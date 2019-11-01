@@ -1,4 +1,4 @@
-from requests import Request
+from starlette.requests import Request
 
 from context.custom.middleware import PreserveCustomContextMiddleware
 

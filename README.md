@@ -11,7 +11,7 @@ Example from `examples` dir:
 
 ```python
 # middleware.py
-from requests import Request
+from starlette.requests import Request
 
 from context.custom.middleware import PreserveCustomContextMiddleware
 
@@ -29,6 +29,7 @@ class PreserveIdentifiersMiddleware(PreserveCustomContextMiddleware):
 app = FastAPI(title="PreserveIdentifiersExample")
 
 from .api import router
+app.include_router(router)
 
 app.add_middleware(PreserveIdentifiersMiddleware)
 ```
