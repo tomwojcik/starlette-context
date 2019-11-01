@@ -7,13 +7,31 @@ https://github.com/tiangolo/fastapi/issues/397
 https://github.com/encode/starlette/issues/420
 
 
-I followed the examples and there it is.
-
-
-Example for `examples` dir:
+Example from `examples` dir:
 
 ```python
 
+# middleware.py
+from requests import Request
+
+from context.custom.middleware import PreserveCustomContextMiddleware
+
+
+class PreserveIdentifiersMiddleware(PreserveCustomContextMiddleware):
+    def set_context(self, request: Request) -> dict:
+        return {
+            "correlation_id": self.get_correlation_id(request),
+            "request_id": self.get_request_id(request),
+        }
+
+# app.py
+app = FastAPI(title="PreserveIdentifiersExample")
+
+from .api import router
+
+app.add_middleware(PreserveIdentifiersMiddleware)
+
+# api.py
 from fastapi import APIRouter
 
 from context.custom import update_context
