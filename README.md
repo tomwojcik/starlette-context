@@ -1,60 +1,38 @@
-# starlette-context
+# starlette context
 Middleware for Starlette (and FastAPI) that allows you to store and access request data, like correlation id or metadata.
 
+### Why I have created it
 
-There are a few github tickets related to this:
-https://github.com/tiangolo/fastapi/issues/397
-https://github.com/encode/starlette/issues/420
+I use FastAPI. I needed something that will allow me to log with context data. Right now I can just `log.info('Message')` and I have log (in ELK) with request id and correlation id. I don't even think about passing this data to logger. It's there automatically.
+  
+    
 
 
-Example from `examples` dir:
+Minimal example from `examples/simple_examples/set_context_in_middleware.py` dir:
 
 ```python
-# middleware.py
+import uvicorn
+from starlette.applications import Starlette
 from starlette.requests import Request
+from starlette.routing import Route
+from starlette.responses import JSONResponse
+from starlette_context import PreserveCustomContextMiddleware, get_context
 
-from context.custom.middleware import PreserveCustomContextMiddleware
+
+async def index(request: Request):
+    return JSONResponse(get_context())  # <-- we get context (dict)
 
 
-class PreserveIdentifiersMiddleware(PreserveCustomContextMiddleware):
-    def set_context(self, request: Request) -> dict:
-        return {
-            "correlation_id": self.get_correlation_id(request),
-            "request_id": self.get_request_id(request),
-        }
+routes = [
+    Route('/', index)
+]
+
+app = Starlette(debug=True, routes=routes)
+app.add_middleware(PreserveCustomContextMiddleware)  # we set context with some data
+uvicorn.run(app)
 ```
 
-```python
-# app.py
-app = FastAPI(title="PreserveIdentifiersExample")
-
-from .api import router
-app.include_router(router)
-
-app.add_middleware(PreserveIdentifiersMiddleware)
-```
-
-```python
-# api.py
-from fastapi import APIRouter
-
-from context.custom import update_context
-from .logger import log
-
-router = APIRouter()
-
-@router.get("/")
-async def index():
-    log.info("test")
-    update_context(yet_another_update="from api now")
-    log.info("test2")
-    return {"msg": "ok"}
-```
-
-In this example `log.info` will dump json log (hi ELK) to stdout with correlation id, request id and whatever is needed.
-In runtime we `update_context`, so the second log will also contain `'yet_another_update': 'from api now'` in its body.
-
-If you want to run one of the examples yourself, just make venv, install requirements and run `asgi.py`.
-
+Returns JSONResponse with data from context, such as RequestID.
+Context can be updated and accessed at anytime if it's created in the middleware.
 
 All tickets or PRs are more than welcome.

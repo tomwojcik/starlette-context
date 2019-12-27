@@ -1,14 +1,11 @@
 import logging
 import sys
 
-from pythonjsonlogger import jsonlogger
+from pythonjsonlogger import jsonlogger  # pip install python-json-logger
 
-from context.custom.middleware import get_context
-
-# that's a dummy logger just to prove it works
+from starlette_context import get_context
 
 global_logger = logging.getLogger("logger_test")
-
 handler = logging.StreamHandler(sys.stdout)
 handler.setLevel(logging.DEBUG)
 
@@ -26,6 +23,7 @@ class MyApiLoggingAdapter(logging.LoggerAdapter):
         super(MyApiLoggingAdapter, self).__init__(logger, extra)
 
     def process(self, msg, kwargs):
+        # here we are basically adding context to log
         context = get_context()
         extra = self.extra.copy()
         extra.update(context)
