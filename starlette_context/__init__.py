@@ -10,7 +10,7 @@ from starlette.middleware.base import (
 from starlette.requests import Request
 
 _request_scope_context_storage: ContextVar[str] = ContextVar(
-    "starlette_context2"
+    "starlette_context"
 )
 
 
