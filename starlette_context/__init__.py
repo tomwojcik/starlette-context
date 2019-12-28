@@ -40,7 +40,7 @@ class CreateEmptyContextMiddleware(BaseHTTPMiddleware):
         """
         You might want to override this method.
         The dict it returns will be saved in scope.
-        You can always to that later.
+        You can always do that later.
         Empty context will be instantiated anyway.
         """
         return {}
