@@ -3,14 +3,14 @@ from distutils.core import setup
 setup(
   name='starlette_context',
   packages=['starlette_context'],
-  version='0.1',
+  version='0.1.1',
   license='MIT',
   description='Middleware for Starlette (and FastAPI) '
                 'that allows you to store and access context data, '
                 'like correlation id or metadata.',
   author='Tomasz Wojcik',
   url='https://github.com/tomwojcik',
-  download_url='https://github.com/tomwojcik/starlette-context/archive/0.1.tar.gz',
+  download_url='https://github.com/tomwojcik/starlette-context/archive/0.1.1.tar.gz',
   keywords=['starlette', 'fastapi'],
   install_requires=[
           'starlette',
