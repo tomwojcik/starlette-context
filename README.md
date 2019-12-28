@@ -1,6 +1,14 @@
 # starlette context
 Middleware for Starlette (and FastAPI) that allows you to store and access request data, like correlation id or metadata.
 
+### Installation 
+
+`pip install starlette-context`
+
+
+### Requirements:
+only `starlette`
+
 ### Why I have created it
 
 I use FastAPI. I needed something that will allow me to log with context data. Right now I can just `log.info('Message')` and I have log (in ELK) with request id and correlation id. I don't even think about passing this data to logger. It's there automatically.
