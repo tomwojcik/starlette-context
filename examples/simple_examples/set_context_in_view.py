@@ -27,4 +27,4 @@ routes = [Route("/", index)]
 
 app = Starlette(debug=True, routes=routes)
 app.add_middleware(CreateEmptyContextMiddleware)
-uvicorn.run(app)
+uvicorn.run(app, host='0.0.0.0')

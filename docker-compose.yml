@@ -1,13 +1,15 @@
 version: '3.7'
 services:
 
-  starlette_context:
+  tests:
     image: starlette_context
     container_name: starlette_context
     build: .
     command: ['pytest', '.']
     ports:
-      - 8080:8080
+      - 8000:8000
     expose:
-      - 8080
+      - 8000
     restart: always
+    volumes:
+      - .:/source/starlette_context
