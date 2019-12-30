@@ -11,15 +11,14 @@ from starlette_context import EmptyContextMiddleware
 
 async def index(request: Request):
     from starlette_context import context
-    context['from_view'] = uuid4().hex
+
+    context["from_view"] = uuid4().hex
     return JSONResponse(context.dict())
 
 
 class UuidMiddleware(EmptyContextMiddleware):
     def set_context(self, request: Request) -> dict:
-        return {
-            'from_middleware': uuid4().hex
-        }
+        return {"from_middleware": uuid4().hex}
 
 
 routes = [
@@ -39,6 +38,8 @@ def test_context_persistance():
     second_resp = client.get("/")
     assert second_resp.status_code == 200
 
-    assert first_resp.json()['from_view'] != second_resp.json()['from_view']
-    assert first_resp.json()['from_middleware'] != second_resp.json()['from_middleware']
-
+    assert first_resp.json()["from_view"] != second_resp.json()["from_view"]
+    assert (
+        first_resp.json()["from_middleware"]
+        != second_resp.json()["from_middleware"]
+    )

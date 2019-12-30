@@ -8,6 +8,7 @@ class Context(collections.MutableMapping):
     It is using request context as a data store.
     Can be used only if context has been created in the middleware.c
     """
+
     def __init__(self, *args, **kwargs):
         if args or kwargs:
             raise AttributeError("Can't instantiate with attributes")
@@ -30,7 +31,6 @@ class Context(collections.MutableMapping):
         self.store.update(kwargs)
 
     def dict(self):
-        # out of asdict, to_dict, dict I think it's best to keep pydantic interface so dict it is
         return self.store or {}
 
     def __iter__(self):

@@ -8,6 +8,7 @@ from starlette.testclient import TestClient
 
 async def index(request: Request):
     from starlette_context import context
+
     return JSONResponse(context.dict())
 
 
