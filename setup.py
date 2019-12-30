@@ -1,18 +1,21 @@
 from distutils.core import setup
+import setuptools
 
 setup(
     name="starlette_context",
-    packages=["starlette_context"],
-    version="0.1.2",
+    version="0.1.3",
     license="MIT",
     description="Middleware for Starlette that allows you to store and "
     "access the context data of a request. Can be used with "
     "logging so logs automatically use request headers such "
     "as x-request-id or x-correlation-id..",
+    packages=setuptools.find_packages(
+        exclude=["tests", "*example*"]
+    ),
     author="Tomasz Wojcik",
     url="https://github.com/tomwojcik",
     download_url="https://github.com/tomwojcik/starlette-context/"
-    "archive/0.1.2.tar.gz",
+    "archive/0.1.3.tar.gz",
     keywords=["starlette", "fastapi"],
     install_requires=["starlette",],
     classifiers=[
