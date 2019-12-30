@@ -32,7 +32,7 @@ app.add_middleware(UuidMiddleware)
 client = TestClient(app)
 
 
-def test_set_context_in_middlewares():
+def test_context_persistance():
     first_resp = client.get("/")
     assert first_resp.status_code == 200
 
