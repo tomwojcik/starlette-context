@@ -3,7 +3,7 @@ import sys
 
 from pythonjsonlogger import jsonlogger  # pip install python-json-logger
 
-from starlette_context import get_context
+from starlette_context import context
 
 global_logger = logging.getLogger("logger_test")
 handler = logging.StreamHandler(sys.stdout)
@@ -23,9 +23,8 @@ class MyApiLoggingAdapter(logging.LoggerAdapter):
         super(MyApiLoggingAdapter, self).__init__(logger, extra)
 
     def process(self, msg, kwargs):
-        context = get_context()
         extra = self.extra.copy()
-        extra.update(context)
+        extra.update(context.dict())
 
         kwargs["extra"] = extra
         return msg, kwargs
