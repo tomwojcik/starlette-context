@@ -24,11 +24,11 @@ from starlette.applications import Starlette
 from starlette.requests import Request
 from starlette.routing import Route
 from starlette.responses import JSONResponse
-from starlette_context import PreserveCustomContextMiddleware, get_context
+from starlette_context import BasicContextMiddleware, context
 
 
 async def index(request: Request):
-    return JSONResponse(get_context())  # <-- we get context (dict)
+    return JSONResponse(context.dict())  # <-- we get context (dict)
 
 
 routes = [
@@ -36,7 +36,7 @@ routes = [
 ]
 
 app = Starlette(debug=True, routes=routes)
-app.add_middleware(PreserveCustomContextMiddleware)  # we set context with some data
+app.add_middleware(BasicContextMiddleware)  # we set context with some data
 uvicorn.run(app)
 ```
 
