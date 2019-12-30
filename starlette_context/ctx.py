@@ -8,6 +8,11 @@ class Context(collections.MutableMapping):
     It is using request context as a data store.
     Can be used only if context has been created in the middleware.
     """
+    def __init__(self, *args, **kwargs):
+        if args or kwargs:
+            raise AttributeError("Can't instantiate with attributes")
+        super(Context, self).__init__()
+
     @property
     def store(self) -> dict:
         return _request_scope_context_storage.get()
