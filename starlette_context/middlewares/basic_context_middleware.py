@@ -3,7 +3,7 @@ from uuid import uuid4
 
 from starlette.middleware.base import BaseHTTPMiddleware, RequestResponseEndpoint
 from starlette.requests import Request
-from starlette_context import _request_scope_context_storage
+from starlette_context import _request_scope_context_storage, context
 
 
 class BasicContextMiddleware(BaseHTTPMiddleware):
@@ -15,8 +15,6 @@ class BasicContextMiddleware(BaseHTTPMiddleware):
 
     def __init__(self, *args, **kwargs):
         super(BasicContextMiddleware, self).__init__(*args, **kwargs)
-        self.cid_value = None
-        self.rid_value = None
 
     @staticmethod
     def get_from_header_by_key(request: Request, key: str):
@@ -26,18 +24,10 @@ class BasicContextMiddleware(BaseHTTPMiddleware):
         return request.headers.get(key)
 
     def get_request_id(self, request: Request) -> str:
-        if not self.rid_value:
-            self.rid_value = (
-                self.get_from_header_by_key(request, self.rid) or uuid4().hex
-            )
-        return self.rid_value
+        return self.get_from_header_by_key(request, self.rid) or uuid4().hex
 
     def get_correlation_id(self, request: Request) -> str:
-        if not self.cid_value:
-            self.cid_value = (
-                self.get_from_header_by_key(request, self.cid) or uuid4().hex
-            )
-        return self.cid_value
+        return self.get_from_header_by_key(request, self.cid) or uuid4().hex
 
     def get_user_agent(self, request: Request) -> str:
         return self.get_from_header_by_key(request, self.ua) or None
@@ -65,8 +55,8 @@ class BasicContextMiddleware(BaseHTTPMiddleware):
         )  # noqa
         try:
             response = await call_next(request)
-            response.headers[self.cid] = self.cid_value
-            response.headers[self.rid] = self.rid_value
+            response.headers[self.cid] = context[self.cid]
+            response.headers[self.rid] = context[self.rid]
         finally:
             _request_scope_context_storage.reset(token)
         return response

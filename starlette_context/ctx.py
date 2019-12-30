@@ -6,7 +6,7 @@ class Context(collections.MutableMapping):
     """
     A mapping with dict-like interface.
     It is using request context as a data store.
-    Can be used only if context has been created in the middleware.
+    Can be used only if context has been created in the middleware.c
     """
     def __init__(self, *args, **kwargs):
         if args or kwargs:
