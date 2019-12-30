@@ -13,7 +13,7 @@ from starlette.routing import Route
 from starlette.status import HTTP_500_INTERNAL_SERVER_ERROR
 
 from examples.example_with_exception_handling.logger import log
-from starlette_context import PreserveCustomContextMiddleware
+from starlette_context import BasicContextMiddleware
 
 
 async def index(request: Request):
@@ -59,5 +59,5 @@ app = Starlette(debug=True, routes=routes)
 # middleware order is important! exc handler has to be topmost
 
 app.add_middleware(ExceptionHandlingMiddleware)
-app.add_middleware(PreserveCustomContextMiddleware)
+app.add_middleware(BasicContextMiddleware)
 uvicorn.run(app, host="0.0.0.0")

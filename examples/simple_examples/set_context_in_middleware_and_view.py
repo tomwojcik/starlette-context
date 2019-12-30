@@ -4,19 +4,15 @@ from starlette.requests import Request
 from starlette.responses import JSONResponse
 from starlette.routing import Route
 
-from starlette_context import (
-    CreateEmptyContextMiddleware,
-    get_context,
-    set_context,
-)
+from starlette_context import EmptyContextMiddleware, context
 
 
 async def index(request: Request):
-    set_context(view=True)
-    return JSONResponse(get_context())
+    context["view"] = True
+    return JSONResponse(context.dict())
 
 
-class ContextFromMiddleware(CreateEmptyContextMiddleware):
+class ContextFromMiddleware(EmptyContextMiddleware):
     def set_context(self, request: Request) -> dict:
         return {"middleware": True}
 
