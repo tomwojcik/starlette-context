@@ -1,11 +1,11 @@
 from _contextvars import Token
+from typing import Any, Optional
 from uuid import uuid4
 
-from starlette.middleware.base import (
-    BaseHTTPMiddleware,
-    RequestResponseEndpoint,
-)
+from starlette.middleware.base import BaseHTTPMiddleware, RequestResponseEndpoint
 from starlette.requests import Request
+from starlette.responses import Response
+
 from starlette_context import _request_scope_context_storage, context
 
 
@@ -16,11 +16,11 @@ class BasicContextMiddleware(BaseHTTPMiddleware):
     forwarded_for = "X-Forwarded-For"
     ua = "User-Agent"
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: Any, **kwargs: Any):
         super(BasicContextMiddleware, self).__init__(*args, **kwargs)
 
     @staticmethod
-    def get_from_header_by_key(request: Request, key: str):
+    def get_from_header_by_key(request: Request, key: str) -> Optional[str]:
         # http/2 headers lowercase
         if key != key.lower():
             return request.headers.get(key) or request.headers.get(key.lower())
@@ -32,16 +32,16 @@ class BasicContextMiddleware(BaseHTTPMiddleware):
     def get_correlation_id(self, request: Request) -> str:
         return self.get_from_header_by_key(request, self.cid) or uuid4().hex
 
-    def get_user_agent(self, request: Request) -> str:
+    def get_user_agent(self, request: Request) -> Optional[str]:
         return self.get_from_header_by_key(request, self.ua) or None
 
-    def get_date(self, request: Request) -> str:
+    def get_date(self, request: Request) -> Optional[str]:
         return self.get_from_header_by_key(request, self.date) or None
 
-    def get_forwarded_for(self, request: Request) -> str:
+    def get_forwarded_for(self, request: Request) -> Optional[str]:
         return self.get_from_header_by_key(request, self.forwarded_for) or None
 
-    def set_context(self, request) -> dict:
+    def set_context(self, request: Request) -> dict:
         return {
             self.cid: self.get_correlation_id(request),
             self.rid: self.get_request_id(request),
@@ -52,10 +52,10 @@ class BasicContextMiddleware(BaseHTTPMiddleware):
 
     async def dispatch(
         self, request: Request, call_next: RequestResponseEndpoint
-    ):
+    ) -> Response:
         token: Token = _request_scope_context_storage.set(
-            self.set_context(request)
-        )  # noqa
+            self.set_context(request)  # type: ignore
+        )
         try:
             response = await call_next(request)
             response.headers[self.cid] = context[self.cid]

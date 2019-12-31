@@ -5,7 +5,7 @@ services:
     image: starlette_context
     container_name: starlette_context
     build: .
-    command: ['pytest', '.']
+    command: ['scripts/test.sh']
     ports:
       - 8000:8000
     expose:

@@ -9,8 +9,13 @@ requests==2.22.0
 
 # test
 pytest==5.3.2
+pytest-cov==2.8.1
+pytest-sugar==0.9.2
+pytest-xdist==1.31.0
+codecov
 
 # lint
-mypy==0.761
-black==19.10b0
-flake8==3.7.9
+autoflake
+mypy
+black
+isort

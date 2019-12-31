@@ -1,23 +1,33 @@
 from distutils.core import setup
 import setuptools
 
+VERSION = "0.1.4"
+
+
+def get_long_description():
+    with open("README.md", "r", encoding="utf8") as f:
+        return f.read()
+
+
 setup(
     name="starlette_context",
-    version="0.1.3",
+    python_requires=">=3.7",
+    version=VERSION,
     license="MIT",
-    description="Middleware for Starlette that allows you to store and "
-    "access the context data of a request. Can be used with "
-    "logging so logs automatically use request headers such "
-    "as x-request-id or x-correlation-id..",
+    description="Access context in Starlette",
+    long_description=get_long_description(),
+    long_description_content_type="text/markdown",
     packages=setuptools.find_packages(
-        exclude=["tests", "*example*"]
+        include=("starlette_context", "starlette_context.*")
+        # exclude=["tests", "*example*"]
     ),
+    platforms="any",
     author="Tomasz Wojcik",
-    url="https://github.com/tomwojcik",
+    url="https://github.com/tomwojcik/starlette-context",
     download_url="https://github.com/tomwojcik/starlette-context/"
-    "archive/0.1.3.tar.gz",
+    f"archive/{VERSION}.tar.gz",
     keywords=["starlette", "fastapi"],
-    install_requires=["starlette",],
+    install_requires="starlette",
     classifiers=[
         "Development Status :: 3 - Alpha",
         "Intended Audience :: Developers",

@@ -1,10 +1,9 @@
 from _contextvars import Token
 
-from starlette.middleware.base import (
-    BaseHTTPMiddleware,
-    RequestResponseEndpoint,
-)
+from starlette.middleware.base import BaseHTTPMiddleware, RequestResponseEndpoint
 from starlette.requests import Request
+from starlette.responses import Response
+
 from starlette_context import _request_scope_context_storage
 
 
@@ -24,10 +23,10 @@ class EmptyContextMiddleware(BaseHTTPMiddleware):
 
     async def dispatch(
         self, request: Request, call_next: RequestResponseEndpoint
-    ):
+    ) -> Response:
         token: Token = _request_scope_context_storage.set(
-            self.set_context(request)
-        )  # noqa
+            self.set_context(request)  # type: ignore
+        )
         try:
             response = await call_next(request)
         finally:

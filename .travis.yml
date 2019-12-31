@@ -1,0 +1,23 @@
+language: python
+cache: pip
+
+python:
+  - "3.7"
+  - "3.8"
+dist: xenial
+sudo: false
+
+before_install:
+  - python --version
+
+install:
+  - pip install -U -r requirements-dev.txt
+
+script:
+  - scripts/test.sh
+
+after_success:
+  - codecov
+
+env:
+  - PARALLELIZE=true
