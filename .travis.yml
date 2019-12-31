@@ -1,0 +1,15 @@
+language: python
+cache: pip
+
+python:
+  - "3.7"
+dist: xenial
+sudo: false
+install:
+  - pip install -U -r requirements-dev.txt
+
+script:
+  - test.sh
+
+after_success:
+  - codecov
