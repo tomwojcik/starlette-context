@@ -61,7 +61,7 @@ def test_invalid_dates(
         "Wed, 01 Jan 2020 04:27:12",
     ],
 )
-def test_valid_dates(
+def test_valid_dt_dates(
     date_header: str,
     mocked_request: Request,
     mocked_middleware: BasicContextMiddleware,
@@ -69,6 +69,23 @@ def test_valid_dates(
     mocked_request.headers[HeaderConstants.date] = date_header
     resp = mocked_middleware.get_date(mocked_request)
     assert isinstance(resp, datetime.datetime)
+
+
+@pytest.mark.parametrize(
+    "date_header",
+    [
+        "",
+        None
+    ],
+)
+def test_valid_null_dates(
+    date_header: str,
+    mocked_request: Request,
+    mocked_middleware: BasicContextMiddleware,
+):
+    mocked_request.headers[HeaderConstants.date] = date_header
+    resp = mocked_middleware.get_date(mocked_request)
+    assert resp is None
 
 
 def test_user_agent(
@@ -106,4 +123,9 @@ def test_getter_for_headers(
     mocked_request.headers[key_lower] = value
     assert value == mocked_middleware.get_from_header_by_key(
         mocked_request, key_title
+    )
+
+    mocked_request.headers[key_lower] = value
+    assert value == mocked_middleware.get_from_header_by_key(
+        mocked_request, key_lower
     )
