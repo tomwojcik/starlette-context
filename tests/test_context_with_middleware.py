@@ -2,23 +2,9 @@ from starlette.applications import Starlette
 from starlette.middleware.base import BaseHTTPMiddleware, RequestResponseEndpoint
 from starlette.requests import Request
 from starlette.responses import JSONResponse
-from starlette.routing import Route
 from starlette.testclient import TestClient
 
 from starlette_context import EmptyContextMiddleware
-
-
-async def no_context_in_resource(request: Request):
-    from starlette_context import context
-
-    return JSONResponse(context.dict())
-
-
-async def add_context_in_resource(request: Request):
-    from starlette_context import context
-
-    context["set_context_in_view"] = True
-    return JSONResponse(context.dict())
 
 
 class MiddlewareUsingSetContextMethod(EmptyContextMiddleware):
@@ -36,14 +22,25 @@ class MiddlewareUsingContextObject(BaseHTTPMiddleware):
         return await call_next(request)
 
 
-routes = [
-    Route("/context_only_from_middleware", no_context_in_resource),
-    Route("/add_context_in_view", add_context_in_resource),
-]
-
-app = Starlette(debug=True, routes=routes)
+app = Starlette()
 app.add_middleware(MiddlewareUsingContextObject)
 app.add_middleware(MiddlewareUsingSetContextMethod)
+
+
+@app.route("/context_only_from_middleware")
+async def no_context_in_resource(request: Request):
+    from starlette_context import context
+
+    return JSONResponse(context.dict())
+
+
+@app.route("/add_context_in_view")
+async def add_context_in_resource(request: Request):
+    from starlette_context import context
+
+    context["set_context_in_view"] = True
+    return JSONResponse(context.dict())
+
 
 client = TestClient(app)
 

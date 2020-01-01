@@ -8,7 +8,9 @@ class Context(collections.MutableMapping):
     """
     A mapping with dict-like interface.
     It is using request context as a data store.
-    Can be used only if context has been created in the middleware.c
+    Can be used only if context has been created in the middleware.
+
+    If you know Flask, it can be compared to g object.
     """
 
     def __init__(self, *args: Any, **kwargs: Any):
