@@ -1,17 +1,14 @@
 from typing import Union
 
-import uvicorn
 from starlette.applications import Starlette
 from starlette.exceptions import HTTPException
-from starlette.middleware.base import (
-    BaseHTTPMiddleware,
-    RequestResponseEndpoint,
-)
+from starlette.middleware.base import BaseHTTPMiddleware, RequestResponseEndpoint
 from starlette.requests import Request
 from starlette.responses import JSONResponse, Response
 from starlette.routing import Route
 from starlette.status import HTTP_500_INTERNAL_SERVER_ERROR
 
+import uvicorn
 from examples.example_with_exception_handling.logger import log
 from starlette_context import BasicContextMiddleware
 

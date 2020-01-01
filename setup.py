@@ -1,4 +1,5 @@
 from distutils.core import setup
+
 import setuptools
 
 VERSION = "0.1.4"
