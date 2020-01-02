@@ -6,12 +6,11 @@ import uvicorn
 from starlette_context import context
 from starlette_context.middleware import ContextMiddleware
 
-
 app = Starlette(debug=True)
 app.add_middleware(ContextMiddleware)
 
 
-@app.route('/')
+@app.route("/")
 async def index(request: Request):
     # adding some dummy data so it actually has some context
     import datetime

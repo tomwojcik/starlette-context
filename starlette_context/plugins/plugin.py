@@ -18,7 +18,9 @@ class Plugin(metaclass=abc.ABCMeta):
     def get_from_header_by_key(self, request: Request) -> Optional[str]:
         # http/2 headers lowercase
         if self.key != self.key.lower():
-            self.value = request.headers.get(self.key) or request.headers.get(self.key.lower())
+            self.value = request.headers.get(self.key) or request.headers.get(
+                self.key.lower()
+            )
         else:
             self.value = request.headers.get(self.key)
 
@@ -35,4 +37,6 @@ class Plugin(metaclass=abc.ABCMeta):
             elif isinstance(self.value, str):
                 response.headers[self.key] = self.value
             else:
-                raise TypeError(f"Can't assign header of type {type(self.value)}")
+                raise TypeError(
+                    f"Can't assign header of type {type(self.value)}"
+                )

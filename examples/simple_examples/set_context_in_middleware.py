@@ -6,15 +6,15 @@ import uvicorn
 from starlette_context import context, plugins
 from starlette_context.middleware import ContextMiddleware
 
-
 app = Starlette(debug=True)
-app.add_middleware(ContextMiddleware.with_plugins(
-    plugins.RequestIdPlugin,
-    plugins.CorrelationIdPlugin
-))
+app.add_middleware(
+    ContextMiddleware.with_plugins(
+        plugins.RequestIdPlugin, plugins.CorrelationIdPlugin
+    )
+)
 
 
-@app.route('/')
+@app.route("/")
 async def index(request: Request):
     return JSONResponse(context.dict())
 

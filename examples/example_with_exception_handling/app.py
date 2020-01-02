@@ -11,11 +11,10 @@ import uvicorn
 from examples.example_with_exception_handling.logger import log
 from starlette_context import middleware, plugins
 
-
 app = Starlette(debug=True)
 
 
-@app.route('/')
+@app.route("/")
 async def index(request: Request):
     log.info("pre exception")
     _ = 1 / 0
@@ -54,11 +53,13 @@ class ExceptionHandlingMiddleware(BaseHTTPMiddleware):
 # middleware order is important! exc handler has to be topmost
 
 app.add_middleware(ExceptionHandlingMiddleware)
-app.add_middleware(middleware.ContextMiddleware.with_plugins(
-    plugins.UserAgentPlugin,
-    plugins.ForwardedForPlugin,
-    plugins.DateHeaderPlugin,
-    plugins.RequestIdPlugin,
-    plugins.CorrelationIdPlugin
-))
+app.add_middleware(
+    middleware.ContextMiddleware.with_plugins(
+        plugins.UserAgentPlugin,
+        plugins.ForwardedForPlugin,
+        plugins.DateHeaderPlugin,
+        plugins.RequestIdPlugin,
+        plugins.CorrelationIdPlugin,
+    )
+)
 uvicorn.run(app, host="0.0.0.0")

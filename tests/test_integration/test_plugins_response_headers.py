@@ -12,16 +12,17 @@ from starlette_context.middleware import ContextMiddleware
 from tests.conftest import dummy_correlation_id, dummy_request_id
 
 
-@pytest.fixture(scope='function', autouse=True)
+@pytest.fixture(scope="function", autouse=True)
 def client():
     """
     That way so `with_plugins` is cls var is clear after those tests.
     """
     app = Starlette()
-    app.add_middleware(ContextMiddleware.with_plugins(
+    app.add_middleware(
+        ContextMiddleware.with_plugins(
             plugins.RequestIdPlugin(),
             plugins.CorrelationIdPlugin,
-            plugins.DateHeaderPlugin
+            plugins.DateHeaderPlugin,
         )
     )
 

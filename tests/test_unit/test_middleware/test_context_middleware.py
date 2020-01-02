@@ -6,8 +6,7 @@ from starlette_context.middleware import ContextMiddleware
 
 
 def test_set_context_method(
-    mocked_request: Request,
-    mocked_middleware: ContextMiddleware,
+    mocked_request: Request, mocked_middleware: ContextMiddleware,
 ):
 
     mocked_middleware.plugins = [plugins.DateHeaderPlugin()]
@@ -16,4 +15,4 @@ def test_set_context_method(
 
     assert {
         plugins.DateHeaderPlugin.key: dt_date
-           } == mocked_middleware.set_context(mocked_request)
+    } == mocked_middleware.set_context(mocked_request)

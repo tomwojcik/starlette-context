@@ -18,13 +18,15 @@ dummy_forwarded_for = "203.0.113.19"
 @pytest.fixture(scope="function", autouse=True)
 def headers():
     h = MutableHeaders()
-    h.update({
-        HeaderKeys.correlation_id: dummy_correlation_id,
-        HeaderKeys.request_id: dummy_request_id,
-        HeaderKeys.date: dummy_date,
-        HeaderKeys.user_agent: dummy_user_agent,
-        HeaderKeys.forwarded_for: dummy_forwarded_for,
-    })
+    h.update(
+        {
+            HeaderKeys.correlation_id: dummy_correlation_id,
+            HeaderKeys.request_id: dummy_request_id,
+            HeaderKeys.date: dummy_date,
+            HeaderKeys.user_agent: dummy_user_agent,
+            HeaderKeys.forwarded_for: dummy_forwarded_for,
+        }
+    )
     return h
 
 
@@ -40,7 +42,7 @@ def mocked_request(headers) -> Request:
     return mocked
 
 
-@pytest.fixture(scope='function', autouse=True)
+@pytest.fixture(scope="function", autouse=True)
 def mocked_response() -> Response:
     mock = MagicMock(spec=Response)
     mock.headers = MutableHeaders()
