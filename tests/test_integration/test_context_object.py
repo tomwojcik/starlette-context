@@ -4,7 +4,7 @@ from starlette.requests import Request
 from starlette.responses import JSONResponse
 from starlette.testclient import TestClient
 
-from starlette_context import EmptyContextMiddleware, context
+from starlette_context import middleware, context
 
 
 class MiddlewareUsingContextObject(BaseHTTPMiddleware):
@@ -19,7 +19,7 @@ class MiddlewareUsingContextObject(BaseHTTPMiddleware):
 
 app = Starlette()
 app.add_middleware(MiddlewareUsingContextObject)
-app.add_middleware(EmptyContextMiddleware)
+app.add_middleware(middleware.ContextMiddleware)
 
 
 @app.route("/")

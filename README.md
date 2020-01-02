@@ -33,34 +33,34 @@ All other dependencies from `requirements-dev.txt` are only needed to run tests 
 **examples/simple_examples/set_context_in_middleware.py**
 
 ```python
-import uvicorn
 from starlette.applications import Starlette
 from starlette.requests import Request
-from starlette.routing import Route
 from starlette.responses import JSONResponse
-from starlette_context import BasicContextMiddleware, context  # import
+
+import uvicorn
+from starlette_context import context, plugins
+from starlette_context.middleware import ContextMiddleware
 
 
+app = Starlette(debug=True)
+app.add_middleware(ContextMiddleware.with_plugins(  # easily extensible
+    plugins.RequestIdPlugin,  # request id
+    plugins.CorrelationIdPlugin  # correlation id
+))
+
+
+@app.route('/')
 async def index(request: Request):
-    return JSONResponse(context.dict())  # we can access context object
+    return JSONResponse(context.dict())
 
 
-routes = [
-    Route('/', index)
-]
-
-app = Starlette(debug=True, routes=routes)
-app.add_middleware(BasicContextMiddleware)  # we create context
-uvicorn.run(app)
+uvicorn.run(app, host="0.0.0.0")
 ```
 In this example the response containes a json with
 ```json
 {
   "X-Correlation-ID":"5ca2f0b43115461bad07ccae5976a990",
-  "X-Request-ID":"21f8d52208ec44948d152dc49a713fdd",
-  "Date":null,
-  "X-Forwarded-For":null,
-  "User-Agent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Ubuntu Chromium/73.0.3683.86 Chrome/73.0.3683.86 Safari/537.36"
+  "X-Request-ID":"21f8d52208ec44948d152dc49a713fdd"
 }
 ```
 

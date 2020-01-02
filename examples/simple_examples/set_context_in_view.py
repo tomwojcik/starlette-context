@@ -1,12 +1,17 @@
 from starlette.applications import Starlette
 from starlette.requests import Request
 from starlette.responses import JSONResponse
-from starlette.routing import Route
 
 import uvicorn
-from starlette_context import EmptyContextMiddleware, context
+from starlette_context import context
+from starlette_context.middleware import ContextMiddleware
 
 
+app = Starlette(debug=True)
+app.add_middleware(ContextMiddleware)
+
+
+@app.route('/')
 async def index(request: Request):
     # adding some dummy data so it actually has some context
     import datetime
@@ -19,8 +24,4 @@ async def index(request: Request):
     return JSONResponse(context.dict())
 
 
-routes = [Route("/", index)]
-
-app = Starlette(debug=True, routes=routes)
-app.add_middleware(EmptyContextMiddleware)
 uvicorn.run(app, host="0.0.0.0")

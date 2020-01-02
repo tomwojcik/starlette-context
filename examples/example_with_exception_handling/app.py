@@ -5,21 +5,21 @@ from starlette.exceptions import HTTPException
 from starlette.middleware.base import BaseHTTPMiddleware, RequestResponseEndpoint
 from starlette.requests import Request
 from starlette.responses import JSONResponse, Response
-from starlette.routing import Route
 from starlette.status import HTTP_500_INTERNAL_SERVER_ERROR
 
 import uvicorn
 from examples.example_with_exception_handling.logger import log
-from starlette_context import BasicContextMiddleware
+from starlette_context import middleware, plugins
 
 
+app = Starlette(debug=True)
+
+
+@app.route('/')
 async def index(request: Request):
     log.info("pre exception")
     _ = 1 / 0
     return JSONResponse({"wont reach this place": None})
-
-
-routes = [Route("/", index)]
 
 
 class ExceptionHandlingMiddleware(BaseHTTPMiddleware):
@@ -51,10 +51,14 @@ class ExceptionHandlingMiddleware(BaseHTTPMiddleware):
         return response
 
 
-app = Starlette(debug=True, routes=routes)
-
 # middleware order is important! exc handler has to be topmost
 
 app.add_middleware(ExceptionHandlingMiddleware)
-app.add_middleware(BasicContextMiddleware)
+app.add_middleware(middleware.ContextMiddleware.with_plugins(
+    plugins.UserAgentPlugin,
+    plugins.ForwardedForPlugin,
+    plugins.DateHeaderPlugin,
+    plugins.RequestIdPlugin,
+    plugins.CorrelationIdPlugin
+))
 uvicorn.run(app, host="0.0.0.0")
