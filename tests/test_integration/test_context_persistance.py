@@ -5,10 +5,12 @@ from starlette.requests import Request
 from starlette.responses import JSONResponse
 from starlette.testclient import TestClient
 
-from starlette_context import EmptyContextMiddleware
+from starlette_context.middleware import ContextMiddleware
 
 
-class UuidMiddleware(EmptyContextMiddleware):
+class UuidMiddleware(ContextMiddleware):
+    plugins = []
+
     def set_context(self, request: Request) -> dict:
         return {"from_middleware": uuid4().hex}
 

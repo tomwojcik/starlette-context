@@ -4,10 +4,12 @@ from starlette.requests import Request
 from starlette.responses import JSONResponse
 from starlette.testclient import TestClient
 
-from starlette_context import EmptyContextMiddleware
+from starlette_context.middleware import ContextMiddleware
 
 
-class MiddlewareUsingSetContextMethod(EmptyContextMiddleware):
+class MiddlewareUsingSetContextMethod(ContextMiddleware):
+    plugins = []
+
     def set_context(self, request: Request) -> dict:
         return {"set_context_in_middleware_using_context_method": True}
 

@@ -4,7 +4,7 @@ from typing import Any, Iterator
 from starlette_context import _request_scope_context_storage
 
 
-class Context(collections.MutableMapping):
+class _Context(collections.MutableMapping):
     """
     A mapping with dict-like interface.
     It is using request context as a data store.
@@ -16,7 +16,7 @@ class Context(collections.MutableMapping):
     def __init__(self, *args: Any, **kwargs: Any):
         if args or kwargs:
             raise AttributeError("Can't instantiate with attributes")
-        super(Context, self).__init__()
+        super(_Context, self).__init__()
 
     @property
     def store(self) -> dict:
@@ -51,4 +51,4 @@ class Context(collections.MutableMapping):
         return f"<Context: {self.dict()}>"
 
 
-context = Context()
+context = _Context()
