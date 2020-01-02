@@ -19,7 +19,7 @@ def client():
     """
     app = Starlette()
     app.add_middleware(ContextMiddleware.with_plugins(
-            plugins.RequestIdPlugin,
+            plugins.RequestIdPlugin(),
             plugins.CorrelationIdPlugin,
             plugins.DateHeaderPlugin
         )
