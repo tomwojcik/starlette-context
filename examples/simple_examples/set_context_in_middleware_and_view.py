@@ -16,7 +16,7 @@ async def index(request: Request):
 
 
 class ContextFromMiddleware(ContextMiddleware):
-    def set_context(self, request: Request) -> dict:
+    async def set_context(self, request: Request) -> dict:
         return {"middleware": True}
 
 

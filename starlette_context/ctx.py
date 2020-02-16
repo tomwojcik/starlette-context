@@ -20,7 +20,7 @@ class _Context(collections.MutableMapping):
 
     @property
     def store(self) -> dict:
-        return _request_scope_context_storage.get()  # type: ignore
+        return _request_scope_context_storage.get()
 
     def __getitem__(self, key: str) -> Any:
         return self.store[key]
@@ -31,7 +31,7 @@ class _Context(collections.MutableMapping):
     def __delitem__(self, key: str) -> None:
         del self.store[key]
 
-    def update(self, **kwargs: Any) -> None:  # type: ignore
+    def update(self, **kwargs: Any) -> None:
         self.store.update(kwargs)
 
     def get_many(self, *args: str) -> dict:

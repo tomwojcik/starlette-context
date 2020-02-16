@@ -10,7 +10,7 @@ from starlette_context.middleware import ContextMiddleware
 class MiddlewareUsingSetContextMethod(ContextMiddleware):
     plugins = []
 
-    def set_context(self, request: Request) -> dict:
+    async def set_context(self, request: Request) -> dict:
         return {"set_context_in_middleware_using_context_method": True}
 
 

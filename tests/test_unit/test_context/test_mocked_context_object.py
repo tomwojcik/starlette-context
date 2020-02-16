@@ -70,3 +70,7 @@ def test_ctx_iter(mocked_context: _Context, ctx_store: dict):
     assert next(iterator) == "c"
     with pytest.raises(StopIteration):
         next(iterator)
+
+
+def test_get_body_from_request_with_await(mocked_context: _Context):
+    raise NotImplementedError

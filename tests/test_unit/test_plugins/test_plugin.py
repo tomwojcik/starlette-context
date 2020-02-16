@@ -21,15 +21,15 @@ def test_getter_for_headers(mocked_request: Request, plugin: plugins.Plugin):
 
     mocked_request.headers[key_title] = value
     plugin.key = key_title
-    assert value == plugin.get_from_header_by_key(mocked_request)
+    assert value == plugin.extract_value_from_header_by_key(mocked_request)
 
     mocked_request.headers[key_lower] = value
     plugin.key = key_title
-    assert value == plugin.get_from_header_by_key(mocked_request)
+    assert value == plugin.extract_value_from_header_by_key(mocked_request)
 
     mocked_request.headers[key_lower] = value
     plugin.key = key_lower
-    assert value == plugin.get_from_header_by_key(mocked_request)
+    assert value == plugin.extract_value_from_header_by_key(mocked_request)
 
 
 def test_enrich_response_str(

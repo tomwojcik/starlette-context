@@ -1,7 +1,8 @@
 from contextvars import Token
 from typing import List, Type, Union
 
-from starlette.middleware.base import BaseHTTPMiddleware, RequestResponseEndpoint
+from starlette.middleware.base import BaseHTTPMiddleware, \
+    RequestResponseEndpoint
 from starlette.requests import Request
 from starlette.responses import Response
 
@@ -26,31 +27,33 @@ class ContextMiddleware(BaseHTTPMiddleware):
                 cls.plugins.append(plugin)
             elif issubclass(plugin, Plugin):
                 cls.plugins.append(plugin())
+            else:
+                raise TypeError('Only plugins are allowed.')
         return cls
 
-    def set_context(self, request: Request) -> dict:
+    async def set_context(self, request: Request) -> dict:
         """
         You might want to override this method.
         The dict it returns will be saved in the scope of a context.
         You can always do that later.
         """
         return {
-            plugin.key: plugin.process_request(request)
+            plugin.key: await plugin.process_request(request)
             for plugin in self.plugins
         }
 
     async def dispatch(
         self, request: Request, call_next: RequestResponseEndpoint
     ) -> Response:
-        token: Token = _request_scope_context_storage.set(
-            self.set_context(request)  # type: ignore
+        _starlette_context_token: Token = _request_scope_context_storage.set(
+            await self.set_context(request)
         )
         try:
             response = await call_next(request)
             for plugin in self.plugins:
-                plugin.enrich_response(response)
+                await plugin.enrich_response(response)
 
         finally:
-            _request_scope_context_storage.reset(token)
+            _request_scope_context_storage.reset(_starlette_context_token)
 
         return response

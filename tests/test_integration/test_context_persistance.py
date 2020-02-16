@@ -11,7 +11,7 @@ from starlette_context.middleware import ContextMiddleware
 class UuidMiddleware(ContextMiddleware):
     plugins = []
 
-    def set_context(self, request: Request) -> dict:
+    async def set_context(self, request: Request) -> dict:
         return {"from_middleware": uuid4().hex}
 
 
