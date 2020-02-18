@@ -18,6 +18,9 @@ class Plugin(metaclass=abc.ABCMeta):
         self.value = None
 
     async def extract_value_from_header_by_key(self, request: Request) -> Optional[str]:
+        """
+        Helper method.
+        """
         # http/2 headers lowercase
         if self.key != self.key.lower():
             self.value = request.headers.get(self.key) or request.headers.get(
@@ -29,11 +32,22 @@ class Plugin(metaclass=abc.ABCMeta):
         return self.value
 
     async def process_request(self, request: Request) -> Union[str, int]:
+        """
+        Runs always on request.
+        Extracts value from header by default.
+        """
         assert isinstance(self.key, str)
         return await self.extract_value_from_header_by_key(request)
 
     async def _add_kv_to_response_headers(self, response: Response) -> None:
+        """
+        Helper method
+        """
         response.headers[self.key] = str(self.value)
 
     async def enrich_response(self, response: Response) -> None:
+        """
+        Runs always on response.
+        Does nothing by default.
+        """
         ...

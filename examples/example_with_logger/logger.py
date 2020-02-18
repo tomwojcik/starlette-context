@@ -24,7 +24,7 @@ class MyApiLoggingAdapter(logging.LoggerAdapter):
     def process(self, msg, kwargs):
         # here we are basically adding context to log
         extra = self.extra.copy()
-        extra.update(context.dict())
+        extra.update(context.data)
 
         kwargs["extra"] = extra
         return msg, kwargs

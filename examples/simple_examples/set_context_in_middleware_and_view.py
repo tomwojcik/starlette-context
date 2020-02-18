@@ -12,7 +12,7 @@ app = Starlette(debug=True)
 @app.route("/")
 async def index(request: Request):
     context["view"] = True
-    return JSONResponse(context.dict())
+    return JSONResponse(context.data)
 
 
 class ContextFromMiddleware(ContextMiddleware):
