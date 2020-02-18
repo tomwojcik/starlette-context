@@ -4,7 +4,7 @@ from typing import Any
 from starlette_context import _request_scope_context_storage
 
 
-class Context(UserDict):
+class _Context(UserDict):
     """
     A mapping with dict-like interface.
     It is using request context as a data store.
@@ -29,4 +29,4 @@ class Context(UserDict):
         return copy.copy(self.data)
 
 
-context = Context()
+context = _Context()

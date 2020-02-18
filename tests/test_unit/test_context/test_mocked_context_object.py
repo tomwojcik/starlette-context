@@ -11,7 +11,7 @@ def ctx_store():
 @pytest.fixture(scope="function", autouse=True)
 def mocked_context(monkeypatch, ctx_store) -> _Context:
     monkeypatch.setattr(
-        "starlette_context.ctx._Context.store", ctx_store.copy()
+        "starlette_context.ctx._Context.data", ctx_store.copy()
     )
     return _Context()
 
@@ -26,7 +26,7 @@ def test_ctx_eq(mocked_context: _Context, ctx_store: dict):
 
 
 def test_ctx_repr(mocked_context: _Context, ctx_store: dict):
-    assert f"<Context: {ctx_store}>" == mocked_context.__repr__()
+    assert str(ctx_store) == mocked_context.__repr__()
 
 
 def test_ctx_len(mocked_context: _Context, ctx_store: dict):
@@ -34,15 +34,7 @@ def test_ctx_len(mocked_context: _Context, ctx_store: dict):
 
 
 def test_ctx_dict(mocked_context: _Context, ctx_store: dict):
-    assert ctx_store == mocked_context.dict()
-
-
-def test_ctx_get_many(mocked_context: _Context, ctx_store: dict):
-    expected = {k: ctx_store.get(k) for k in ["a", "b", "z"]}
-    actual = mocked_context.get_many("a", "b", "z")
-    assert 3 == len(actual)
-    assert expected == actual
-    assert expected["z"] is None
+    assert ctx_store == mocked_context.data
 
 
 def test_ctx_update(mocked_context: _Context, ctx_store: dict):
@@ -58,7 +50,7 @@ def test_ctx_del(mocked_context: _Context, ctx_store: dict):
     del mocked_context["a"]
     del ctx_store["a"]
     assert "a" not in mocked_context
-    assert "a" not in mocked_context.dict()
+    assert "a" not in mocked_context.data
     assert ctx_store == mocked_context
 
 
@@ -70,7 +62,3 @@ def test_ctx_iter(mocked_context: _Context, ctx_store: dict):
     assert next(iterator) == "c"
     with pytest.raises(StopIteration):
         next(iterator)
-
-
-def test_get_body_from_request_with_await(mocked_context: _Context):
-    raise NotImplementedError

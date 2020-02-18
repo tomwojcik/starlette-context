@@ -43,6 +43,8 @@ class Plugin(metaclass=abc.ABCMeta):
         """
         Helper method
         """
+        if not isinstance(self.value, (str, int)):
+            raise TypeError("String or int needed. Header value shouldn't be a complex type.")
         response.headers[self.key] = str(self.value)
 
     async def enrich_response(self, response: Response) -> None:
