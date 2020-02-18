@@ -24,7 +24,7 @@ async def index(request: Request):
     from starlette_context import context
 
     context["from_view"] = uuid4().hex
-    return JSONResponse(context.dict())
+    return JSONResponse(context.data)
 
 
 client = TestClient(app)

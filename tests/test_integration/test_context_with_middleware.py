@@ -33,7 +33,7 @@ app.add_middleware(MiddlewareUsingSetContextMethod)
 async def no_context_in_resource(request: Request):
     from starlette_context import context
 
-    return JSONResponse(context.dict())
+    return JSONResponse(context.data)
 
 
 @app.route("/add_context_in_view")
@@ -41,7 +41,7 @@ async def add_context_in_resource(request: Request):
     from starlette_context import context
 
     context["set_context_in_view"] = True
-    return JSONResponse(context.dict())
+    return JSONResponse(context.data)
 
 
 client = TestClient(app)

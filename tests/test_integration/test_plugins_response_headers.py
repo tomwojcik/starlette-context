@@ -37,7 +37,7 @@ def client():
                 return o.__str__()
 
         return JSONResponse(
-            json.loads(json.dumps(context.dict(), default=dt_serializator))
+            json.loads(json.dumps(context.data, default=dt_serializator))
         )
 
     return TestClient(app)
