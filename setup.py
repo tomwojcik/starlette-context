@@ -2,7 +2,7 @@ from distutils.core import setup
 
 import setuptools
 
-VERSION = "0.1.6"
+VERSION = "0.2.0"
 
 
 def get_long_description():
@@ -20,7 +20,6 @@ setup(
     long_description_content_type="text/markdown",
     packages=setuptools.find_packages(
         include=("starlette_context", "starlette_context.*")
-        # exclude=["tests", "*example*"]
     ),
     platforms="any",
     author="Tomasz Wojcik",
