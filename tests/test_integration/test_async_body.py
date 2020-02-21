@@ -46,3 +46,6 @@ def test_async_body():
         "from_plugin": {"test": "payload"},
     }
     assert expected_resp == resp.json()
+
+    # ugly cleanup
+    ContextMiddleware.plugins = []
