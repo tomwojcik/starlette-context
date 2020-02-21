@@ -12,7 +12,7 @@ client = TestClient(app)
 
 @app.route("/")
 async def index(request: Request):
-    return JSONResponse(context.dict())
+    return JSONResponse(context.data)
 
 
 def test_no_middleware():

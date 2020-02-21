@@ -11,7 +11,7 @@ from starlette_context.middleware import ContextMiddleware
 class UuidMiddleware(ContextMiddleware):
     plugins = []
 
-    def set_context(self, request: Request) -> dict:
+    async def set_context(self, request: Request) -> dict:
         return {"from_middleware": uuid4().hex}
 
 
@@ -24,7 +24,7 @@ async def index(request: Request):
     from starlette_context import context
 
     context["from_view"] = uuid4().hex
-    return JSONResponse(context.dict())
+    return JSONResponse(context.data)
 
 
 client = TestClient(app)

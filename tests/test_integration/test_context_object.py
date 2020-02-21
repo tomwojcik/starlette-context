@@ -1,5 +1,8 @@
 from starlette.applications import Starlette
-from starlette.middleware.base import BaseHTTPMiddleware, RequestResponseEndpoint
+from starlette.middleware.base import (
+    BaseHTTPMiddleware,
+    RequestResponseEndpoint,
+)
 from starlette.requests import Request
 from starlette.responses import JSONResponse
 from starlette.testclient import TestClient
@@ -26,7 +29,7 @@ app.add_middleware(middleware.ContextMiddleware)
 async def index(request: Request):
     context.update(c=2, d=3, e=4)
     context["f"] = 5
-    return JSONResponse(context.dict())
+    return JSONResponse(context.data)
 
 
 client = TestClient(app)

@@ -26,7 +26,7 @@ def client():
         )
     )
 
-    @app.route("/index")
+    @app.route("/")
     async def index(request: Request):
         return Response()
 
@@ -37,14 +37,14 @@ def client():
                 return o.__str__()
 
         return JSONResponse(
-            json.loads(json.dumps(context.dict(), default=dt_serializator))
+            json.loads(json.dumps(context.data, default=dt_serializator))
         )
 
     return TestClient(app)
 
 
 def test_response_headers(client, headers):
-    response = client.get("/index", headers=headers)
+    response = client.get("/", headers=headers)
     assert 2 == len(response.headers)
     cid_header = response.headers["x-correlation-id"]
     rid_header = response.headers["x-request-id"]

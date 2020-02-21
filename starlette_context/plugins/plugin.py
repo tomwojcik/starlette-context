@@ -6,16 +6,24 @@ from starlette.responses import Response
 
 
 class Plugin(metaclass=abc.ABCMeta):
-    key: str = None
-    add_to_response: bool = False
+    """
+    Base class for building those plugins to extract things from request.
+    One plugins should be responsible for extracting one thing.
 
-    instantiated = False
+    key: the key that allows to access value in headers
+    """
+
+    key: str = None
 
     def __init__(self):
-        Plugin.instantiated = True
         self.value = None
 
-    def get_from_header_by_key(self, request: Request) -> Optional[str]:
+    async def extract_value_from_header_by_key(
+        self, request: Request
+    ) -> Optional[str]:
+        """
+        Helper method.
+        """
         # http/2 headers lowercase
         if self.key != self.key.lower():
             self.value = request.headers.get(self.key) or request.headers.get(
@@ -26,17 +34,27 @@ class Plugin(metaclass=abc.ABCMeta):
 
         return self.value
 
-    def process_request(self, request: Request) -> Union[str, int]:
+    async def process_request(self, request: Request) -> Union[str, int, dict]:
+        """
+        Runs always on request.
+        Extracts value from header by default.
+        """
         assert isinstance(self.key, str)
-        return self.get_from_header_by_key(request)
+        return await self.extract_value_from_header_by_key(request)
 
-    def enrich_response(self, response: Response) -> None:
-        if self.add_to_response:
-            if isinstance(self.value, int):
-                response.headers[self.key] = str(self.value)
-            elif isinstance(self.value, str):
-                response.headers[self.key] = self.value
-            else:
-                raise TypeError(
-                    f"Can't assign header of type {type(self.value)}"
-                )
+    async def _add_kv_to_response_headers(self, response: Response) -> None:
+        """
+        Helper method
+        """
+        if not isinstance(self.value, (str, int)):
+            raise TypeError(
+                "String or int needed. Header value shouldn't be a complex type."  # noqa: E501
+            )
+        response.headers[self.key] = str(self.value)
+
+    async def enrich_response(self, response: Response) -> None:
+        """
+        Runs always on response.
+        Does nothing by default.
+        """
+        ...

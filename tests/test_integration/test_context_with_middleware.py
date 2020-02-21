@@ -1,5 +1,8 @@
 from starlette.applications import Starlette
-from starlette.middleware.base import BaseHTTPMiddleware, RequestResponseEndpoint
+from starlette.middleware.base import (
+    BaseHTTPMiddleware,
+    RequestResponseEndpoint,
+)
 from starlette.requests import Request
 from starlette.responses import JSONResponse
 from starlette.testclient import TestClient
@@ -10,7 +13,7 @@ from starlette_context.middleware import ContextMiddleware
 class MiddlewareUsingSetContextMethod(ContextMiddleware):
     plugins = []
 
-    def set_context(self, request: Request) -> dict:
+    async def set_context(self, request: Request) -> dict:
         return {"set_context_in_middleware_using_context_method": True}
 
 
@@ -33,7 +36,7 @@ app.add_middleware(MiddlewareUsingSetContextMethod)
 async def no_context_in_resource(request: Request):
     from starlette_context import context
 
-    return JSONResponse(context.dict())
+    return JSONResponse(context.data)
 
 
 @app.route("/add_context_in_view")
@@ -41,7 +44,7 @@ async def add_context_in_resource(request: Request):
     from starlette_context import context
 
     context["set_context_in_view"] = True
-    return JSONResponse(context.dict())
+    return JSONResponse(context.data)
 
 
 client = TestClient(app)

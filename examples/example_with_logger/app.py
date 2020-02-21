@@ -12,7 +12,7 @@ app = Starlette(debug=True)
 @app.route("/")
 async def index(request: Request):
     log.info("Log from view")
-    return JSONResponse(context.dict())
+    return JSONResponse(context.data)
 
 
 app.add_middleware(

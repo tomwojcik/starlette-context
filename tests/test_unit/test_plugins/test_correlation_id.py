@@ -12,38 +12,41 @@ def plugin():
     return plugins.CorrelationIdPlugin()
 
 
-def test_process_request_for_existing_header(
+@pytest.mark.asyncio
+async def test_process_request_for_existing_header(
     plugin: plugins.CorrelationIdPlugin, mocked_request: Request
 ):
-    assert dummy_correlation_id == plugin.process_request(mocked_request)
+    assert dummy_correlation_id == await plugin.process_request(mocked_request)
     assert dummy_correlation_id == plugin.value
 
 
-def test_process_request_for_missing_header(
+@pytest.mark.asyncio
+async def test_process_request_for_missing_header(
     plugin: plugins.CorrelationIdPlugin, mocked_request: Request
 ):
     del mocked_request.headers[HeaderKeys.correlation_id]
 
     assert HeaderKeys.correlation_id not in mocked_request.headers
 
-    uuid1 = plugin.process_request(mocked_request)
+    uuid1 = await plugin.process_request(mocked_request)
     assert uuid1 is not None
     assert isinstance(uuid1, str)
 
-    uuid2 = plugin.process_request(mocked_request)
+    uuid2 = await plugin.process_request(mocked_request)
     assert uuid2 is not None
     assert isinstance(uuid2, str)
 
     assert uuid1 != uuid2
 
 
-def test_enrich_response_str(
+@pytest.mark.asyncio
+async def test_enrich_response_str(
     plugin: plugins.CorrelationIdPlugin,
     mocked_request: Request,
     mocked_response: Response,
 ):
-    plugin.process_request(mocked_request)
-    plugin.enrich_response(mocked_response)
+    await plugin.process_request(mocked_request)
+    await plugin.enrich_response(mocked_response)
 
     assert (
         dummy_correlation_id

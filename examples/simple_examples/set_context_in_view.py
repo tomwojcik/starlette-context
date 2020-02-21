@@ -20,7 +20,7 @@ async def index(request: Request):
         a="b", ts=str(datetime.datetime.utcnow()), uuid=uuid.uuid4().hex
     )
 
-    return JSONResponse(context.dict())
+    return JSONResponse(context.data)
 
 
 uvicorn.run(app, host="0.0.0.0")
