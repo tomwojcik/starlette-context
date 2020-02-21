@@ -62,3 +62,15 @@ def test_ctx_iter(mocked_context: _Context, ctx_store: dict):
     assert next(iterator) == "c"
     with pytest.raises(StopIteration):
         next(iterator)
+
+
+def test_copy(mocked_context: _Context, ctx_store: dict):
+    initial_data = mocked_context.data
+    copied_data = mocked_context.copy()
+
+    assert initial_data == copied_data
+    copied_data['a'] = 123
+    assert initial_data != copied_data
+
+    assert id(initial_data) == id(mocked_context.data)
+    assert id(mocked_context.copy()) != id(mocked_context.copy())

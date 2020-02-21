@@ -51,7 +51,7 @@ app.add_middleware(ContextMiddleware.with_plugins(  # easily extensible
 
 @app.route('/')
 async def index(request: Request):
-    return JSONResponse(context.dict())
+    return JSONResponse(context.data)
 
 
 uvicorn.run(app, host="0.0.0.0")

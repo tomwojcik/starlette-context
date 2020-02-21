@@ -18,7 +18,10 @@ class _Context(UserDict):
             raise AttributeError("Can't instantiate with attributes")
 
     @property
-    def data(self):
+    def data(self) -> dict:
+        """
+        Dump this to json. Object itself it not serializable.
+        """
         return _request_scope_context_storage.get()
 
     def copy(self) -> dict:
