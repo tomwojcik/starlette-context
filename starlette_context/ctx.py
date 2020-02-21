@@ -12,6 +12,7 @@ class _Context(UserDict):
 
     If you know Flask, it can be compared to g object.
     """
+
     def __init__(self, *args: Any, **kwargs: Any):
         # not calling super on purpose
         if args or kwargs:
@@ -29,6 +30,7 @@ class _Context(UserDict):
         Read only context data.
         """
         import copy
+
         return copy.copy(self.data)
 
 

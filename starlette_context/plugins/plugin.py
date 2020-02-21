@@ -12,12 +12,15 @@ class Plugin(metaclass=abc.ABCMeta):
 
     key: the key that allows to access value in headers
     """
+
     key: str = None
 
     def __init__(self):
         self.value = None
 
-    async def extract_value_from_header_by_key(self, request: Request) -> Optional[str]:
+    async def extract_value_from_header_by_key(
+        self, request: Request
+    ) -> Optional[str]:
         """
         Helper method.
         """
@@ -31,7 +34,7 @@ class Plugin(metaclass=abc.ABCMeta):
 
         return self.value
 
-    async def process_request(self, request: Request) -> Union[str, int]:
+    async def process_request(self, request: Request) -> Union[str, int, dict]:
         """
         Runs always on request.
         Extracts value from header by default.
@@ -44,7 +47,9 @@ class Plugin(metaclass=abc.ABCMeta):
         Helper method
         """
         if not isinstance(self.value, (str, int)):
-            raise TypeError("String or int needed. Header value shouldn't be a complex type.")
+            raise TypeError(
+                "String or int needed. Header value shouldn't be a complex type."  # noqa: E501
+            )
         response.headers[self.key] = str(self.value)
 
     async def enrich_response(self, response: Response) -> None:

@@ -14,7 +14,9 @@ class DateHeaderPlugin(Plugin):
     def rfc1123_to_dt(s: str) -> datetime.datetime:
         return datetime.datetime.strptime(s, "%a, %d %b %Y %H:%M:%S")
 
-    async def process_request(self, request: Request) -> Optional[datetime.datetime]:
+    async def process_request(
+        self, request: Request
+    ) -> Optional[datetime.datetime]:
         """
         Has to be as stated in rfc2616 which uses rfc1123.
         Has to be in GMT.

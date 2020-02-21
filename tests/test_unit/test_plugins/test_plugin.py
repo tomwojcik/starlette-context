@@ -17,22 +17,30 @@ def plugin():
 
 
 @pytest.mark.asyncio
-async def test_getter_for_headers(mocked_request: Request, plugin: plugins.Plugin):
+async def test_getter_for_headers(
+    mocked_request: Request, plugin: plugins.Plugin
+):
     key_title = "X-Test-Header"
     key_lower = key_title.lower()
     value = "test_value"
 
     mocked_request.headers[key_title] = value
     plugin.key = key_title
-    assert value == await plugin.extract_value_from_header_by_key(mocked_request)
+    assert value == await plugin.extract_value_from_header_by_key(
+        mocked_request
+    )
 
     mocked_request.headers[key_lower] = value
     plugin.key = key_title
-    assert value == await plugin.extract_value_from_header_by_key(mocked_request)
+    assert value == await plugin.extract_value_from_header_by_key(
+        mocked_request
+    )
 
     mocked_request.headers[key_lower] = value
     plugin.key = key_lower
-    assert value == await plugin.extract_value_from_header_by_key(mocked_request)
+    assert value == await plugin.extract_value_from_header_by_key(
+        mocked_request
+    )
 
 
 @pytest.mark.asyncio

@@ -11,8 +11,12 @@ from starlette_context.plugins.plugin import Plugin
 class CorrelationIdPlugin(Plugin):
     key = HeaderKeys.correlation_id
 
-    async def extract_value_from_header_by_key(self, request: Request) -> Optional[str]:
-        await super(CorrelationIdPlugin, self).extract_value_from_header_by_key(request)
+    async def extract_value_from_header_by_key(
+        self, request: Request
+    ) -> Optional[str]:
+        await super(
+            CorrelationIdPlugin, self
+        ).extract_value_from_header_by_key(request)
         if self.value is None:
             self.value = uuid.uuid4().hex
         return self.value

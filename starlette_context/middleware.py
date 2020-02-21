@@ -1,8 +1,10 @@
 from contextvars import Token
 from typing import List, Type, Union
 
-from starlette.middleware.base import BaseHTTPMiddleware, \
-    RequestResponseEndpoint
+from starlette.middleware.base import (
+    BaseHTTPMiddleware,
+    RequestResponseEndpoint,
+)
 from starlette.requests import Request
 from starlette.responses import Response
 
@@ -28,7 +30,7 @@ class ContextMiddleware(BaseHTTPMiddleware):
             elif issubclass(plugin, Plugin):
                 cls.plugins.append(plugin())
             else:
-                raise TypeError('Only plugins are allowed.')
+                raise TypeError("Only plugins are allowed.")
         return cls
 
     async def set_context(self, request: Request) -> dict:

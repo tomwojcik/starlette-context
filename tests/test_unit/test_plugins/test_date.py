@@ -30,7 +30,7 @@ async def test_process_request_for_existing_header(
 
 
 @pytest.mark.parametrize(
-    "date_header", ["",],
+    "date_header", ["",],  # noqa: E231
 )
 @pytest.mark.asyncio
 async def test_process_request_for_empty_header(
