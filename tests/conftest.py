@@ -32,7 +32,7 @@ def headers():
 
 @pytest.fixture(scope="function", autouse=True)
 def mocked_middleware() -> middleware.ContextMiddleware:
-    return middleware.ContextMiddleware(MagicMock())
+    return middleware.ContextMiddleware(app=MagicMock())
 
 
 @pytest.fixture(scope="function", autouse=True)

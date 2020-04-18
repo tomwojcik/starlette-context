@@ -23,7 +23,14 @@ class _Context(UserDict):
         """
         Dump this to json. Object itself it not serializable.
         """
-        return _request_scope_context_storage.get()
+        try:
+            return _request_scope_context_storage.get()
+        except LookupError as e:
+            raise RuntimeError(
+                "You didn't use ContextMiddleware or "
+                "you're trying to access `context` object "
+                "outside of the request-response cycle."
+            ) from e
 
     def copy(self) -> dict:
         """

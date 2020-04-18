@@ -1,11 +1,11 @@
 from starlette.applications import Starlette
+from starlette.middleware import Middleware
 from starlette.requests import Request
 from starlette.responses import JSONResponse
 from starlette.testclient import TestClient
 
+from starlette_context import context, plugins
 from starlette_context.middleware import ContextMiddleware
-
-from starlette_context import plugins, context
 
 
 class GetPayloadUsingPlugin(plugins.Plugin):
@@ -24,10 +24,12 @@ class GetPayloadFromBodyMiddleware(ContextMiddleware):
         return {"from_middleware": await request.json(), **from_plugin}
 
 
-app = Starlette()
-app.add_middleware(
-    GetPayloadFromBodyMiddleware.with_plugins(GetPayloadUsingPlugin)
-)
+middleware = [
+    Middleware(
+        GetPayloadFromBodyMiddleware, plugins=(GetPayloadUsingPlugin(),)
+    )
+]
+app = Starlette(middleware=middleware)
 
 
 @app.route("/", methods=["POST"])
@@ -46,6 +48,3 @@ def test_async_body():
         "from_plugin": {"test": "payload"},
     }
     assert expected_resp == resp.json()
-
-    # ugly cleanup
-    ContextMiddleware.plugins = []

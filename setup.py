@@ -2,7 +2,7 @@ from distutils.core import setup
 
 import setuptools
 
-VERSION = "0.2.0"
+VERSION = "0.2.1"
 
 
 def get_long_description():

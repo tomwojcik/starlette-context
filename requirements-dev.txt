@@ -20,3 +20,4 @@ autoflake
 mypy
 black
 isort
+pre-commit-hooks
