@@ -4,9 +4,8 @@ from starlette.requests import Request
 from starlette.responses import JSONResponse
 from starlette.testclient import TestClient
 
+from starlette_context import context, plugins
 from starlette_context.middleware import ContextMiddleware
-
-from starlette_context import plugins, context
 
 
 class GetPayloadUsingPlugin(plugins.Plugin):
