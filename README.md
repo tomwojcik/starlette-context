@@ -3,14 +3,11 @@
 [![PyPI version](https://badge.fury.io/py/starlette-context.svg)](https://badge.fury.io/py/starlette-context)
 [![PyPI license](https://img.shields.io/pypi/l/ansicolortags.svg)](https://pypi.python.org/pypi/ansicolortags/)
 [![codecov](https://codecov.io/gh/tomwojcik/starlette-context/branch/master/graph/badge.svg)](https://codecov.io/gh/tomwojcik/starlette-context)
+[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
 # starlette context
 Middleware for Starlette that allows you to store and access the context data of a request. Can be used with logging so logs automatically use request headers such as x-request-id or x-correlation-id.
 
-### Motivation
-
-I use FastAPI. I needed something that will allow me to log with context data. Right now I can just `log.info('Message')` and I have log (in ELK) with request id and correlation id. I don't even think about passing this data to logger. It's there automatically.
-  
 ### Installation 
 
 `$ pip install starlette-context`
@@ -34,6 +31,7 @@ All other dependencies from `requirements-dev.txt` are only needed to run tests 
 
 ```python
 from starlette.applications import Starlette
+from starlette.middleware import Middleware
 from starlette.requests import Request
 from starlette.responses import JSONResponse
 
@@ -41,22 +39,28 @@ import uvicorn
 from starlette_context import context, plugins
 from starlette_context.middleware import ContextMiddleware
 
+middleware = [
+    Middleware(
+        ContextMiddleware,
+        plugins=(
+            plugins.RequestIdPlugin(),
+            plugins.CorrelationIdPlugin()
+        )
+    )
+]
 
-app = Starlette(debug=True)
-app.add_middleware(ContextMiddleware.with_plugins(  # easily extensible
-    plugins.RequestIdPlugin,  # request id
-    plugins.CorrelationIdPlugin  # correlation id
-))
+app = Starlette(middleware=middleware)
 
 
-@app.route('/')
+@app.route("/")
 async def index(request: Request):
     return JSONResponse(context.data)
 
 
 uvicorn.run(app, host="0.0.0.0")
+
 ```
-In this example the response containes a json with
+In this example the response contains a json with
 ```json
 {
   "X-Correlation-ID":"5ca2f0b43115461bad07ccae5976a990",

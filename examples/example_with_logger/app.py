@@ -16,7 +16,7 @@ middleware = [
             plugins.DateHeaderPlugin(),
             plugins.ForwardedForPlugin(),
             plugins.UserAgentPlugin(),
-        )
+        ),
     )
 ]
 

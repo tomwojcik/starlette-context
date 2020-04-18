@@ -44,8 +44,8 @@ class ExceptionHandlingMiddleware(BaseHTTPMiddleware):
         log.info("no exc raised")
         return response
 
-# middleware order is important! exc handler has to be topmost
 
+# middleware order is important! exc handler has to be topmost
 middleware = [
     Middleware(
         middleware.ContextMiddleware,
@@ -55,11 +55,9 @@ middleware = [
             plugins.DateHeaderPlugin(),
             plugins.ForwardedForPlugin(),
             plugins.UserAgentPlugin(),
-        )
+        ),
     ),
-    Middleware(
-        ExceptionHandlingMiddleware
-    )
+    Middleware(ExceptionHandlingMiddleware),
 ]
 
 app = Starlette(debug=True, middleware=middleware)

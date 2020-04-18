@@ -27,11 +27,10 @@ class GetPayloadFromBodyMiddleware(ContextMiddleware):
 
 middleware = [
     Middleware(
-        GetPayloadFromBodyMiddleware,
-        plugins=(GetPayloadUsingPlugin,)
+        GetPayloadFromBodyMiddleware, plugins=(GetPayloadUsingPlugin(),)
     )
 ]
-app = Starlette()
+app = Starlette(middleware=middleware)
 
 
 @app.route("/", methods=["POST"])
@@ -50,6 +49,3 @@ def test_async_body():
         "from_plugin": {"test": "payload"},
     }
     assert expected_resp == resp.json()
-
-    # ugly cleanup
-    ContextMiddleware.plugins = []

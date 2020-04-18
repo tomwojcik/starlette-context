@@ -1,8 +1,8 @@
 import pytest
 from starlette.applications import Starlette
-from starlette_context.middleware import ContextMiddleware
+from starlette.middleware import Middleware
 
-app = Starlette()
+from starlette_context.middleware import ContextMiddleware
 
 
 class NotAPlugin:
@@ -11,4 +11,6 @@ class NotAPlugin:
 
 def test_set_context_in_middlewares():
     with pytest.raises(TypeError):
-        app.add_middleware(ContextMiddleware.with_plugins(NotAPlugin))
+        Starlette(
+            middleware=[Middleware(ContextMiddleware, plugins=(NotAPlugin,))]
+        )

@@ -10,10 +10,7 @@ from starlette_context.middleware import ContextMiddleware
 middleware = [
     Middleware(
         ContextMiddleware,
-        plugins=(
-            plugins.RequestIdPlugin(),
-            plugins.CorrelationIdPlugin()
-        )
+        plugins=(plugins.RequestIdPlugin(), plugins.CorrelationIdPlugin()),
     )
 ]
 

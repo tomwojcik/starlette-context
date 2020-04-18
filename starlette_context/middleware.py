@@ -17,15 +17,14 @@ class ContextMiddleware(BaseHTTPMiddleware):
     Middleware that creates empty context for request it's used on.
     If not used, you won't be able to use context object.
     """
+
     def __init__(
-        self,
-        plugins: Optional[Sequence[Plugin]] = None,
-        *args, **kwargs
+        self, plugins: Optional[Sequence[Plugin]] = None, *args, **kwargs
     ) -> None:
         super().__init__(*args, **kwargs)
         self.plugins = plugins or ()
         if not all([isinstance(plugin, Plugin) for plugin in self.plugins]):
-            raise TypeError("Invalid plugin")
+            raise TypeError("This is not a valid instance of a plugin")
 
     async def set_context(self, request: Request) -> dict:
         """
