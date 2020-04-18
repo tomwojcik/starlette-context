@@ -27,7 +27,6 @@ https://github.com/MagicStack/contextvars
 All other dependencies from `requirements-dev.txt` are only needed to run tests or examples. Test/dev env is dockerized if you want to try them yourself.
     
 ### Example
-**examples/simple_examples/set_context_in_middleware.py**
 
 ```python
 from starlette.applications import Starlette
