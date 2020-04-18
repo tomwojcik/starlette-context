@@ -16,5 +16,5 @@ async def index(request: Request):
 
 
 def test_no_middleware():
-    with pytest.raises(LookupError):
+    with pytest.raises(RuntimeError):
         client.get("/")

@@ -6,6 +6,7 @@ import uvicorn
 from starlette_context import context
 from starlette_context.middleware import ContextMiddleware
 
+
 app = Starlette(debug=True)
 app.add_middleware(ContextMiddleware)
 

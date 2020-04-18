@@ -1,4 +1,5 @@
 from starlette.applications import Starlette
+from starlette.middleware import Middleware
 from starlette.requests import Request
 from starlette.responses import JSONResponse
 
@@ -6,22 +7,26 @@ import uvicorn
 from examples.example_with_logger.logger import log
 from starlette_context import context, middleware, plugins
 
-app = Starlette(debug=True)
+middleware = [
+    Middleware(
+        middleware.ContextMiddleware,
+        plugins=(
+            plugins.CorrelationIdPlugin(),
+            plugins.RequestIdPlugin(),
+            plugins.DateHeaderPlugin(),
+            plugins.ForwardedForPlugin(),
+            plugins.UserAgentPlugin(),
+        )
+    )
+]
+
+app = Starlette(debug=True, middleware=middleware)
 
 
 @app.route("/")
-async def index(request: Request):
+async def index(_: Request):
     log.info("Log from view")
     return JSONResponse(context.data)
 
 
-app.add_middleware(
-    middleware.ContextMiddleware.with_plugins(
-        plugins.CorrelationIdPlugin,
-        plugins.RequestIdPlugin,
-        plugins.DateHeaderPlugin,
-        plugins.ForwardedForPlugin,
-        plugins.UserAgentPlugin,
-    )
-)
 uvicorn.run(app, host="0.0.0.0")

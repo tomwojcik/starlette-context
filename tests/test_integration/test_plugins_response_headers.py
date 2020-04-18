@@ -3,6 +3,7 @@ import json
 
 import pytest
 from starlette.applications import Starlette
+from starlette.middleware import Middleware
 from starlette.requests import Request
 from starlette.responses import JSONResponse, Response
 from starlette.testclient import TestClient
@@ -12,19 +13,17 @@ from starlette_context.middleware import ContextMiddleware
 from tests.conftest import dummy_correlation_id, dummy_request_id
 
 
-@pytest.fixture(scope="function", autouse=True)
-def client():
-    """
-    That way so `with_plugins` is cls var is clear after those tests.
-    """
-    app = Starlette()
-    app.add_middleware(
-        ContextMiddleware.with_plugins(
-            plugins.RequestIdPlugin(),
-            plugins.CorrelationIdPlugin,
-            plugins.DateHeaderPlugin,
+    middleware = [
+        Middleware(
+            ContextMiddleware,
+            plugins=(
+                plugins.RequestIdPlugin(),
+                plugins.CorrelationIdPlugin,
+                plugins.DateHeaderPlugin,
+            )
         )
-    )
+    ]
+    app = Starlette(middleware=middleware)
 
     @app.route("/")
     async def index(request: Request):
@@ -40,7 +39,7 @@ def client():
             json.loads(json.dumps(context.data, default=dt_serializator))
         )
 
-    return TestClient(app)
+    client = TestClient(app)
 
 
 def test_response_headers(client, headers):

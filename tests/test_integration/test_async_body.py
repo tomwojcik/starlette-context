@@ -1,4 +1,5 @@
 from starlette.applications import Starlette
+from starlette.middleware import Middleware
 from starlette.requests import Request
 from starlette.responses import JSONResponse
 from starlette.testclient import TestClient
@@ -24,10 +25,13 @@ class GetPayloadFromBodyMiddleware(ContextMiddleware):
         return {"from_middleware": await request.json(), **from_plugin}
 
 
+middleware = [
+    Middleware(
+        GetPayloadFromBodyMiddleware,
+        plugins=(GetPayloadUsingPlugin,)
+    )
+]
 app = Starlette()
-app.add_middleware(
-    GetPayloadFromBodyMiddleware.with_plugins(GetPayloadUsingPlugin)
-)
 
 
 @app.route("/", methods=["POST"])

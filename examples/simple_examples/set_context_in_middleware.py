@@ -1,4 +1,5 @@
 from starlette.applications import Starlette
+from starlette.middleware import Middleware
 from starlette.requests import Request
 from starlette.responses import JSONResponse
 
@@ -6,12 +7,17 @@ import uvicorn
 from starlette_context import context, plugins
 from starlette_context.middleware import ContextMiddleware
 
-app = Starlette(debug=True)
-app.add_middleware(
-    ContextMiddleware.with_plugins(
-        plugins.RequestIdPlugin, plugins.CorrelationIdPlugin
+middleware = [
+    Middleware(
+        ContextMiddleware,
+        plugins=(
+            plugins.RequestIdPlugin(),
+            plugins.CorrelationIdPlugin()
+        )
     )
-)
+]
+
+app = Starlette(debug=True, middleware=middleware)
 
 
 @app.route("/")

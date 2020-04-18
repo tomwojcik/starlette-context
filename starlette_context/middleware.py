@@ -1,5 +1,5 @@
 from contextvars import Token
-from typing import List, Type, Union
+from typing import Optional, Sequence
 
 from starlette.middleware.base import (
     BaseHTTPMiddleware,
@@ -17,21 +17,15 @@ class ContextMiddleware(BaseHTTPMiddleware):
     Middleware that creates empty context for request it's used on.
     If not used, you won't be able to use context object.
     """
-
-    plugins: List[Plugin] = []
-
-    @classmethod
-    def with_plugins(
-        cls, *plugins: Union[Plugin, Type[Plugin]]
-    ) -> Type["ContextMiddleware"]:
-        for plugin in plugins:
-            if isinstance(plugin, Plugin):
-                cls.plugins.append(plugin)
-            elif issubclass(plugin, Plugin):
-                cls.plugins.append(plugin())
-            else:
-                raise TypeError("Only plugins are allowed.")
-        return cls
+    def __init__(
+        self,
+        plugins: Optional[Sequence[Plugin]] = None,
+        *args, **kwargs
+    ) -> None:
+        super().__init__(*args, **kwargs)
+        self.plugins = plugins or ()
+        if not all([isinstance(plugin, Plugin) for plugin in self.plugins]):
+            raise TypeError("Invalid plugin")
 
     async def set_context(self, request: Request) -> dict:
         """
