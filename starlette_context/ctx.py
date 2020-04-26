@@ -33,7 +33,7 @@ class _Context(UserDict):
                 "outside of the request-response cycle."
             ) from e
 
-    def exist(self):
+    def exists(self) -> bool:
         return _request_scope_context_storage in copy_context()
 
     def copy(self) -> dict:
