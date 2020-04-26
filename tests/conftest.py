@@ -7,9 +7,10 @@ from starlette.responses import Response
 
 from starlette_context import middleware
 from starlette_context.header_keys import HeaderKeys
+import uuid
 
-dummy_correlation_id = "dummy_correlation_id"
-dummy_request_id = "dummy_request_id"
+dummy_correlation_id = uuid.uuid4().hex
+dummy_request_id = uuid.uuid4().hex
 dummy_user_agent = "dummy_user_agent"
 dummy_date = "Wed, 01 Jan 2020 04:27:12 GMT"
 dummy_forwarded_for = "203.0.113.19"

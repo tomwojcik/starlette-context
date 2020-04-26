@@ -49,3 +49,12 @@ async def test_enrich_response_str(
     await plugin.enrich_response(mocked_response)
 
     assert dummy_request_id == mocked_response.headers[HeaderKeys.request_id]
+
+
+@pytest.mark.asyncio
+async def test_invalid_request_id_uuid(
+    plugin: plugins.RequestIdPlugin, mocked_request: Request
+):
+    mocked_request.headers[HeaderKeys.request_id] = "invalid_uuid"
+    with pytest.raises(ValueError):
+        await plugin.process_request(mocked_request)

@@ -1,6 +1,7 @@
 from collections import UserDict
 from typing import Any
 
+from contextvars import copy_context
 from starlette_context import _request_scope_context_storage
 
 
@@ -31,6 +32,9 @@ class _Context(UserDict):
                 "you're trying to access `context` object "
                 "outside of the request-response cycle."
             ) from e
+
+    def exists(self) -> bool:
+        return _request_scope_context_storage in copy_context()
 
     def copy(self) -> dict:
         """
