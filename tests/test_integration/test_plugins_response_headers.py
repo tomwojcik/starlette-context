@@ -10,6 +10,7 @@ from starlette.testclient import TestClient
 from starlette_context import context, plugins
 from starlette_context.middleware import ContextMiddleware
 from tests.conftest import dummy_correlation_id, dummy_request_id
+from starlette_context.header_keys import HeaderKeys
 
 middleware = [
     Middleware(
@@ -46,8 +47,8 @@ client = TestClient(app)
 def test_response_headers(headers):
     response = client.get("/", headers=headers)
     assert 2 == len(response.headers)
-    cid_header = response.headers["x-correlation-id"]
-    rid_header = response.headers["x-request-id"]
+    cid_header = response.headers[HeaderKeys.correlation_id.lower()]
+    rid_header = response.headers[HeaderKeys.request_id.lower()]
     assert dummy_correlation_id == cid_header
     assert dummy_request_id == rid_header
 

@@ -15,7 +15,7 @@ app.add_middleware(middleware.ContextMiddleware)
 
 @app.route("/")
 async def index(request: Request) -> Response:
-    return JSONResponse({'exists': context.exists()})
+    return JSONResponse({"exists": context.exists()})
 
 
 client = TestClient(app)

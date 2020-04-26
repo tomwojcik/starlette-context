@@ -13,6 +13,7 @@ from starlette.testclient import TestClient
 
 from starlette_context import middleware
 from starlette_context.header_keys import HeaderKeys
+from starlette_context import context
 
 
 class CustomException(Exception):
@@ -20,31 +21,25 @@ class CustomException(Exception):
 
 
 async def custom_exception_handler(request: Request, exc: Exception):
-    from starlette_context import context
-    return JSONResponse({'exception': 'handled'}, headers=context.data)
+    return JSONResponse({"exception": "handled"}, headers=context.data)
 
 
 async def general_exception_handler(request: Request, exc: Exception):
-    from starlette_context import context
-    return JSONResponse({'exception': 'handled'}, headers=context.data)
+    return JSONResponse({"exception": "handled"}, headers=context.data)
 
 
 middleware = [
     Middleware(
-        middleware.ContextMiddleware,
-        plugins=(plugins.RequestIdPlugin(),)
+        middleware.ContextMiddleware, plugins=(plugins.RequestIdPlugin(),)
     )
 ]
 exception_handlers = {
     CustomException: custom_exception_handler,
-    Exception: general_exception_handler
+    Exception: general_exception_handler,
 }
 
 
-app = Starlette(
-    exception_handlers=exception_handlers,
-    middleware=middleware,
-)
+app = Starlette(exception_handlers=exception_handlers, middleware=middleware,)
 
 headers = {HeaderKeys.request_id: uuid.uuid4().hex}
 
@@ -64,5 +59,8 @@ client = TestClient(app)
 
 def test_exception_handling_that_is_not_resulting_in_500():
     resp = client.get("/custom-exc", headers=headers)
-    assert json.loads(resp.content) == {'exception': 'handled'}
-    assert resp.headers.get(HeaderKeys.request_id) == headers[HeaderKeys.request_id]
+    assert json.loads(resp.content) == {"exception": "handled"}
+    assert (
+        resp.headers.get(HeaderKeys.request_id)
+        == headers[HeaderKeys.request_id]
+    )

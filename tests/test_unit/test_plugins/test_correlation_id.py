@@ -21,6 +21,15 @@ async def test_process_request_for_existing_header(
 
 
 @pytest.mark.asyncio
+async def test_invalid_correlation_id_uuid(
+    plugin: plugins.CorrelationIdPlugin, mocked_request: Request
+):
+    mocked_request.headers[HeaderKeys.correlation_id] = "invalid_uuid"
+    with pytest.raises(ValueError):
+        await plugin.process_request(mocked_request)
+
+
+@pytest.mark.asyncio
 async def test_process_request_for_missing_header(
     plugin: plugins.CorrelationIdPlugin, mocked_request: Request
 ):
@@ -52,3 +61,35 @@ async def test_enrich_response_str(
         dummy_correlation_id
         == mocked_response.headers[HeaderKeys.correlation_id]
     )
+
+
+def test_version_cant_map_to_function():
+    with pytest.raises(TypeError):
+        plugins.CorrelationIdPlugin(version=123)
+
+
+@pytest.mark.asyncio
+async def test_force_new_uuid(
+    plugin: plugins.CorrelationIdPlugin,
+    mocked_request: Request,
+    mocked_response: Response,
+):
+    plugin.force_new_uuid = True
+    await plugin.process_request(mocked_request)
+    await plugin.enrich_response(mocked_response)
+
+    assert (
+        dummy_correlation_id
+        != mocked_response.headers[HeaderKeys.correlation_id]
+    )
+
+
+@pytest.mark.asyncio
+async def test_uuid_validation(
+    plugin: plugins.CorrelationIdPlugin,
+    mocked_request: Request,
+    mocked_response: Response,
+):
+    mocked_request.headers[HeaderKeys.correlation_id] = "invalid_uuid"
+    with pytest.raises(ValueError):
+        await plugin.process_request(mocked_request)
