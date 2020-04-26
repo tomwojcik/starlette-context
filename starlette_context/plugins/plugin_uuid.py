@@ -10,12 +10,13 @@ from starlette_context.plugins.plugin import Plugin
 class PluginUUIDBase(Plugin):
     uuid_functions_mapper = {4: uuid.uuid4}
 
-    def __init__(self, force_new_uuid: bool = False, version: int = 4):
+    def __init__(self, force_new_uuid: bool = False, version: int = 4, validate: bool = True):
         super().__init__()
         if version not in self.uuid_functions_mapper:
             raise TypeError(f"UUID version {version} is not supported.")
         self.force_new_uuid = force_new_uuid
         self.version = version
+        self.validate = validate
 
     def validate_uuid(self, uuid_to_validate: str) -> None:
         try:
@@ -36,7 +37,8 @@ class PluginUUIDBase(Plugin):
         if self.value is None:
             self.value = self.get_new_uuid()
 
-        self.validate_uuid(self.value)
+        if self.validate:
+            self.validate_uuid(self.value)
 
         return self.value
 
