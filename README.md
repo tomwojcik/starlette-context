@@ -16,10 +16,6 @@ Middleware for Starlette that allows you to store and access the context data of
 ### Requirements
 Python 3.7+
 
-For Python 3.6 only:  
-`contextvar` came out with python3.7 and is required for this to run. If you need to use Starlette with python3.6, there is a backport of `contextvar` for py36. 
-https://github.com/MagicStack/contextvars
-
 ### Dependencies
 
 - `starlette`
