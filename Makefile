@@ -24,8 +24,11 @@ bash:
 doc:
 	docker-compose -f docker-compose.yml run --rm tests sh -c "cd docs && make html"
 
-make increment-patch:
-	docker-compose -f docker-compose.yml run --rm tests sh -c "bump2version part patch"
-
 push:
-	docker-compose -f docker-compose.yml run --rm tests sh -c "bump2version part starlette_context"
+	sh scripts/clean.sh
+	increment-patch
+	docker-compose -f docker-compose.yml run --rm tests sh -c "python setup.py sdist"
+	docker-compose -f docker-compose.yml run --rm tests sh -c "twine upload dist/*"
+
+increment-patch:
+	docker-compose -f docker-compose.yml run --rm tests sh -c "bump2version part patch"
