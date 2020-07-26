@@ -26,6 +26,7 @@ doc:
 
 push:
 	sh scripts/clean.sh
+	lint
 	bump2version patch
-	python setup.py sdist
+	python3 setup.py sdist
 	twine upload dist/*
