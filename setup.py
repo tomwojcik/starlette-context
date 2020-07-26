@@ -1,8 +1,6 @@
 from distutils.core import setup
-
+from starlette_context import __version__, __author__
 import setuptools
-
-VERSION = "0.2.2"
 
 
 def get_long_description():
@@ -13,7 +11,7 @@ def get_long_description():
 setup(
     name="starlette_context",
     python_requires=">=3.7",
-    version=VERSION,
+    version=__version__,
     license="MIT",
     description="Access context in Starlette",
     long_description=get_long_description(),
@@ -22,10 +20,10 @@ setup(
         include=("starlette_context", "starlette_context.*")
     ),
     platforms="any",
-    author="Tomasz Wojcik",
+    author=__author__,
     url="https://github.com/tomwojcik/starlette-context",
     download_url="https://github.com/tomwojcik/starlette-context/"
-    f"archive/{VERSION}.tar.gz",
+    f"archive/{__version__}.tar.gz",
     keywords=["starlette", "fastapi"],
     install_requires="starlette",
     classifiers=[
