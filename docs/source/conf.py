@@ -18,14 +18,13 @@ sys.path.insert(0, os.path.abspath("../../starlette_context"))
 
 # -- Project information -----------------------------------------------------
 
-from starlette_context import __author__, __version__
-
 project = "Starlette Context"
-copyright = f"2020, {__author__}"
-author = __author__
+copyright = f"2020, Tomasz Wojcik"
+author = "Tomasz Wojcik"
 
 # The full version, including alpha/beta/rc tags
-release = __version__
+VERSION = "0.2.3"
+release = VERSION
 
 # -- General configuration ---------------------------------------------------
 
