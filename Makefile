@@ -24,11 +24,11 @@ bash:
 doc:
 	docker-compose -f docker-compose.yml run --rm tests sh -c "cd docs && make html"
 
+increment-patch:
+	bump2version patch
+
 push:
 	sh scripts/clean.sh
 	increment-patch
 	python setup.py sdist
 	twine upload dist/*
-
-increment-patch:
-	bump2version patch
