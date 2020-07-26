@@ -15,6 +15,7 @@ I wanted the interface to be as pythonic as possible so it mimics a ``dict``.
 I think the only thing you can't do with it is unpack it using ``**context``.
 You'd have to use ``**.context.data`` for that.
 Following operations work as expected
+
  - ``context["key"]``
  - ``context.get("key")``
  - ``context.items()``
