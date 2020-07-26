@@ -1,6 +1,6 @@
 from contextvars import ContextVar
 
-__version__ = "0.2.3"
+__version__ = "0.2.2"
 __author__ = "Tomasz Wojcik"
 
 
