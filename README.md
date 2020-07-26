@@ -4,9 +4,16 @@
 [![PyPI license](https://img.shields.io/pypi/l/ansicolortags.svg)](https://pypi.python.org/pypi/ansicolortags/)
 [![codecov](https://codecov.io/gh/tomwojcik/starlette-context/branch/master/graph/badge.svg)](https://codecov.io/gh/tomwojcik/starlette-context)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
+[![](https://readthedocs.org/projects/pip/badge/?version=latest&style=plastic)](https://starlette-context.readthedocs.io/)
 
 # starlette context
 Middleware for Starlette that allows you to store and access the context data of a request. Can be used with logging so logs automatically use request headers such as x-request-id or x-correlation-id.
+
+Resources:
+
+* **Source**: https://github.com/tomwojcik/starlette-context
+* **Documentation**: https://starlette-context.readthedocs.io/
+* **Changelog**: https://starlette-context.readthedocs.io/en/stable/changelog.html
 
 ### Installation 
 

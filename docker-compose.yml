@@ -1,7 +1,7 @@
 version: '3.7'
 services:
 
-  tests:
+  app:
     image: starlette_context
     container_name: starlette_context
     build: .
@@ -10,6 +10,6 @@ services:
       - 8000:8000
     expose:
       - 8000
-    restart: always
+    restart: unless-stopped
     volumes:
       - .:/source/starlette_context

@@ -4,6 +4,8 @@ from typing import Optional, Union
 from starlette.requests import Request
 from starlette.responses import Response
 
+from starlette_context import context
+
 
 class Plugin(metaclass=abc.ABCMeta):
     """
@@ -15,9 +17,6 @@ class Plugin(metaclass=abc.ABCMeta):
 
     key: str = None
 
-    def __init__(self):
-        self.value = None
-
     async def extract_value_from_header_by_key(
         self, request: Request
     ) -> Optional[str]:
@@ -26,13 +25,13 @@ class Plugin(metaclass=abc.ABCMeta):
         """
         # http/2 headers lowercase
         if self.key != self.key.lower():
-            self.value = request.headers.get(self.key) or request.headers.get(
+            value = request.headers.get(self.key) or request.headers.get(
                 self.key.lower()
             )
         else:
-            self.value = request.headers.get(self.key)
+            value = request.headers.get(self.key)
 
-        return self.value
+        return value
 
     async def process_request(self, request: Request) -> Union[str, int, dict]:
         """
@@ -46,11 +45,12 @@ class Plugin(metaclass=abc.ABCMeta):
         """
         Helper method
         """
-        if not isinstance(self.value, (str, int)):
+        value = context.get(self.key)
+        if not isinstance(value, (str, int)):
             raise TypeError(
                 "String or int needed. Header value shouldn't be a complex type."  # noqa: E501
             )
-        response.headers[self.key] = str(self.value)
+        response.headers[self.key] = value
 
     async def enrich_response(self, response: Response) -> None:
         """

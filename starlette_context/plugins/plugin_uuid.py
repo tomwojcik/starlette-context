@@ -10,7 +10,12 @@ from starlette_context.plugins.plugin import Plugin
 class PluginUUIDBase(Plugin):
     uuid_functions_mapper = {4: uuid.uuid4}
 
-    def __init__(self, force_new_uuid: bool = False, version: int = 4, validate: bool = True):
+    def __init__(
+        self,
+        force_new_uuid: bool = False,
+        version: int = 4,
+        validate: bool = True,
+    ):
         super().__init__()
         if version not in self.uuid_functions_mapper:
             raise TypeError(f"UUID version {version} is not supported.")
@@ -31,16 +36,18 @@ class PluginUUIDBase(Plugin):
     async def extract_value_from_header_by_key(
         self, request: Request
     ) -> Optional[str]:
-        if not self.force_new_uuid:
-            await super().extract_value_from_header_by_key(request)
 
-        if self.value is None:
-            self.value = self.get_new_uuid()
+        if self.force_new_uuid:
+            value = self.get_new_uuid()
+        else:
+            value = super(
+                PluginUUIDBase, self
+            ).extract_value_from_header_by_key(request)
 
         if self.validate:
-            self.validate_uuid(self.value)
+            self.validate_uuid(value)
 
-        return self.value
+        return value
 
     async def enrich_response(self, response: Response) -> None:
         await self._add_kv_to_response_headers(response)
