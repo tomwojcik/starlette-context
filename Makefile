@@ -27,8 +27,8 @@ doc:
 push:
 	sh scripts/clean.sh
 	increment-patch
-	docker-compose -f docker-compose.yml run --rm tests sh -c "python setup.py sdist"
-	docker-compose -f docker-compose.yml run --rm tests sh -c "twine upload dist/*"
+	python setup.py sdist
+	twine upload dist/*
 
 increment-patch:
-	docker-compose -f docker-compose.yml run --rm tests sh -c "bump2version part patch"
+	bump2version patch
