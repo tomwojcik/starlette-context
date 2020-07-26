@@ -28,5 +28,5 @@ push:
 	sh scripts/clean.sh
 	lint
 	bump2version patch
-	python3 setup.py sdist
-	twine upload dist/*
+	python3 setup.py sdist bdist_wheel
+	twine upload --repository-url https://upload.pypi.org/legacy/ dist/*
