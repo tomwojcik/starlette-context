@@ -15,9 +15,11 @@ pytest-xdist==1.31.0
 pytest-asyncio==0.10.0
 codecov
 
+# docs
+sphinx
+sphinx_rtd_theme
+
 # lint
-autoflake
 mypy
 black
-isort
 pre-commit-hooks

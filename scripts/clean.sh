@@ -14,3 +14,4 @@ if [ -d 'starlette_context.egg-info' ] ; then
 fi
 
 find . -type d -name ".*" -empty -delete
+find . -type f -name ".coverage" -delete

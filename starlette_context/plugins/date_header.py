@@ -26,9 +26,10 @@ class DateHeaderPlugin(Plugin):
             Wed, 01 Jan 2020 04:27:12 GMT
             Wed, 01 Jan 2020 04:27:12
         """
+
         rfc1123 = await self.extract_value_from_header_by_key(request)
         if not rfc1123:
-            self.value = None
+            value = None
         else:
             dt_str, dt_data = rfc1123[:25], rfc1123[25:]
 
@@ -37,6 +38,6 @@ class DateHeaderPlugin(Plugin):
                     "Date header in wrong format, has to match rfc1123."
                 )
 
-            self.value = self.rfc1123_to_dt(dt_str.strip())
+            value = self.rfc1123_to_dt(dt_str.strip())
 
-        return self.value
+        return value
