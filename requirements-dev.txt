@@ -23,7 +23,3 @@ sphinx_rtd_theme
 mypy
 black
 pre-commit-hooks
-
-# dist
-bump2version
-twine
