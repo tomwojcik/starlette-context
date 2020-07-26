@@ -16,7 +16,6 @@ class PluginUUIDBase(Plugin):
         version: int = 4,
         validate: bool = True,
     ):
-        super().__init__()
         if version not in self.uuid_functions_mapper:
             raise TypeError(f"UUID version {version} is not supported.")
         self.force_new_uuid = force_new_uuid
@@ -37,12 +36,11 @@ class PluginUUIDBase(Plugin):
         self, request: Request
     ) -> Optional[str]:
 
-        if self.force_new_uuid:
+        value = await super().extract_value_from_header_by_key(request)
+
+        # if force_new_uuid or correlation id was not found, create one
+        if self.force_new_uuid or not value:
             value = self.get_new_uuid()
-        else:
-            value = super(
-                PluginUUIDBase, self
-            ).extract_value_from_header_by_key(request)
 
         if self.validate:
             self.validate_uuid(value)

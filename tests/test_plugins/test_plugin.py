@@ -41,33 +41,3 @@ async def test_getter_for_headers(
     assert value == await plugin.extract_value_from_header_by_key(
         mocked_request
     )
-
-
-@pytest.mark.asyncio
-async def test_enrich_response_str(
-    mocked_response: Response, plugin: plugins.Plugin
-):
-    val = "asd"
-    plugin.value = val
-    await plugin.enrich_response(mocked_response)
-    assert val == mocked_response.headers[plugin.key]
-
-
-@pytest.mark.asyncio
-async def test_enrich_response_int(
-    mocked_response: Response, plugin: plugins.Plugin
-):
-    val = 123
-    plugin.value = val
-    await plugin.enrich_response(mocked_response)
-    assert str(val) == mocked_response.headers[plugin.key]
-
-
-@pytest.mark.asyncio
-async def test_enrich_response_invalid(
-    mocked_response: Response, plugin: plugins.Plugin
-):
-    val = None
-    plugin.value = val
-    with pytest.raises(TypeError):
-        await plugin.enrich_response(mocked_response)
