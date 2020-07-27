@@ -1,6 +1,6 @@
-##########
+=======
 Plugins
-##########
+=======
 
 Context plugins allow you to extract any data you want from the request and store it in the context object.
 I wrote plugins for the most common use cases that come to my mind, like extracting Correlation ID.

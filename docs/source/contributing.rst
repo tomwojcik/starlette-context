@@ -1,6 +1,6 @@
-************
+============
 Contributing
-************
+============
 
 I'm very happy with all the tickets you open. Feel free to open PRs if you feel like it.
 

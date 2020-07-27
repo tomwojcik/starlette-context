@@ -1,6 +1,6 @@
-**********
+==========
 Middleware
-**********
+==========
 
 There's only one middleware (``ContextMiddleware``) as my idea was to extend its functionality using plugins.
 

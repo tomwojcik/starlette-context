@@ -1,6 +1,6 @@
-**************
+==============
 Context object
-**************
+==============
 
 The context object is kept in ``ContextVar`` created for the request that is being processed asynchronously.
 This ``ContextVar`` is a python object that has been introduced with 3.7 IIRC.
