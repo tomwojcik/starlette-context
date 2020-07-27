@@ -4,6 +4,15 @@ Changelog
 Latest release
 
 *********
+**0.2.3**
+*********
+*Release date: July 27, 2020*
+
+ * add docs on read the docs
+ * fix bug with ``force_new_uuid=True`` returning the same uuid constantly
+ * due to ^ a lot of tests had to be refactored as well
+
+*********
 **0.2.2**
 *********
 *Release date: Apr 26, 2020*
