@@ -3,7 +3,7 @@
 [![PyPI version](https://badge.fury.io/py/starlette-context.svg)](https://badge.fury.io/py/starlette-context)
 [![codecov](https://codecov.io/gh/tomwojcik/starlette-context/branch/master/graph/badge.svg)](https://codecov.io/gh/tomwojcik/starlette-context)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
-[![Docs](https://readthedocs.org/projects/pip/badge/?version=latest&style=plastic)](https://starlette-context.readthedocs.io/)
+[![Docs](https://readthedocs.org/projects/pip/badge/?version=latest)](https://starlette-context.readthedocs.io/)
 ![Downloads](https://img.shields.io/pypi/dm/starlette-context)
 
 # starlette context
