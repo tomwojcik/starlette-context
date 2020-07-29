@@ -1,7 +1,7 @@
 -r requirements.txt
 
 # for running examples locally
-uvicorn==0.11.1
+uvicorn==0.11.7
 python-json-logger==0.1.11
 
 # test dependencies for starlette
