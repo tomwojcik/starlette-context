@@ -46,6 +46,6 @@ def test_not_a_plugin_in_init():
     class NotAPlugin:
         pass
 
-    middleware = [Middleware(NotAPlugin,)]
+    middleware = [Middleware(RawContextMiddleware, plugins=(NotAPlugin()),)]
     with pytest.raises(TypeError):
         Starlette(middleware=middleware)
