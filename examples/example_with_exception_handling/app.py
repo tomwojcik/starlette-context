@@ -13,7 +13,6 @@ from starlette.status import HTTP_500_INTERNAL_SERVER_ERROR
 
 import uvicorn
 
-import starlette_context.middleware.context_middleware
 from examples.example_with_exception_handling.logger import log
 from starlette_context import middleware, plugins
 
@@ -50,7 +49,7 @@ class ExceptionHandlingMiddleware(BaseHTTPMiddleware):
 # middleware order is important! exc handler has to be topmost
 middleware = [
     Middleware(
-        starlette_context.middleware.context_middleware.ContextMiddleware,
+        middleware.ContextMiddleware,
         plugins=(
             plugins.CorrelationIdPlugin(),
             plugins.RequestIdPlugin(),
