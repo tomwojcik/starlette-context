@@ -10,11 +10,11 @@ However, if you are using StreamingResponse, you might bump into memory issues. 
 - https://github.com/encode/starlette/issues/919
 - https://github.com/encode/starlette/issues/1012
 
-Authors `discourage the use of BaseHTTPMiddleware https://github.com/encode/starlette/issues/1012#issuecomment-673461832`_ in favor of what the call "raw middleware".
+Authors `discourage the use of BaseHTTPMiddleware https://github.com/encode/starlette/issues/1012#issuecomment-673461832`_ in favor of what they call "raw middleware".
 That's why I created a new one. It does more or less the same thing, but instead of creating the entire ``Request`` object,
 only ``HTTPConnection`` is instantiated. That I think will be sufficient to mitigate this issue.
 
-It is entirely possible that ``ContextMiddleware`` will be removed in the future release. Therefore, if possible, use only ``ContextRawMiddleware``.
+It is entirely possible that ``ContextMiddleware`` will be removed in the future release. Therefore, if possible, use only ``RawContextMiddleware``.
 
 .. warning::
 
@@ -59,7 +59,7 @@ Finally, the "storage" that async python apps can access is removed.
 
 
 ********************
-ContextRawMiddleware
+RawContextMiddleware
 ********************
 
 Tries to achieve the same thing but differently. Here you can access only the request-like object you will instantiate yourself.
