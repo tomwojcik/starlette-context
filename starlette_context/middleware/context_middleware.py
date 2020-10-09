@@ -1,3 +1,4 @@
+import warnings
 from contextvars import Token
 from typing import Optional, Sequence
 
@@ -16,11 +17,17 @@ class ContextMiddleware(BaseHTTPMiddleware):
     """
     Middleware that creates empty context for request it's used on.
     If not used, you won't be able to use context object.
+
+    Not to be used with StreamingResponse / FileResponse.
+    https://github.com/encode/starlette/issues/1012#issuecomment-673461832
     """
 
     def __init__(
         self, plugins: Optional[Sequence[Plugin]] = None, *args, **kwargs
     ) -> None:
+        warnings.warn(
+            "Using `ContextMiddleware` might cause memory issues. See https://github.com/tomwojcik/starlette-context/issues/18"
+        )
         super().__init__(*args, **kwargs)
         self.plugins = plugins or ()
         if not all([isinstance(plugin, Plugin) for plugin in self.plugins]):
