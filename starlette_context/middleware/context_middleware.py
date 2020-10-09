@@ -16,6 +16,9 @@ class ContextMiddleware(BaseHTTPMiddleware):
     """
     Middleware that creates empty context for request it's used on.
     If not used, you won't be able to use context object.
+
+    Not to be used with StreamingResponse / FileResponse.
+    https://github.com/encode/starlette/issues/1012#issuecomment-673461832
     """
 
     def __init__(

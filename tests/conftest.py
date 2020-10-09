@@ -4,8 +4,8 @@ import pytest
 from starlette.datastructures import MutableHeaders
 from starlette.requests import Request
 from starlette.responses import Response
+from starlette_context.middleware import ContextMiddleware
 
-from starlette_context import middleware
 from starlette_context.header_keys import HeaderKeys
 import uuid
 
@@ -32,8 +32,8 @@ def headers():
 
 
 @pytest.fixture(scope="function", autouse=True)
-def mocked_middleware() -> middleware.ContextMiddleware:
-    return middleware.ContextMiddleware(app=MagicMock())
+def mocked_middleware() -> ContextMiddleware:
+    return ContextMiddleware(app=MagicMock())
 
 
 @pytest.fixture(scope="function", autouse=True)

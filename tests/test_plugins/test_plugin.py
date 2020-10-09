@@ -11,7 +11,7 @@ def plugin():
         key = "key"
 
         async def enrich_response(self, response: Response) -> None:
-            await self._add_kv_to_response_headers(response)
+            await super().enrich_response(response)
 
     return DummyPlugin()
 

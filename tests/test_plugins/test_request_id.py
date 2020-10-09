@@ -32,7 +32,7 @@ def test_valid_request_returns_proper_response():
     assert response.headers.get(HeaderKeys.request_id) == dummy_request_id
 
 
-def test_invalid_correlation_id_raises_exception_on_uuid_validation():
+def test_invalid_request_id_raises_exception_on_uuid_validation():
     with pytest.raises(ValueError):
         client.get("/", headers={HeaderKeys.request_id: "invalid_uuid"})
 
