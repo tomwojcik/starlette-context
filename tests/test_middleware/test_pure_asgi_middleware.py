@@ -1,3 +1,4 @@
+import pytest
 from starlette import status
 from starlette.applications import Starlette
 from starlette.middleware import Middleware
@@ -39,3 +40,12 @@ def test_valid_request():
 
     assert HeaderKeys.correlation_id in resp.headers
     assert HeaderKeys.request_id in resp.headers
+
+
+def test_not_a_plugin_in_init():
+    class NotAPlugin:
+        pass
+
+    middleware = [Middleware(NotAPlugin,)]
+    with pytest.raises(TypeError):
+        Starlette(middleware=middleware)
