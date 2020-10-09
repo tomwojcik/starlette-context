@@ -40,12 +40,3 @@ def test_valid_request():
 
     assert HeaderKeys.correlation_id in resp.headers
     assert HeaderKeys.request_id in resp.headers
-
-
-def test_not_a_plugin_in_init():
-    class NotAPlugin:
-        pass
-
-    middleware = [Middleware(RawContextMiddleware, plugins=(NotAPlugin()),)]
-    with pytest.raises(TypeError):
-        Starlette(middleware=middleware)
