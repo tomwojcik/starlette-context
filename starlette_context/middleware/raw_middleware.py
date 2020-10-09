@@ -8,7 +8,7 @@ from starlette_context import _request_scope_context_storage
 from starlette_context.plugins import Plugin
 
 
-class ContextPureMiddleware:
+class RawContextMiddleware:
     def __init__(
         self, app: ASGIApp, plugins: Optional[Sequence[Plugin]] = None
     ) -> None:
@@ -36,7 +36,7 @@ class ContextPureMiddleware:
     ) -> Union[Request, HTTPConnection]:
         # here we instantiate HTTPConnection instead of a Request object
         # because using the latter one might cause some memory problems
-        # If you need the payload etc for your plugin instantiate Request instead
+        # If you need the payload etc for your plugin instantiate Request(scope, receive, send)
         return HTTPConnection(scope)
 
     async def __call__(

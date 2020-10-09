@@ -2,9 +2,30 @@
 Middleware
 ==========
 
-There's only one middleware (``ContextMiddleware``) as my idea was to extend its functionality using plugins.
+There are two middlewares you can use. They achieve more or less the same thing.
 
-Everything this middleware does can be seen in this single method but it's important to understand what is actually happening here.
+``ContextMiddleware`` inherits from ``BaseHTTPMiddleware`` which is an interface prepared by ``encode``.
+That is, in theory, the "normal" way of creating a middleware. It's simple and convenient.
+However, if you are using StreamingResponse, you might bump into memory issues. See
+- https://github.com/encode/starlette/issues/919
+- https://github.com/encode/starlette/issues/1012
+
+Authors `discourage the use of BaseHTTPMiddleware https://github.com/encode/starlette/issues/1012#issuecomment-673461832`_ in favor of what the call "raw middleware".
+That's why I created a new one. It does more or less the same thing, but instead of creating the entire ``Request`` object,
+only ``HTTPConnection`` is instantiated. That I think will be sufficient to mitigate this issue.
+
+It is entirely possible that ``ContextMiddleware`` will be removed in the future release. Therefore, if possible, use only ``ContextRawMiddleware``.
+
+.. warning::
+
+    The `enrich_response` method won't run for unhandled exceptions.
+    Even if your tried to run it in your own 500 handler, the context won't be available in the handler as that's
+    how Starlette handles 500 (it's the last middleware to be run).
+    Therefore, at the current state of Starlette and this library, no response headers will be set for 500 responses either.
+
+*****************
+ContextMiddleware
+*****************
 
 .. code-block:: python
 
@@ -34,3 +55,17 @@ either write your own plugin or just overwrite the ``set_context`` method which 
 Then, once the response is created, we iterate over plugins so it's possible to set some response headers based on the context contents.
 
 Finally, the "storage" that async python apps can access is removed.
+
+
+
+********************
+ContextRawMiddleware
+********************
+
+Tries to achieve the same thing but differently. Here you can access only the request-like object you will instantiate yourself.
+You can even instantiate the ``Request`` object but it's not recommended because it might cause memory issues as it tries to evaluate the payload.
+All plugins so far need only access to headers. If you still need to access the ``Request`` object or do something custom, you might want to
+overwrite the `get_request_object` method.
+
+So, in theory, this middleware does the same thing. Should be faster and safer. But have in mind that some black magic is
+involved over here and `I'm waiting for the documentation on this subject https://github.com/encode/starlette/issues/1029`_ to be improved.

@@ -1,4 +1,3 @@
-import warnings
 from contextvars import Token
 from typing import Optional, Sequence
 
@@ -25,9 +24,6 @@ class ContextMiddleware(BaseHTTPMiddleware):
     def __init__(
         self, plugins: Optional[Sequence[Plugin]] = None, *args, **kwargs
     ) -> None:
-        warnings.warn(
-            "Using `ContextMiddleware` might cause memory issues. See https://github.com/tomwojcik/starlette-context/issues/18"
-        )
         super().__init__(*args, **kwargs)
         self.plugins = plugins or ()
         if not all([isinstance(plugin, Plugin) for plugin in self.plugins]):

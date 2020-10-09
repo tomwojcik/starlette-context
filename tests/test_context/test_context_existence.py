@@ -28,5 +28,5 @@ def test_context_existence_in_request_response_cycle():
 
 def test_context_outside_of_request_response_cycle():
     assert context.exists() is False
-    resp = client.get("/")
+    _ = client.get("/")
     assert context.exists() is False

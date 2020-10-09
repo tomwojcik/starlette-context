@@ -1,2 +1,2 @@
 from .context_middleware import ContextMiddleware
-from .pure_middleware import ContextPureMiddleware
+from .raw_middleware import RawContextMiddleware
