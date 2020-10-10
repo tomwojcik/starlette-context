@@ -1,7 +1,8 @@
 DOCKER_IMAGES := $(docker images |grep 'starlette_context')
+.PHONY: run_hooks test rebuild clean purge clean_docker bash doc push
 
 run_hooks:
-	pre-commit run --all-files
+	pre-commit run --all-files --show-diff-on-failure
 
 test:
 	docker-compose -f docker-compose.yml run --rm tests sh scripts/test.sh
@@ -14,9 +15,9 @@ clean:
 	sh scripts/clean.sh
 
 purge:
-	clean
+	$(MAKE) clean
 	docker-compose rm -sfv
-	clean_docker
+	$(MAKE) clean_docker
 
 clean_docker:
 	@if [ -n "$(DOCKER_IMAGES)" ]; then echo "Removing docker"; else echo "Nothing found"; fi;
