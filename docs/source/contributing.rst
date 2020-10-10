@@ -3,15 +3,12 @@ Contributing
 ============
 
 I'm very happy with all the tickets you open. Feel free to open PRs if you feel like it.
+If you've found a bug but don't want to get involved, that's more than ok and I'd appreciate such ticket as well.
 
-It's a rather young and small project so I haven't defined any specific guidelines yet.
+If you have opened a PR it can't be merged until CI passed. Stuff that is checked:
+ * codecov has to be kept at 100%
+ * pre commit hooks consist of flake8 and mypy, so consider installing hooks before commiting. Otherwise CI might fail
 
-If you have opened a PR I won't merge it until
- * it will have 100% test coverage
- * it will pass all pre-commit hooks (that are a part of CI either way), so flake8 and mypy
+You can ``make test`` for yourself. Everything is dockerized.
 
-I'm willing to do that myself after your changes but I don't know if you want me to work on your branch. Just letting you know I will if those conditions are not met.
-
-If you have found a bug or just want to open a feature request I'm more than happy to implement it myself as well.
-
-If you plan to contribute and write some tests, have in mind that PyCharm debugger for pytest won't work if there's `--cov` in ``pytest.ini`` so just remove this line when you debug.
+Have in mind that PyCharm debugger for pytest won't work if there's `--cov` in ``pytest.ini`` so just remove this line when you debug.

@@ -2,32 +2,36 @@
 Middleware
 ==========
 
-There are two middlewares you can use. They achieve more or less the same thing.
+****************************************************
+Why are there two middlewares that do the same thing
+****************************************************
 
 ``ContextMiddleware`` inherits from ``BaseHTTPMiddleware`` which is an interface prepared by ``encode``.
 That is, in theory, the "normal" way of creating a middleware. It's simple and convenient.
-However, if you are using StreamingResponse, you might bump into memory issues. See
-- https://github.com/encode/starlette/issues/919
-- https://github.com/encode/starlette/issues/1012
+However, if you are using ``StreamingResponse``, you might bump into memory issues. See
+ * https://github.com/encode/starlette/issues/919
+ * https://github.com/encode/starlette/issues/1012
 
-Authors `discourage the use of BaseHTTPMiddleware <https://github.com/encode/starlette/issues/1012#issuecomment-673461832>`_ in favor of what they call "raw middleware".
-That's why I created a new one. It does more or less the same thing, but instead of creating the entire ``Request`` object,
-only ``HTTPConnection`` is instantiated. That I think will be sufficient to mitigate this issue.
+Authors recently started to `discourage the use of BaseHTTPMiddleware <https://github.com/encode/starlette/issues/1012#issuecomment-673461832>`_
+in favor of what they call "raw middleware". The problem with the "raw" one is that there's no docs for how to actually create it.
 
+The ``RawContextMiddleware`` does more or less the same thing.
 It is entirely possible that ``ContextMiddleware`` will be removed in the future release.
 It is also possible that authors will make some changes to the ``BaseHTTPMiddleware`` to fix this issue.
 I'd advise to only use ``RawContextMiddleware``.
 
 .. warning::
 
-    The `enrich_response` method won't run for unhandled exceptions.
+    The ``enrich_response`` method won't run for unhandled exceptions.
     Even if you use your own 500 handler, the context won't be available in it as that's
     how Starlette handles 500 (it's the last middleware to be run).
-    Therefore, at the current state of Starlette and this library, no response headers will be set for 500 responses either.
+    Therefore, at the current state of Starlette and this library, no response headers will be set for 500 responses.
 
 *****************
 ContextMiddleware
 *****************
+
+Excerpt
 
 .. code-block:: python
 
@@ -64,6 +68,8 @@ Finally, the "storage" that async python apps can access is removed.
 RawContextMiddleware
 ********************
 
+Excerpt
+
 .. code-block:: python
 
     @staticmethod
@@ -71,8 +77,9 @@ RawContextMiddleware
         scope, receive, send
     ) -> Union[Request, HTTPConnection]:
         # here we instantiate HTTPConnection instead of a Request object
-        # because using the latter one might cause some memory problems
-        # If you need the payload etc for your plugin instantiate Request(scope, receive, send)
+        # because only headers are needed so that's sufficient.
+        # If you need the payload etc for your plugin
+        # instantiate Request(scope, receive, send)
         return HTTPConnection(scope)
 
     async def __call__(

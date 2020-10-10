@@ -35,7 +35,7 @@ class RawContextMiddleware:
         scope, receive, send
     ) -> Union[Request, HTTPConnection]:
         # here we instantiate HTTPConnection instead of a Request object
-        # because using the latter one might cause some memory problems
+        # because only headers are needed so that's sufficient.
         # If you need the payload etc for your plugin
         # instantiate Request(scope, receive, send)
         return HTTPConnection(scope)

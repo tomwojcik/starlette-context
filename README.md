@@ -13,7 +13,7 @@ Resources:
 
 * **Source**: https://github.com/tomwojcik/starlette-context
 * **Documentation**: https://starlette-context.readthedocs.io/
-* **Changelog**: https://starlette-context.readthedocs.io/en/stable/changelog.html
+* **Changelog**: https://starlette-context.readthedocs.io/en/latest/changelog.html
 
 ### Installation 
 
@@ -75,7 +75,5 @@ Context can be updated and accessed at anytime if it's created in the middleware
 
 
 ### Contribution
-All tickets or PRs are more than welcome.
 
-For setting up the test env there's a convenient `Makefile` with dockerized environment.  
-Please make sure you install `pre-commit` hooks before committing any changes. Otherwise CI might fail.
+See the guide on [read the docs](https://starlette-context.readthedocs.io/en/latest/contributing.html#contributing).

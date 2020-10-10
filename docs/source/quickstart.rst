@@ -19,7 +19,7 @@ How to use
 
 You can access the magic `context` if and only if all those conditions are met:
  * you access it within a request-response cycle
- * you used a ``ContextMiddleware`` in your ASGI app
+ * you used a ``ContextMiddleware`` or ``RawContextMiddleware`` in your ASGI app
 
 Minimal working example
 
