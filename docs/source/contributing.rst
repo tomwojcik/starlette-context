@@ -7,8 +7,8 @@ I'm very happy with all the tickets you open. Feel free to open PRs if you feel 
 It's a rather young and small project so I haven't defined any specific guidelines yet.
 
 If you have opened a PR I won't merge it until
- * it will have 100% coverage
- * will be black/mypy positive
+ * it will have 100% test coverage
+ * it will pass all pre-commit hooks (that are a part of CI either way), so flake8 and mypy
 
 I'm willing to do that myself after your changes but I don't know if you want me to work on your branch. Just letting you know I will if those conditions are not met.
 
