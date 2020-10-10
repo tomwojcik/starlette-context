@@ -8,4 +8,4 @@ _request_scope_context_storage: ContextVar[Dict[Any, Any]] = ContextVar(
     "starlette_context"
 )
 
-from starlette_context.ctx import context  # noqa: E402, F401
+from starlette_context.ctx import context  # noqa: E402

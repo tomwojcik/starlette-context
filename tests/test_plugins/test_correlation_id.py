@@ -6,12 +6,10 @@ from starlette.requests import Request
 from starlette.responses import Response
 from starlette.testclient import TestClient
 
-from tests.conftest import dummy_correlation_id
-
+from starlette_context import plugins
 from starlette_context.header_keys import HeaderKeys
 from starlette_context.middleware import ContextMiddleware
-from starlette_context import plugins
-
+from tests.conftest import dummy_correlation_id
 
 middleware = [
     Middleware(

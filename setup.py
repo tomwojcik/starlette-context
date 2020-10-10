@@ -1,6 +1,8 @@
 from distutils.core import setup
-from starlette_context import __version__, __author__
+
 import setuptools
+
+from starlette_context import __author__, __version__
 
 
 def get_long_description():

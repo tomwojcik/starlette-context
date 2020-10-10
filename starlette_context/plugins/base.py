@@ -1,9 +1,9 @@
 import abc
 import uuid
-from typing import Optional, Any, Union
+from typing import Any, Optional, Union
 
 from starlette.datastructures import MutableHeaders
-from starlette.requests import Request, HTTPConnection
+from starlette.requests import HTTPConnection, Request
 from starlette.responses import Response
 from starlette.types import Message
 

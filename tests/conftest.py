@@ -1,13 +1,13 @@
+import uuid
 from unittest.mock import MagicMock
 
 import pytest
 from starlette.datastructures import MutableHeaders
 from starlette.requests import Request
 from starlette.responses import Response
-from starlette_context.middleware import ContextMiddleware
 
 from starlette_context.header_keys import HeaderKeys
-import uuid
+from starlette_context.middleware import ContextMiddleware
 
 dummy_correlation_id = uuid.uuid4().hex
 dummy_request_id = uuid.uuid4().hex

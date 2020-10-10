@@ -1,18 +1,17 @@
 import datetime
-import pytest
 
+import pytest
 from starlette import status
 from starlette.applications import Starlette
 from starlette.middleware import Middleware
 from starlette.requests import Request
-from starlette.responses import Response, JSONResponse
+from starlette.responses import JSONResponse, Response
 from starlette.testclient import TestClient
-from starlette_context.plugins import DateHeaderPlugin
 
+from starlette_context import plugins
 from starlette_context.header_keys import HeaderKeys
 from starlette_context.middleware import ContextMiddleware
-from starlette_context import plugins
-
+from starlette_context.plugins import DateHeaderPlugin
 
 middleware = [
     Middleware(
