@@ -5,10 +5,8 @@ from starlette.requests import Request
 from starlette.responses import Response
 from starlette.testclient import TestClient
 
-from starlette_context.header_keys import HeaderKeys
-
 from starlette_context import middleware, plugins
-
+from starlette_context.header_keys import HeaderKeys
 
 app = Starlette(
     middleware=[
@@ -20,7 +18,7 @@ app = Starlette(
 
 
 @app.route("/exc")
-async def index(request: Request):
+async def exc(request: Request):
     raise Exception
 
 

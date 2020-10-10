@@ -2,6 +2,7 @@ import logging
 import sys
 
 from pythonjsonlogger import jsonlogger  # pip install python-json-logger
+
 from starlette_context import context
 
 global_logger = logging.getLogger("logger_test")

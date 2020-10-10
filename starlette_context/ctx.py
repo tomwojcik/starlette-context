@@ -1,7 +1,7 @@
 from collections import UserDict
+from contextvars import copy_context
 from typing import Any
 
-from contextvars import copy_context
 from starlette_context import _request_scope_context_storage
 
 

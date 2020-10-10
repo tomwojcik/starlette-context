@@ -1,8 +1,8 @@
 from contextvars import Token
 from typing import Optional, Sequence, Union
 
-from starlette.requests import Request, HTTPConnection
-from starlette.types import ASGIApp, Scope, Receive, Send, Message
+from starlette.requests import HTTPConnection, Request
+from starlette.types import ASGIApp, Message, Receive, Scope, Send
 
 from starlette_context import _request_scope_context_storage
 from starlette_context.plugins import Plugin
@@ -36,7 +36,8 @@ class RawContextMiddleware:
     ) -> Union[Request, HTTPConnection]:
         # here we instantiate HTTPConnection instead of a Request object
         # because using the latter one might cause some memory problems
-        # If you need the payload etc for your plugin instantiate Request(scope, receive, send)
+        # If you need the payload etc for your plugin
+        # instantiate Request(scope, receive, send)
         return HTTPConnection(scope)
 
     async def __call__(
@@ -54,7 +55,7 @@ class RawContextMiddleware:
         request = self.get_request_object(scope, receive, send)
 
         _starlette_context_token: Token = _request_scope_context_storage.set(
-            await self.set_context(request)  # noqa
+            await self.set_context(request)
         )
 
         try:

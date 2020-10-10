@@ -1,14 +1,12 @@
-import pytest
 from starlette import status
 from starlette.applications import Starlette
 from starlette.middleware import Middleware
 from starlette.requests import Request
 from starlette.responses import JSONResponse
 from starlette.testclient import TestClient
+
+from starlette_context import context, plugins
 from starlette_context.header_keys import HeaderKeys
-
-from starlette_context import plugins, context
-
 from starlette_context.middleware import RawContextMiddleware
 
 plugins_to_use = (

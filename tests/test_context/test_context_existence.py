@@ -1,13 +1,11 @@
 import json
 
 from starlette.applications import Starlette
-
 from starlette.requests import Request
 from starlette.responses import JSONResponse, Response
 from starlette.testclient import TestClient
 
 from starlette_context import context, middleware
-
 
 app = Starlette()
 app.add_middleware(middleware.ContextMiddleware)

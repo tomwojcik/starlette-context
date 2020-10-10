@@ -1,7 +1,7 @@
 import datetime
 from typing import Optional, Union
 
-from starlette.requests import Request, HTTPConnection
+from starlette.requests import HTTPConnection, Request
 
 from starlette_context.header_keys import HeaderKeys
 from starlette_context.plugins.base import Plugin
