@@ -1,9 +1,9 @@
 import abc
 import uuid
-from typing import Optional, Union
+from typing import Optional, Any, Union
 
 from starlette.datastructures import MutableHeaders
-from starlette.requests import Request
+from starlette.requests import Request, HTTPConnection
 from starlette.responses import Response
 from starlette.types import Message
 
@@ -19,14 +19,16 @@ class Plugin(metaclass=abc.ABCMeta):
     key: the key that allows to access value in headers
     """
 
-    key: str = None
+    key: str
 
     async def extract_value_from_header_by_key(
-        self, request: Request
-    ) -> Optional[str]:
+        self, request: Union[Request, HTTPConnection]
+    ) -> Optional[Any]:
         return request.headers.get(self.key)
 
-    async def process_request(self, request: Request) -> Union[str, int, dict]:
+    async def process_request(
+        self, request: Union[Request, HTTPConnection]
+    ) -> Optional[Any]:
         """
         Runs always on request.
         Extracts value from header by default.
@@ -34,7 +36,7 @@ class Plugin(metaclass=abc.ABCMeta):
         assert isinstance(self.key, str)
         return await self.extract_value_from_header_by_key(request)
 
-    async def enrich_response(self, response: Response) -> None:
+    async def enrich_response(self, arg: Union[Response, Message]) -> None:
         """
         Runs always on response.
         Does nothing by default.
@@ -68,7 +70,7 @@ class PluginUUIDBase(Plugin):
         return func().hex
 
     async def extract_value_from_header_by_key(
-        self, request: Request
+        self, request: Union[Request, HTTPConnection]
     ) -> Optional[str]:
 
         value = await super().extract_value_from_header_by_key(request)
@@ -83,7 +85,6 @@ class PluginUUIDBase(Plugin):
         return value
 
     async def enrich_response(self, arg) -> None:
-
         value = str(context.get(self.key))
 
         # for ContextMiddleware
@@ -91,7 +92,6 @@ class PluginUUIDBase(Plugin):
             arg.headers[self.key] = value
         # for ContextPureMiddleware
         else:
-            arg: Message
             if arg["type"] == "http.response.start":
                 headers = MutableHeaders(scope=arg)
                 headers.append(self.key, value)

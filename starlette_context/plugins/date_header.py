@@ -1,7 +1,7 @@
 import datetime
-from typing import Optional
+from typing import Optional, Union
 
-from starlette.requests import Request
+from starlette.requests import Request, HTTPConnection
 
 from starlette_context.header_keys import HeaderKeys
 from starlette_context.plugins.base import Plugin
@@ -15,7 +15,7 @@ class DateHeaderPlugin(Plugin):
         return datetime.datetime.strptime(s, "%a, %d %b %Y %H:%M:%S")
 
     async def process_request(
-        self, request: Request
+        self, request: Union[Request, HTTPConnection]
     ) -> Optional[datetime.datetime]:
         """
         Has to be as stated in rfc2616 which uses rfc1123.

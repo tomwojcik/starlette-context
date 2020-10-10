@@ -15,7 +15,10 @@ from starlette_context import plugins
 
 
 middleware = [
-    Middleware(ContextMiddleware, plugins=(plugins.DateHeaderPlugin(),),)
+    Middleware(
+        ContextMiddleware,
+        plugins=(plugins.DateHeaderPlugin(),),
+    )
 ]
 app = Starlette(middleware=middleware)
 client = TestClient(app)

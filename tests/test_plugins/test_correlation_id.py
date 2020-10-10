@@ -14,7 +14,10 @@ from starlette_context import plugins
 
 
 middleware = [
-    Middleware(ContextMiddleware, plugins=(plugins.CorrelationIdPlugin(),),)
+    Middleware(
+        ContextMiddleware,
+        plugins=(plugins.CorrelationIdPlugin(),),
+    )
 ]
 app = Starlette(middleware=middleware)
 client = TestClient(app)

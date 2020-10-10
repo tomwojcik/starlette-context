@@ -1,10 +1,10 @@
 from contextvars import ContextVar
+from typing import Any, Dict
 
 __version__ = "0.2.3"
 __author__ = "Tomasz Wojcik"
 
-
-_request_scope_context_storage: ContextVar[str] = ContextVar(
+_request_scope_context_storage: ContextVar[Dict[Any, Any]] = ContextVar(
     "starlette_context"
 )
 
