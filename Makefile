@@ -21,9 +21,6 @@ purge:
 clean_docker:
 	@if [ -n "$(DOCKER_IMAGES)" ]; then echo "Removing docker"; else echo "Nothing found"; fi;
 
-lint:
-	pre-commit run --all-files
-
 bash:
 	docker-compose -f docker-compose.yml run --rm tests sh
 
@@ -32,7 +29,7 @@ doc:
 
 push:
 	sh scripts/clean.sh
-	lint
+	$(MAKE) run_hooks
 	bump2version patch
 	python3 setup.py sdist bdist_wheel
 	twine upload --repository-url https://upload.pypi.org/legacy/ dist/*
