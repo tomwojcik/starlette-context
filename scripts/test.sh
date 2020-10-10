@@ -8,4 +8,4 @@ fi
 set -x
 
 ${PREFIX}pytest .. --ignore venv --cov=starlette_context --cov-report=term-missing
-#${PREFIX}mypy ../starlette_context/starlette_context --ignore-missing-imports --disallow-untyped-defs
+${PREFIX}mypy ./starlette_context/

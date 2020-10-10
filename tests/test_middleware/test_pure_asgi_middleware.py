@@ -19,7 +19,12 @@ plugins_to_use = (
     plugins.DateHeaderPlugin(),
 )
 
-middleware = [Middleware(RawContextMiddleware, plugins=plugins_to_use,)]
+middleware = [
+    Middleware(
+        RawContextMiddleware,
+        plugins=plugins_to_use,
+    )
+]
 
 app = Starlette(middleware=middleware)
 client = TestClient(app)

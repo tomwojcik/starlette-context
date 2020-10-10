@@ -12,7 +12,10 @@ from starlette_context import plugins
 
 
 middleware = [
-    Middleware(ContextMiddleware, plugins=(plugins.UserAgentPlugin(),),)
+    Middleware(
+        ContextMiddleware,
+        plugins=(plugins.UserAgentPlugin(),),
+    )
 ]
 app = Starlette(middleware=middleware)
 client = TestClient(app)

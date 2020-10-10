@@ -6,9 +6,11 @@ test:
 rebuild:
 	docker-compose -f docker-compose.yml up --build
 
+clean:
+	sh scripts/clean.sh
 
 purge:
-	sh scripts/clean.sh
+	clean
 	docker-compose rm -sfv
 	clean_docker
 
@@ -30,3 +32,6 @@ push:
 	bump2version patch
 	python3 setup.py sdist bdist_wheel
 	twine upload --repository-url https://upload.pypi.org/legacy/ dist/*
+
+run-hooks:
+	pre-commit run --all-files

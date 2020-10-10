@@ -8,7 +8,8 @@ from starlette_context.middleware import ContextMiddleware
 
 @pytest.mark.asyncio
 async def test_set_context_method(
-    mocked_request: Request, mocked_middleware: ContextMiddleware,
+    mocked_request: Request,
+    mocked_middleware: ContextMiddleware,
 ):
 
     mocked_middleware.plugins = [plugins.DateHeaderPlugin()]
