@@ -8,11 +8,13 @@ This project adheres to `Semantic Versioning <http://semver.org/>`_.
 Latest release
 
 --------
-`0.2.4`_
+`0.3.0`_
 --------
-*Release date: to be released
+*Release date: October 10, 2020*
 
 * add `RawContextMiddleware` for `Streaming` and `File` responses
+* add flake8, isort, mypy
+* small refactor of the base plugin, moved directories and removed one redundant method (potentially breaking changes)
 
 --------
 `0.2.3`_
@@ -88,3 +90,4 @@ Latest release
 .. _0.2.1: https://github.com/tomwojcik/starlette-context/compare/0.2.0...0.2.1
 .. _0.2.2: https://github.com/tomwojcik/starlette-context/compare/0.2.1...0.2.2
 .. _0.2.3: https://github.com/tomwojcik/starlette-context/compare/0.2.2...v0.2.3
+.. _0.3.0: https://github.com/tomwojcik/starlette-context/compare/v0.2.3...v0.3.0

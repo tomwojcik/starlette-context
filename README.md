@@ -32,18 +32,19 @@ All other dependencies from `requirements-dev.txt` are only needed to run tests 
 ### Example
 
 ```python
+import uvicorn
+
 from starlette.applications import Starlette
 from starlette.middleware import Middleware
 from starlette.requests import Request
 from starlette.responses import JSONResponse
 
-import uvicorn
 from starlette_context import context, plugins
-from starlette_context.middleware import ContextMiddleware
+from starlette_context.middleware import RawContextMiddleware
 
 middleware = [
     Middleware(
-        ContextMiddleware,
+        RawContextMiddleware,
         plugins=(
             plugins.RequestIdPlugin(),
             plugins.CorrelationIdPlugin()
@@ -75,3 +76,6 @@ Context can be updated and accessed at anytime if it's created in the middleware
 
 ### Contribution
 All tickets or PRs are more than welcome.
+
+For setting up the test env there's a convenient `Makefile` with dockerized environment.  
+Please make sure you install `pre-commit` hooks before committing any changes. Otherwise CI might fail.

@@ -23,7 +23,7 @@ copyright = f"2020, Tomasz Wojcik"
 author = "Tomasz Wojcik"
 
 # The full version, including alpha/beta/rc tags
-VERSION = "0.2.3"
+VERSION = "0.3.0"
 release = VERSION
 
 # -- General configuration ---------------------------------------------------
