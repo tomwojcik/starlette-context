@@ -8,11 +8,13 @@ This project adheres to `Semantic Versioning <http://semver.org/>`_.
 Latest release
 
 --------
-`0.2.4`_
+`0.3.0`_
 --------
-*Release date: to be released
+*Release date: October 10, 2020*
 
 * add `RawContextMiddleware` for `Streaming` and `File` responses
+* add flake8, isort, mypy
+* small refactor of the base plugin, moved directories and removed one redundant method (potentially breaking changes)
 
 --------
 `0.2.3`_
