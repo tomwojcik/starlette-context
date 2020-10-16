@@ -1,3 +1,4 @@
+from .api_key import ApiKeyPlugin
 from .base import Plugin
 from .correlation_id import CorrelationIdPlugin
 from .date_header import DateHeaderPlugin

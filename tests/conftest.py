@@ -9,6 +9,7 @@ from starlette.responses import Response
 from starlette_context.header_keys import HeaderKeys
 from starlette_context.middleware import ContextMiddleware
 
+dummy_api_key = "abcdef12345"
 dummy_correlation_id = uuid.uuid4().hex
 dummy_request_id = uuid.uuid4().hex
 dummy_user_agent = "dummy_user_agent"
@@ -21,6 +22,7 @@ def headers():
     h = MutableHeaders()
     h.update(
         {
+            HeaderKeys.api_key: dummy_api_key,
             HeaderKeys.correlation_id: dummy_correlation_id,
             HeaderKeys.request_id: dummy_request_id,
             HeaderKeys.date: dummy_date,
