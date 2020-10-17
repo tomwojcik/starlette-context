@@ -8,6 +8,13 @@ This project adheres to `Semantic Versioning <http://semver.org/>`_.
 Latest release
 
 --------
+`0.3.1`_
+--------
+*Release date: October 17, 2020*
+
+* add ``ApiKeyPlugin`` plugin for ``X-API-Key`` header
+
+--------
 `0.3.0`_
 --------
 *Release date: October 10, 2020*
@@ -91,3 +98,5 @@ Latest release
 .. _0.2.2: https://github.com/tomwojcik/starlette-context/compare/0.2.1...0.2.2
 .. _0.2.3: https://github.com/tomwojcik/starlette-context/compare/0.2.2...v0.2.3
 .. _0.3.0: https://github.com/tomwojcik/starlette-context/compare/v0.2.3...v0.3.0
+.. _0.3.1: https://github.com/tomwojcik/starlette-context/compare/v0.3.0...v0.3.1
+
