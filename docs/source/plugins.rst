@@ -31,6 +31,12 @@ You add as many plugins as you want to your middleware. You pass them to the mid
 
    app = Starlette(middleware=middleware)
 
+*******
+API Key
+*******
+
+Extracts header "X-API-Key" and keeps it in context.
+
 **************
 Correlation ID
 **************
@@ -50,9 +56,9 @@ Forwarded For
 
 Extracts header "X-Forwarded-For" and keeps it in context.
 
-************
+**********
 Request ID
-************
+**********
 
 Extracts header "X-Request-ID" and keeps it in context.
 You can pass `force_new_uuid=True` to enforce the creation of a new UUID.
