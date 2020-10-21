@@ -48,8 +48,7 @@ def test_invalid_request_id_raises_exception_on_uuid_validation():
 
 
 def test_invalid_request_id_with_custom_error():
-    error_message = 'X-Request-ID header is not a valid UUID'
-    
+    error_message = "X-Request-ID header is not a valid UUID"
     middleware = [
         Middleware(
             ContextMiddleware,
@@ -64,8 +63,7 @@ def test_invalid_request_id_with_custom_error():
         "/", headers={HeaderKeys.request_id: "invalid_uuid"}
     )
     assert response.status_code == status.HTTP_400_BAD_REQUEST
-    assert response.json()['detail'] == error_message
-    assert HeaderKeys.request_id not in response.headers
+    assert response.json()["detail"] == error_message
 
 
 def test_missing_header_will_assign_one():

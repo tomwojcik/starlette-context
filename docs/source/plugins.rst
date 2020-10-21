@@ -62,6 +62,9 @@ Request ID
 
 Extracts header "X-Request-ID" and keeps it in context.
 You can pass `force_new_uuid=True` to enforce the creation of a new UUID.
+It validates the header value is a valid UUID, and raises a ValueError('Wrong uuid').
+Pass `validate=False` to disable the check, or `validation_error=your_error`to raise a different error.
+
 
 **********
 User Agent

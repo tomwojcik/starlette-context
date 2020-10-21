@@ -59,7 +59,6 @@ class PluginUUIDBase(Plugin):
         self.force_new_uuid = force_new_uuid
         self.version = version
         self.validate = validate
-        
         self.validation_error = validation_error or ValueError("Wrong uuid")
 
     def validate_uuid(self, uuid_to_validate: str) -> None:
