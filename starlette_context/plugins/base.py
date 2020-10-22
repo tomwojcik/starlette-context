@@ -52,20 +52,20 @@ class PluginUUIDBase(Plugin):
         force_new_uuid: bool = False,
         version: int = 4,
         validate: bool = True,
-        validation_error: Exception = None
+        validation_error: Response = None,
     ):
         if version not in self.uuid_functions_mapper:
             raise TypeError(f"UUID version {version} is not supported.")
         self.force_new_uuid = force_new_uuid
         self.version = version
         self.validate = validate
-        self.validation_error = validation_error or ValueError("Wrong uuid")
+        self.validation_error = validation_error
 
     def validate_uuid(self, uuid_to_validate: str) -> None:
         try:
             uuid.UUID(uuid_to_validate, version=self.version)
         except Exception as e:
-            raise self.validation_error from e
+            raise ValueError("Wrong uuid") from e
 
     def get_new_uuid(self) -> str:
         func = self.uuid_functions_mapper[self.version]
@@ -82,7 +82,12 @@ class PluginUUIDBase(Plugin):
             value = self.get_new_uuid()
 
         if self.validate:
-            self.validate_uuid(value)
+            try:
+                self.validate_uuid(value)
+            except ValueError:
+                if self.validation_error:
+                    return self.validation_error
+                raise
 
         return value
 

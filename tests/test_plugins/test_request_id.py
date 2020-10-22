@@ -51,15 +51,15 @@ def test_invalid_request_id_with_custom_error():
     error_message = "X-Request-ID header is not a valid UUID"
     error = HTTPException(400, detail=error_message)
     middleware = [
-        Middleware(ContextMiddleware, plugins=(
-            plugins.RequestIdPlugin(validation_error=error),),)
+        Middleware(
+            ContextMiddleware,
+            plugins=(plugins.RequestIdPlugin(validation_error=error),),
+        )
     ]
     app = Starlette(middleware=middleware)
-    client = TestClient(app, raise_server_exceptions=False)
+    client = TestClient(app)
 
-    response = client.get(
-        "/", headers={HeaderKeys.request_id: "invalid_uuid"}
-    )
+    response = client.get("/", headers={HeaderKeys.request_id: "invalid_uuid"})
     assert response.status_code == status.HTTP_400_BAD_REQUEST
     assert response.json()["detail"] == error_message
 
