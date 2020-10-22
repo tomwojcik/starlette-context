@@ -1,6 +1,7 @@
 import pytest
 from starlette import status
 from starlette.applications import Starlette
+from starlette.exceptions import HTTPException
 from starlette.middleware import Middleware
 from starlette.requests import Request
 from starlette.responses import Response
@@ -43,6 +44,27 @@ def test_invalid_request_id_raises_exception_on_uuid_validation():
     )
 
     assert response.status_code == status.HTTP_500_INTERNAL_SERVER_ERROR
+    assert HeaderKeys.request_id not in response.headers
+
+
+def test_invalid_request_id_with_custom_error():
+    error_message = 'X-Request-ID header is not a valid UUID'
+    
+    middleware = [
+        Middleware(
+            ContextMiddleware,
+            plugins=(plugins.RequestIdPlugin(
+                validation_error=HTTPException(400, detail=error_message)),),
+        )
+    ]
+    app = Starlette(middleware=middleware)
+    client = TestClient(app)
+
+    response = client.get(
+        "/", headers={HeaderKeys.request_id: "invalid_uuid"}
+    )
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
+    assert response.json()['detail'] == error_message
     assert HeaderKeys.request_id not in response.headers
 
 
