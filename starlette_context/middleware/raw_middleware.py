@@ -2,6 +2,7 @@ from contextvars import Token
 from typing import Optional, Sequence, Union
 
 from starlette.requests import HTTPConnection, Request
+from starlette.responses import Response
 from starlette.types import ASGIApp, Message, Receive, Scope, Send
 
 from starlette_context import _request_scope_context_storage
@@ -10,12 +11,18 @@ from starlette_context.plugins import Plugin
 
 class RawContextMiddleware:
     def __init__(
-        self, app: ASGIApp, plugins: Optional[Sequence[Plugin]] = None
+        self,
+        app: ASGIApp,
+        plugins: Optional[Sequence[Plugin]] = None,
+        defaut_error_response: Response = Response(status_code=400)
     ) -> None:
         self.app = app
+        for plugin in plugins or ():
+            if not isinstance(plugin, Plugin):
+                raise TypeError(f"Plugin {plugin} is not a valid instance")
+        
         self.plugins = plugins or ()
-        if not all([isinstance(plugin, Plugin) for plugin in self.plugins]):
-            raise TypeError("This is not a valid instance of a plugin")
+        self.error_response = defaut_error_response
 
     async def set_context(
         self, request: Union[Request, HTTPConnection]
@@ -54,12 +61,32 @@ class RawContextMiddleware:
             await send(message)
 
         request = self.get_request_object(scope, receive, send)
+        
+        try:
+            context = await self.set_context(request)
+        except ValueError as e:
+            if isinstance(e.args[0], Response):
+                error_response = e.args[0]
+            else:
+                error_response = self.error_response
 
-        _starlette_context_token: Token = _request_scope_context_storage.set(
-            await self.set_context(request)
-        )
+            message_head = {
+                'type': 'http.response.start',
+                'status': error_response.status_code,
+                'headers': error_response.raw_headers,
+            }
+            await send(message_head)
+
+            message_body = {
+                'type': 'http.response.body',
+                'body': error_response.body
+            }
+            await send(message_body)
+            return
+        
+        token: Token = _request_scope_context_storage.set(context)
 
         try:
             await self.app(scope, receive, send_wrapper)
         finally:
-            _request_scope_context_storage.reset(_starlette_context_token)
+            _request_scope_context_storage.reset(token)

@@ -22,12 +22,17 @@ class ContextMiddleware(BaseHTTPMiddleware):
     """
 
     def __init__(
-        self, plugins: Optional[Sequence[Plugin]] = None, *args, **kwargs
+        self,
+        plugins: Optional[Sequence[Plugin]] = None,
+        defaut_error_response: Response = Response(status_code=400),
+        *args, **kwargs
     ) -> None:
         super().__init__(*args, **kwargs)
+        for plugin in plugins or ():
+            if not isinstance(plugin, Plugin):
+                raise TypeError(f"Plugin {plugin} is not a valid instance")
         self.plugins = plugins or ()
-        if not all([isinstance(plugin, Plugin) for plugin in self.plugins]):
-            raise TypeError("This is not a valid instance of a plugin")
+        self.error_response = defaut_error_response
 
     async def set_context(self, request: Request) -> dict:
         """
@@ -44,15 +49,18 @@ class ContextMiddleware(BaseHTTPMiddleware):
     async def dispatch(
         self, request: Request, call_next: RequestResponseEndpoint
     ) -> Response:
-        _starlette_context_token: Token = _request_scope_context_storage.set(
-            await self.set_context(request)
-        )
+        try:
+            context = await self.set_context(request)
+            token: Token = _request_scope_context_storage.set(context)
+        except ValueError:
+            return self.error_response
+
         try:
             response = await call_next(request)
             for plugin in self.plugins:
                 await plugin.enrich_response(response)
 
         finally:
-            _request_scope_context_storage.reset(_starlette_context_token)
+            _request_scope_context_storage.reset(token)
 
         return response
