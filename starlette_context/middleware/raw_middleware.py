@@ -14,13 +14,13 @@ class RawContextMiddleware:
         self,
         app: ASGIApp,
         plugins: Optional[Sequence[Plugin]] = None,
-        defaut_error_response: Response = Response(status_code=400)
+        defaut_error_response: Response = Response(status_code=400),
     ) -> None:
         self.app = app
         for plugin in plugins or ():
             if not isinstance(plugin, Plugin):
                 raise TypeError(f"Plugin {plugin} is not a valid instance")
-        
+
         self.plugins = plugins or ()
         self.error_response = defaut_error_response
 
@@ -61,7 +61,7 @@ class RawContextMiddleware:
             await send(message)
 
         request = self.get_request_object(scope, receive, send)
-        
+
         try:
             context = await self.set_context(request)
         except ValueError as e:
@@ -71,19 +71,19 @@ class RawContextMiddleware:
                 error_response = self.error_response
 
             message_head = {
-                'type': 'http.response.start',
-                'status': error_response.status_code,
-                'headers': error_response.raw_headers,
+                "type": "http.response.start",
+                "status": error_response.status_code,
+                "headers": error_response.raw_headers,
             }
             await send(message_head)
 
             message_body = {
-                'type': 'http.response.body',
-                'body': error_response.body
+                "type": "http.response.body",
+                "body": error_response.body,
             }
             await send(message_body)
             return
-        
+
         token: Token = _request_scope_context_storage.set(context)
 
         try:

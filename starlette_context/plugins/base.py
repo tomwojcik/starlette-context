@@ -55,7 +55,7 @@ class PluginUUIDBase(Plugin):
         force_new_uuid: bool = False,
         version: int = 4,
         validate: bool = True,
-        error_response: Optional[Response] = None
+        error_response: Optional[Response] = None,
     ):
         if version not in self.uuid_functions_mapper:
             raise TypeError(f"UUID version {version} is not supported.")
