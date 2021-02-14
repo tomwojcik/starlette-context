@@ -52,21 +52,15 @@ def test_rfc1123_parsing_method():
 
 
 def test_invalid_date_header_raises_exception():
-    with pytest.raises(ValueError):
-        client.get("/", headers={HeaderKeys.date: "invalid_date"})
+    response1 = client.get("/", headers={HeaderKeys.date: "invalid_date"})
+    assert response1.status_code == status.HTTP_400_BAD_REQUEST
+    assert HeaderKeys.date not in response1.headers
 
-    with pytest.raises(ValueError):
-        client.get(
-            "/", headers={HeaderKeys.date: "Wed, 01 Jan 2020 04:27:12 invalid"}
-        )
-
-    allow_500_client = TestClient(app, raise_server_exceptions=False)
-    response = allow_500_client.get(
-        "/", headers={HeaderKeys.date: "invalid_date"}
+    response2 = client.get(
+        "/", headers={HeaderKeys.date: "Wed, 01 Jan 2020 04:27:12 invalid"}
     )
-
-    assert response.status_code == status.HTTP_500_INTERNAL_SERVER_ERROR
-    assert HeaderKeys.date not in response.headers
+    assert response2.status_code == status.HTTP_400_BAD_REQUEST
+    assert HeaderKeys.date not in response2.headers
 
 
 def test_missing_header_date():

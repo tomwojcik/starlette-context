@@ -1,4 +1,3 @@
-import pytest
 from starlette import status
 from starlette.applications import Starlette
 from starlette.middleware import Middleware
@@ -33,16 +32,9 @@ def test_valid_request_returns_proper_response():
     assert response.headers.get(HeaderKeys.request_id) == dummy_request_id
 
 
-def test_invalid_request_id_raises_exception_on_uuid_validation():
-    with pytest.raises(ValueError):
-        client.get("/", headers={HeaderKeys.request_id: "invalid_uuid"})
-
-    allow_500_client = TestClient(app, raise_server_exceptions=False)
-    response = allow_500_client.get(
-        "/", headers={HeaderKeys.request_id: "invalid_uuid"}
-    )
-
-    assert response.status_code == status.HTTP_500_INTERNAL_SERVER_ERROR
+def test_invalid_request_id_returns_a_bad_request():
+    response = client.get("/", headers={HeaderKeys.request_id: "invalid_uuid"})
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
     assert HeaderKeys.request_id not in response.headers
 
 

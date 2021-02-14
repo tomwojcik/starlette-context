@@ -25,7 +25,8 @@ class ContextMiddleware(BaseHTTPMiddleware):
         self,
         plugins: Optional[Sequence[Plugin]] = None,
         defaut_error_response: Response = Response(status_code=400),
-        *args, **kwargs
+        *args,
+        **kwargs,
     ) -> None:
         super().__init__(*args, **kwargs)
         for plugin in plugins or ():
@@ -52,8 +53,12 @@ class ContextMiddleware(BaseHTTPMiddleware):
         try:
             context = await self.set_context(request)
             token: Token = _request_scope_context_storage.set(context)
-        except ValueError:
-            return self.error_response
+        except ValueError as e:
+            if isinstance(e.args[0], Response):
+                error_response = e.args[0]
+            else:
+                error_response = self.error_response
+            return error_response
 
         try:
             response = await call_next(request)
