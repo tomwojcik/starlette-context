@@ -2,13 +2,35 @@ repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v3.2.0
     hooks:
-      - id: check-merge-conflict
       - id: debug-statements
+      - id: check-added-large-files
+      - id: check-case-conflict
+      - id: check-merge-conflict
+      - id: check-toml
+      - id: end-of-file-fixer
+      - id: trailing-whitespace
 
   - repo: https://github.com/ambv/black
     rev: 20.8b1
     hooks:
       - id: black
+        language_version: python3.7
+        entry: black
+        require_serial: true
+        types: [ python ]
+
+  - repo: https://github.com/myint/docformatter
+    rev: v1.4
+    hooks:
+      - id: docformatter
+        args: ['--in-place', '--wrap-summaries=78', '--wrap-descriptions=78', '--pre-summary-newline']
+
+  - repo: git@github.com:humitos/mirrors-autoflake.git
+    rev: v1.1
+    hooks:
+      - id: autoflake
+        args: ['--in-place', '--remove-all-unused-imports', '--remove-unused-variable']
+        exclude: '__init__.py'
 
   - repo: https://github.com/pre-commit/mirrors-mypy
     rev: v0.790
@@ -25,3 +47,14 @@ repos:
     rev: 3.8.4
     hooks:
       - id: flake8
+
+  - repo: https://github.com/asottile/pyupgrade
+    rev: v2.9.0
+    hooks:
+      - id: pyupgrade
+
+  - repo: https://github.com/MartinThoma/check-pip-compile
+    rev: 0.1.0
+    hooks:
+    -   id: check-pip-compile
+        args: ['.']
