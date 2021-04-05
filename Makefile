@@ -1,36 +1,37 @@
-DOCKER_IMAGES := $(docker images |grep 'starlette_context')
-.PHONY: run_hooks test rebuild clean purge clean_docker bash doc push
+.PHONY: init run_hooks test clean docs push
+
+init:
+	sh scripts/init.sh
 
 run_hooks:
 	pre-commit run --all-files --show-diff-on-failure
 
 test:
-	docker-compose -f docker-compose.yml run --rm tests sh scripts/test.sh
+	sh scripts/test.sh
 	$(MAKE) run_hooks
-
-rebuild:
-	docker-compose -f docker-compose.yml up --build
 
 clean:
 	sh scripts/clean.sh
 
-purge:
-	$(MAKE) clean
-	docker-compose rm -sfv
-	$(MAKE) clean_docker
+docs:
+	cd docs && make html
 
-clean_docker:
-	@if [ -n "$(DOCKER_IMAGES)" ]; then echo "Removing docker"; else echo "Nothing found"; fi;
-
-bash:
-	docker-compose -f docker-compose.yml run --rm tests sh
-
-doc:
-	docker-compose -f docker-compose.yml run --rm tests sh -c "cd docs && make html"
-
-push:
+prebuild:
 	sh scripts/clean.sh
 	$(MAKE) run_hooks
+	$(MAKE) docs
+
+testbuild:
+	$(MAKE) prebuild
+	python3 setup.py sdist bdist_wheel
+
+stubs:
+	stubgen starlette_context --output starlette_context
+
+build:
+	$(MAKE) prebuild
 	bump2version patch
 	python3 setup.py sdist bdist_wheel
+
+push:
 	twine upload --repository-url https://upload.pypi.org/legacy/ dist/*

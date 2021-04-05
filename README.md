@@ -15,7 +15,7 @@ Resources:
 * **Documentation**: https://starlette-context.readthedocs.io/
 * **Changelog**: https://starlette-context.readthedocs.io/en/latest/changelog.html
 
-### Installation 
+### Installation
 
 `$ pip install starlette-context`
 
@@ -27,8 +27,8 @@ Python 3.7+
 
 - `starlette`
 
-All other dependencies from `requirements-dev.txt` are only needed to run tests or examples. Test/dev env is dockerized if you want to try them yourself.
-    
+All other dependencies from `requirements-dev.txt` are only needed to run tests or examples.
+
 ### Example
 
 ```python
