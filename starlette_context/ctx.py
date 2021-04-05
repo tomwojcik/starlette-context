@@ -8,8 +8,9 @@ from starlette_context import _request_scope_context_storage
 class _Context(UserDict):
     """
     A mapping with dict-like interface.
-    It is using request context as a data store.
-    Can be used only if context has been created in the middleware.
+
+    It is using request context as a data store. Can be used only if context
+    has been created in the middleware.
     """
 
     def __init__(self, *args: Any, **kwargs: Any):
@@ -20,7 +21,9 @@ class _Context(UserDict):
     @property
     def data(self) -> dict:  # type: ignore
         """
-        Dump this to json. Object itself it not serializable.
+        Dump this to json.
+
+        Object itself it not serializable.
         """
         try:
             return _request_scope_context_storage.get()
@@ -35,9 +38,7 @@ class _Context(UserDict):
         return _request_scope_context_storage in copy_context()
 
     def copy(self) -> dict:  # type: ignore
-        """
-        Read only context data.
-        """
+        """Read only context data."""
         import copy
 
         return copy.copy(self.data)

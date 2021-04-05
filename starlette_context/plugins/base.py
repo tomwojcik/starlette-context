@@ -15,6 +15,7 @@ __all__ = ["Plugin", "PluginUUIDBase"]
 class Plugin(metaclass=abc.ABCMeta):
     """
     Base class for building those plugins to extract things from request.
+
     One plugins should be responsible for extracting one thing.
     key: the key that allows to access value in headers
     """
@@ -31,6 +32,7 @@ class Plugin(metaclass=abc.ABCMeta):
     ) -> Optional[Any]:
         """
         Runs always on request.
+
         Extracts value from header by default.
         """
         assert isinstance(self.key, str)
@@ -39,6 +41,7 @@ class Plugin(metaclass=abc.ABCMeta):
     async def enrich_response(self, arg: Union[Response, Message]) -> None:
         """
         Runs always on response.
+
         Does nothing by default.
         """
         ...

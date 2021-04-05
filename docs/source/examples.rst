@@ -109,4 +109,3 @@ Log json with request info
 
 
    log = MyApiLoggingAdapter(global_logger)
-
