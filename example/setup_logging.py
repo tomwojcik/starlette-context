@@ -8,9 +8,11 @@ from starlette_context import context
 def setup_logging():
     import logging.config
 
-    def add_app_context(logger: logging.Logger, method_name: str,
-                        event_dict: MutableMapping[str, Any]) -> \
-            MutableMapping[str, Any]:
+    def add_app_context(
+        logger: logging.Logger,
+        method_name: str,
+        event_dict: MutableMapping[str, Any],
+    ) -> MutableMapping[str, Any]:
         if context.exists():
             event_dict.update(context.data)
         return event_dict
@@ -44,7 +46,8 @@ def setup_logging():
         },
         "loggers": {
             "starlette_context_example": {
-                "handlers": ["json"], "level": "INFO"
+                "handlers": ["json"],
+                "level": "INFO",
             },
         },
     }
