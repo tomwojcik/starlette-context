@@ -25,9 +25,6 @@ testbuild:
 	$(MAKE) prebuild
 	python3 setup.py sdist bdist_wheel
 
-stubs:
-	stubgen starlette_context --output starlette_context
-
 build:
 	$(MAKE) prebuild
 	bump2version patch

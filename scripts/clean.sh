@@ -21,3 +21,4 @@ fi
 
 find . -type d -name ".*" -empty -delete
 find . -type f -name ".coverage" -delete
+sudo find . -name '*.pyc' -delete

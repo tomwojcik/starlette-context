@@ -1,13 +1,7 @@
 -r requirements.txt
 
-# for running examples locally
-uvicorn==0.11.7
-python-json-logger==0.1.11
-
-# test dependencies for starlette
-requests==2.22.0
-
 # test
+requests==2.22.0
 pytest==5.3.2
 pytest-cov==2.8.1
 pytest-sugar==0.9.2
