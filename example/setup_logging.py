@@ -49,6 +49,13 @@ def setup_logging():
                 "handlers": ["json"],
                 "level": "INFO",
             },
+            "uvicorn": {"handlers": ["json"], "level": "INFO"},
+            "uvicorn.error": {"handlers": ["json"], "level": "INFO"},
+            "uvicorn.access": {
+                "handlers": ["json"],
+                "level": "INFO",
+                "propagate": False,
+            },
         },
     }
     logging.config.dictConfig(logging_config)
