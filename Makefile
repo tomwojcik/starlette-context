@@ -1,4 +1,6 @@
 .PHONY: init run_hooks test clean docs push
+.ONESHELL :
+
 
 init:
 	sh scripts/init.sh
@@ -7,7 +9,7 @@ run_hooks:
 	pre-commit run --all-files --show-diff-on-failure
 
 test:
-	sh scripts/test.sh
+	sh scripts/test.sh; \
 	$(MAKE) run_hooks
 
 clean:

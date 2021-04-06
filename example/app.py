@@ -1,10 +1,12 @@
+import structlog
 from starlette.applications import Starlette
 from starlette.middleware import Middleware
-from starlette.middleware.base import BaseHTTPMiddleware, RequestResponseEndpoint
+from starlette.middleware.base import (
+    BaseHTTPMiddleware,
+    RequestResponseEndpoint,
+)
 from starlette.requests import Request
 from starlette.responses import JSONResponse, Response
-
-import structlog
 
 from starlette_context import context, plugins
 from starlette_context.middleware import RawContextMiddleware
@@ -13,9 +15,7 @@ logger = structlog.get_logger("starlette_context_example")
 
 
 class LoggingMiddleware(BaseHTTPMiddleware):
-    """
-    Example logging middleware
-    """
+    """Example logging middleware."""
     async def dispatch(
         self, request: Request, call_next: RequestResponseEndpoint
     ) -> Response:

@@ -1,0 +1,20 @@
+starlette
+requests
+pytest
+pytest-cov
+pytest-sugar
+pytest-xdist
+pytest-asyncio
+codecov
+
+# docs
+sphinx
+sphinx_rtd_theme
+
+# lint
+mypy
+black
+pre-commit
+pre-commit-hooks
+flake8
+pip-tools
