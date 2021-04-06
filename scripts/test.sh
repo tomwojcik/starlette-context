@@ -7,4 +7,4 @@ fi
 
 set -x
 
-${PREFIX}pytest .. --ignore venv --cov=starlette_context --cov-report=term-missing
+${PREFIX}pytest . --cov=starlette_context --cov-report=term-missing

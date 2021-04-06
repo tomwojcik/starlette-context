@@ -13,7 +13,7 @@ class _Context(UserDict):
     has been created in the middleware.
     """
 
-    def __init__(self, *args: Any, **kwargs: Any):
+    def __init__(self, *args: Any, **kwargs: Any):  # noqa
         # not calling super on purpose
         if args or kwargs:
             raise AttributeError("Can't instantiate with attributes")

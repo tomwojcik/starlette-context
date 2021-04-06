@@ -18,7 +18,11 @@ fi
 if [ -d '.mypy_cache' ] ; then
     rm -r .mypy_cache
 fi
+if [ -d '.pytest_cache' ] ; then
+  rm -r .pytest_cache
+fi
 
 find . -type d -name ".*" -empty -delete
+
 find . -type f -name ".coverage" -delete
 sudo find . -name '*.pyc' -delete

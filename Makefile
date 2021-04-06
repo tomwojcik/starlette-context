@@ -1,4 +1,4 @@
-.PHONY: init run_hooks test clean docs push
+.PHONY: init run_hooks citest test clean docs push
 .ONESHELL :
 
 
@@ -8,8 +8,14 @@ init:
 run_hooks:
 	pre-commit run --all-files --show-diff-on-failure
 
+citest:
+	if [ ! -d "venv" ]; then $(MAKE) init; fi
+	sh scripts/test.sh
+	black starlette_context --check
+	flake8 starlette_context
+
 test:
-	sh scripts/test.sh; \
+	sh scripts/test.sh
 	$(MAKE) run_hooks
 
 clean:
@@ -22,10 +28,6 @@ prebuild:
 	sh scripts/clean.sh
 	$(MAKE) run_hooks
 	$(MAKE) docs
-
-testbuild:
-	$(MAKE) prebuild
-	python3 setup.py sdist bdist_wheel
 
 build:
 	$(MAKE) prebuild
