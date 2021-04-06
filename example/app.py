@@ -1,29 +1,40 @@
-from typing import Union
-
-from starlette import status
 from starlette.applications import Starlette
 from starlette.middleware import Middleware
-from starlette.requests import HTTPConnection, Request
-from starlette.responses import HTMLResponse, JSONResponse, Response
+from starlette.middleware.base import BaseHTTPMiddleware, RequestResponseEndpoint
+from starlette.requests import Request
+from starlette.responses import JSONResponse, Response
 
 import structlog
 
-from starlette_context import context
+from starlette_context import context, plugins
 from starlette_context.middleware import RawContextMiddleware
 
+logger = structlog.get_logger("starlette_context_example")
 
-class ContextFromMiddleware(RawContextMiddleware):
-    async def set_context(self, request: Union[Request, HTTPConnection]) -> dict:
-        return {'from_middleware': True}
+
+class LoggingMiddleware(BaseHTTPMiddleware):
+    """
+    Example logging middleware
+    """
+    async def dispatch(
+        self, request: Request, call_next: RequestResponseEndpoint
+    ) -> Response:
+        await logger.info('request log', request=request)
+        response = await call_next(request)
+        await logger.info('response log', response=response)
+        return response
 
 
 middlewares = [
-    Middleware(ContextFromMiddleware)
+    Middleware(RawContextMiddleware, plugins=(
+        plugins.CorrelationIdPlugin(),
+        plugins.RequestIdPlugin(),
+    )),
+    Middleware(LoggingMiddleware),
 ]
 
 
 app = Starlette(debug=True, middleware=middlewares)
-logger = structlog.get_logger("starlette_context_example")
 
 
 @app.on_event("startup")
@@ -32,32 +43,8 @@ async def startup_event() -> None:
     setup_logging()
 
 
-@app.route('/from-middleware')
-async def example1(request: Request):
-    await logger.info('log from example1 view')
-    return JSONResponse(context.data)
-
-
-@app.route('/from-view')
-async def example2(request: Request):
-    await logger.info('log from example2 view')
-    context['from_view'] = True
-    return JSONResponse(context.data)
-
-
-@app.route("/")
+@app.route('/')
 async def index(request: Request):
-    url = request.base_url
-
-    await logger.info('log from index view')
-    return HTMLResponse(f"<html>"
-                        f"<body>"
-                        f"<h1>Example usages of starlette-context</h1>"
-                        f"<a href={url}from-middleware>Example 1</a> - set context in middleware"
-                        f"<br>"
-                        f"<a href={url}from-view>Example 2</a> - change context in view"
-                        f"<br>"
-                        f"<a href={url}error>Example 3</a> - handle exception logger"
-                        f"</body>"
-                        f"</html>"
-                        f"")
+    context['something else'] = "This will be visible even in the response log"
+    await logger.info('log from view')
+    return JSONResponse(context.data)
