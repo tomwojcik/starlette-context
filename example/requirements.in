@@ -1,3 +1,4 @@
 starlette
 uvicorn
 structlog
+mypy

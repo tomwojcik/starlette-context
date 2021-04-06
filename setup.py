@@ -21,9 +21,6 @@ setup(
     packages=setuptools.find_packages(
         include=("starlette_context", "starlette_context.*")
     ),
-    package_data={
-        "starlette_context": ["py.typed"],
-    },
     platforms="any",
     author=__author__,
     url="https://github.com/tomwojcik/starlette-context",
