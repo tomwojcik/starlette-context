@@ -28,7 +28,7 @@ repos:
       - id: docformatter
         args: ['--in-place', '--wrap-summaries=78', '--wrap-descriptions=78', '--pre-summary-newline']
 
-  - repo: git@github.com:humitos/mirrors-autoflake.git
+  - repo: https://github.com/humitos/mirrors-autoflake
     rev: v1.1
     hooks:
       - id: autoflake

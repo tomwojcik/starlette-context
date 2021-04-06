@@ -8,12 +8,6 @@ init:
 run_hooks:
 	pre-commit run --all-files --show-diff-on-failure
 
-citest:
-	if [ ! -d "venv" ]; then $(MAKE) init; fi
-	sh scripts/test.sh
-	black starlette_context --check
-	flake8 starlette_context
-
 test:
 	sh scripts/test.sh
 	$(MAKE) run_hooks
