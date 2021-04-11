@@ -22,7 +22,7 @@ setup(
         include=("starlette_context", "starlette_context.*")
     ),
     package_data={
-        "starlette_context": ["py.typed", "*.pyi", "**/*.pyi"],
+        "starlette_context": ["py.typed"],
     },
     platforms="any",
     author=__author__,
