@@ -1,7 +1,10 @@
 #!/bin/sh -e
 
-VENV="venv"
-PIP="$VENV/bin/pip"
+if [ -d 'venv' ] ; then
+  PIP="venv/bin/pip"
+else
+  PIP="pip"
+fi
 
 set -x
 
