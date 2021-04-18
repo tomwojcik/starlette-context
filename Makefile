@@ -16,3 +16,6 @@ clean:
 
 docs:
 	cd docs && make html
+
+minor:
+	bump2version patch

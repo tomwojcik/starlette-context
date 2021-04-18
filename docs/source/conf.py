@@ -13,8 +13,6 @@
 import os
 import sys
 
-this_year = datetime.datetime.now().year
-
 sys.path.insert(0, os.path.abspath("../../starlette_context"))
 
 

@@ -1,0 +1,11 @@
+#!/bin/sh -e
+
+REQUIREMENTS="requirements-dev.txt"
+VENV="venv"
+PIP="$VENV/bin/pip"
+
+set -x
+
+"$PIP" install --upgrade pip
+"$PIP" install wheel
+"$PIP" install -r requirements-dev.txt

@@ -20,7 +20,3 @@ fi
 
 if [ -d venv ]; then rm -r venv; fi
 python3 -m venv venv
-. ./venv/bin/activate && \
-  pip install --upgrade pip && \
-  pip install wheel && \
-  pip install -r requirements-dev.txt
