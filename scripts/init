@@ -1,8 +1,8 @@
-#!/bin/sh
+#!/bin/sh -e
 
 PYTHON_VERSION_TARGET=3.7.0
 
-set -ex
+set -x
 
 
 if which pyenv > /dev/null

@@ -4,6 +4,7 @@
 
 init:
 	sh scripts/init
+	sh scripts/install
 
 run_hooks:
 	pre-commit run --all-files --show-diff-on-failure
