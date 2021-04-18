@@ -3,6 +3,7 @@ from contextvars import copy_context
 from typing import Any
 
 from starlette_context import _request_scope_context_storage
+from starlette_context.errors import ContextDoesNotExistError
 
 
 class _Context(UserDict):
@@ -27,12 +28,8 @@ class _Context(UserDict):
         """
         try:
             return _request_scope_context_storage.get()
-        except LookupError as e:
-            raise RuntimeError(
-                "You didn't use ContextMiddleware or "
-                "you're trying to access `context` object "
-                "outside of the request-response cycle."
-            ) from e
+        except LookupError:
+            raise ContextDoesNotExistError
 
     def exists(self) -> bool:
         return _request_scope_context_storage in copy_context()
