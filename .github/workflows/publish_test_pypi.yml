@@ -2,9 +2,8 @@
 name: Publish to TestPyPI
 
 on:
-  push:
-    branches:
-      - master
+  release:
+    types: [prereleased]
 
 jobs:
   build-n-publish:
