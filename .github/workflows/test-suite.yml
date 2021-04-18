@@ -26,8 +26,6 @@ jobs:
         uses: "actions/setup-python@v2"
         with:
           python-version: "${{ matrix.python-version }}"
-      - name: "Initialize virtual environment"
-        run: "scripts/init"
       - name: "Install dependencies"
         run: "scripts/install"
       - name: "Run tests"

@@ -1,6 +1,5 @@
 #!/bin/sh -e
 
-REQUIREMENTS="requirements-dev.txt"
 VENV="venv"
 PIP="$VENV/bin/pip"
 
