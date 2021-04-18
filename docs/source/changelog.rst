@@ -8,6 +8,15 @@ This project adheres to `Semantic Versioning <http://semver.org/>`_.
 Latest release
 
 --------
+`0.3.2`_
+--------
+*Release date: ??, 2021*
+
+* ``ContextDoesNotExistError`` is raised when context object can't be accessed. Previously it was ``RuntimeError``.
+For backwards compatibility, it inherits from ``RuntimeError`` so it shouldn't result in any regressions.
+* Added ``py.typed`` file so your mypy should never complain
+
+--------
 `0.3.1`_
 --------
 *Release date: October 17, 2020*
@@ -19,7 +28,7 @@ Latest release
 --------
 *Release date: October 10, 2020*
 
-* add `RawContextMiddleware` for `Streaming` and `File` responses
+* add ``RawContextMiddleware`` for ``Streaming`` and ``File`` responses
 * add flake8, isort, mypy
 * small refactor of the base plugin, moved directories and removed one redundant method (potentially breaking changes)
 
@@ -99,3 +108,4 @@ Latest release
 .. _0.2.3: https://github.com/tomwojcik/starlette-context/compare/0.2.2...v0.2.3
 .. _0.3.0: https://github.com/tomwojcik/starlette-context/compare/v0.2.3...v0.3.0
 .. _0.3.1: https://github.com/tomwojcik/starlette-context/compare/v0.3.0...v0.3.1
+.. _0.3.2: https://github.com/tomwojcik/starlette-context/compare/v0.3.1...v0.3.2

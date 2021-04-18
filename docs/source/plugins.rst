@@ -6,9 +6,9 @@ Context plugins allow you to extract any data you want from the request and stor
 I wrote plugins for the most common use cases that come to my mind, like extracting Correlation ID.
 If you want to write your own plugin or modify existing ones, it's super simple.
 
-************
-How to use
-************
+*************
+Example usage
+*************
 
 You add as many plugins as you want to your middleware. You pass them to the middleware accordingly to the Starlette standard.
 
