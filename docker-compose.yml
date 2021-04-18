@@ -6,10 +6,5 @@ services:
     container_name: starlette_context
     build: .
     command: ['scripts/test.sh']
-    ports:
-      - 8000:8000
-    expose:
-      - 8000
-    restart: unless-stopped
     volumes:
       - .:/source/starlette_context

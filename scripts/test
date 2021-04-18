@@ -1,0 +1,16 @@
+#!/bin/sh -e
+
+export PREFIX=""
+if [ -d 'venv' ] ; then
+    export PREFIX="venv/bin/"
+fi
+
+set -x
+
+${PREFIX}pytest --ignore=example --doctest-modules --cov=starlette_context --cov-report=term-missing
+
+${PREFIX}pre-commit run --all-files --show-diff-on-failure
+
+if [ -n "$GITHUB_ACTIONS" ]; then
+  ${PREFIX}codecov
+fi

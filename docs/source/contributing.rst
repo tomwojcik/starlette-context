@@ -9,6 +9,19 @@ If you have opened a PR it can't be merged until CI passed. Stuff that is checke
  * codecov has to be kept at 100%
  * pre commit hooks consist of flake8 and mypy, so consider installing hooks before commiting. Otherwise CI might fail
 
-You can ``make test`` for yourself. Everything is dockerized.
+Sometimes one pre-commit hook will affect another so you will run them a few times.
 
-Have in mind that PyCharm debugger for pytest won't work if there's `--cov` in ``pytest.ini`` so just remove this line when you debug.
+You can run tests with docker of with venv.
+
+***********
+With docker
+***********
+
+With docker run tests with ``make testdocker``.
+If you want to plug docker env in your IDE run service ``tests`` from ``docker-compose.yml``.
+
+***********
+Local setup
+***********
+
+Running ``make init`` will result with creating local venv with dependencies. Then you can ``make test`` or plug venv into IDE.

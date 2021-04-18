@@ -2,7 +2,7 @@ from distutils.core import setup
 
 import setuptools
 
-from starlette_context import __author__, __version__
+from starlette_context import __author__, __version__  # noqa
 
 
 def get_long_description():

@@ -1,0 +1,4 @@
+starlette
+uvicorn
+structlog
+mypy

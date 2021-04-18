@@ -17,7 +17,7 @@ should work with all Starlette-based frameworks, such as Responder, FastAPI or F
 How to use
 **********
 
-You can access the magic `context` if and only if all those conditions are met:
+You can access the magic ``context`` if and only if all those conditions are met:
  * you access it within a request-response cycle
  * you used a ``ContextMiddleware`` or ``RawContextMiddleware`` in your ASGI app
 
@@ -30,9 +30,9 @@ Minimal working example
    from starlette.middleware import Middleware
    from starlette.applications import Starlette
 
-   from starlette_context.middleware import ContextMiddleware
+   from starlette_context.middleware import RawContextMiddleware
 
-   middleware = [Middleware(ContextMiddleware)]
+   middleware = [Middleware(RawContextMiddleware)]
    app = Starlette(middleware=middleware)
 
 

@@ -14,8 +14,8 @@ from starlette_context.plugins import Plugin
 
 class ContextMiddleware(BaseHTTPMiddleware):
     """
-    Middleware that creates empty context for request it's used on.
-    If not used, you won't be able to use context object.
+    Middleware that creates empty context for request it's used on. If not
+    used, you won't be able to use context object.
 
     Not to be used with StreamingResponse / FileResponse.
     https://github.com/encode/starlette/issues/1012#issuecomment-673461832
@@ -32,8 +32,9 @@ class ContextMiddleware(BaseHTTPMiddleware):
     async def set_context(self, request: Request) -> dict:
         """
         You might want to override this method.
-        The dict it returns will be saved in the scope of a context.
-        You can always do that later.
+
+        The dict it returns will be saved in the scope of a context. You can
+        always do that later.
         """
         return {
             plugin.key: await plugin.process_request(request)

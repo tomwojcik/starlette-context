@@ -19,7 +19,7 @@ sys.path.insert(0, os.path.abspath("../../starlette_context"))
 # -- Project information -----------------------------------------------------
 
 project = "Starlette Context"
-copyright = f"2020, Tomasz Wojcik"
+copyright = "2021, Tomasz Wojcik"
 author = "Tomasz Wojcik"
 
 # The full version, including alpha/beta/rc tags
@@ -31,7 +31,11 @@ release = VERSION
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
-extensions = ["sphinx.ext.autodoc", "sphinx.ext.viewcode"]
+extensions = [
+    "sphinx.ext.autodoc",
+    "sphinx.ext.viewcode",
+    "sphinx.ext.autosectionlabel",
+]
 pygments_style = "sphinx"
 
 

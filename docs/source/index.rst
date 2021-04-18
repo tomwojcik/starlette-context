@@ -7,10 +7,11 @@ starlette-context
    :caption: Contents:
 
    quickstart
-   examples
    context
    middleware
    plugins
+   errors
+   example
    contributing
    license
    changelog
