@@ -2,10 +2,6 @@
 Middleware
 ==========
 
-.. warning::
-    If you see "You didn't use the required middleware or you're trying to access `context`
-    object outside of the request-response cycle." please see :ref:`errors`.
-
 ****************************************************
 Why are there two middlewares that do the same thing
 ****************************************************

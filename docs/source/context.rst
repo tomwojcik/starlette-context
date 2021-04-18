@@ -6,6 +6,9 @@ The context object is kept in ``ContextVar`` created for the request that is bei
 This ``ContextVar`` is a python object that has been introduced with 3.7.
 For more info go see the official docs of `contextvars <https://docs.python.org/3/library/contextvars.html>`_.
 
+.. warning::
+    If you see ``ContextDoesNotExistError`` please see :ref:`errors`.
+
 My idea was to create something like a ``g`` object in ``Flask``.
 
 In ``Django`` I think there's no builtin similar solution but it can be compared to anything that allows you to store some
