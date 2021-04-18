@@ -12,11 +12,5 @@ then
   pyenv local $PYTHON_VERSION_TARGET
 fi
 
-ver=$(python3 -V 2>&1 | sed 's/.* \([0-9]\).\([0-9]\).*/\1\2/')
-if [ "$ver" -lt "37" ]; then
-    echo "This script requires python 3.7 or greater"
-    exit 1
-fi
-
 if [ -d venv ]; then rm -r venv; fi
 python3 -m venv venv

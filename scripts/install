@@ -5,6 +5,12 @@ PIP="$VENV/bin/pip"
 
 set -x
 
+ver=$(python3 -V 2>&1 | sed 's/.* \([0-9]\).\([0-9]\).*/\1\2/')
+if [ "$ver" -lt "37" ]; then
+    echo "This script requires python 3.7 or greater"
+    exit 1
+fi
+
 "$PIP" install --upgrade pip
 "$PIP" install wheel
 "$PIP" install -r requirements-dev.txt
