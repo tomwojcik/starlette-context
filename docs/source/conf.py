@@ -13,13 +13,15 @@
 import os
 import sys
 
+this_year = datetime.datetime.now().year
+
 sys.path.insert(0, os.path.abspath("../../starlette_context"))
 
 
 # -- Project information -----------------------------------------------------
 
 project = "Starlette Context"
-copyright = f"2020, Tomasz Wojcik"
+copyright = "2021, Tomasz Wojcik"
 author = "Tomasz Wojcik"
 
 # The full version, including alpha/beta/rc tags

@@ -9,7 +9,6 @@ repos:
       - id: check-added-large-files
       - id: check-case-conflict
       - id: check-merge-conflict
-      - id: check-toml
       - id: end-of-file-fixer
       - id: trailing-whitespace
 
