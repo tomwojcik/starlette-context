@@ -54,9 +54,3 @@ repos:
     rev: v2.9.0
     hooks:
       - id: pyupgrade
-
-  - repo: https://github.com/MartinThoma/check-pip-compile
-    rev: 0.1.0
-    hooks:
-    -   id: check-pip-compile
-        args: ['.']
