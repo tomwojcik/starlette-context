@@ -5,6 +5,7 @@ on:
   push:
     branches:
       - master
+      - clean-hooks-travis-automation-docs  # temp
   pull_request:
 
 jobs:
