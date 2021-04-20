@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/tomwojcik/starlette-context.svg?branch=master)](https://travis-ci.org/tomwojcik/starlette-context)
+[![Test Suite](https://github.com/tomwojcik/starlette-context/actions/workflows/test-suite.yml/badge.svg)](https://github.com/tomwojcik/starlette-context/actions/workflows/test-suite.yml)
 [![Python](https://img.shields.io/badge/python-3.7+-blue.svg)](https://www.python.org/downloads/release/python-370/)
 [![PyPI version](https://badge.fury.io/py/starlette-context.svg)](https://badge.fury.io/py/starlette-context)
 [![codecov](https://codecov.io/gh/tomwojcik/starlette-context/branch/master/graph/badge.svg)](https://codecov.io/gh/tomwojcik/starlette-context)
