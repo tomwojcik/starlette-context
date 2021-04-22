@@ -8,6 +8,7 @@ from starlette.responses import Response
 from starlette.types import Message
 
 from starlette_context import context
+from starlette_context.errors import WrongUUIDError, ConfigurationError
 
 __all__ = ["Plugin", "PluginUUIDBase"]
 
@@ -58,7 +59,9 @@ class PluginUUIDBase(Plugin):
         error_response: Optional[Response] = None,
     ):
         if version not in self.uuid_functions_mapper:
-            raise TypeError(f"UUID version {version} is not supported.")
+            raise ConfigurationError(
+                f"UUID version {version} is not supported."
+            )
         self.force_new_uuid = force_new_uuid
         self.version = version
         self.validate = validate
@@ -68,7 +71,9 @@ class PluginUUIDBase(Plugin):
         try:
             uuid.UUID(uuid_to_validate, version=self.version)
         except Exception as e:
-            raise ValueError(self.error_response or "Wrong uuid") from e
+            raise WrongUUIDError(
+                "Wrong uuid", error_response=self.error_response
+            ) from e
 
     def get_new_uuid(self) -> str:
         func = self.uuid_functions_mapper[self.version]

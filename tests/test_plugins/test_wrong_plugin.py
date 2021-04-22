@@ -1,3 +1,4 @@
+from starlette_context.errors import ConfigurationError
 import pytest
 from starlette.applications import Starlette
 from starlette.middleware import Middleware
@@ -13,14 +14,14 @@ class NotAPlugin:
 
 
 def test_context_middleware_wrong_plugin():
-    with pytest.raises(TypeError):
+    with pytest.raises(ConfigurationError):
         Starlette(
             middleware=[Middleware(ContextMiddleware, plugins=(NotAPlugin(),))]
         )
 
 
 def test_raw_middleware_wrong_plugin():
-    with pytest.raises(TypeError):
+    with pytest.raises(ConfigurationError):
         Starlette(
             middleware=[
                 Middleware(RawContextMiddleware, plugins=(NotAPlugin(),))

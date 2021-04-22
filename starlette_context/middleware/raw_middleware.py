@@ -7,6 +7,10 @@ from starlette.types import ASGIApp, Message, Receive, Scope, Send
 
 from starlette_context import _request_scope_context_storage
 from starlette_context.plugins import Plugin
+from starlette_context.errors import (
+    ConfigurationError,
+    MiddleWareValidationError,
+)
 
 
 class RawContextMiddleware:
@@ -19,7 +23,9 @@ class RawContextMiddleware:
         self.app = app
         for plugin in plugins or ():
             if not isinstance(plugin, Plugin):
-                raise TypeError(f"Plugin {plugin} is not a valid instance")
+                raise ConfigurationError(
+                    f"Plugin {plugin} is not a valid instance"
+                )
 
         self.plugins = plugins or ()
         self.error_response = defaut_error_response
@@ -64,9 +70,9 @@ class RawContextMiddleware:
 
         try:
             context = await self.set_context(request)
-        except ValueError as e:
-            if isinstance(e.args[0], Response):
-                error_response = e.args[0]
+        except MiddleWareValidationError as e:
+            if e.error_response is not None:
+                error_response = e.error_response
             else:
                 error_response = self.error_response
 

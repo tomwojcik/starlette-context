@@ -1,6 +1,7 @@
 import pytest
 
 from starlette_context.ctx import _Context
+from starlette_context.errors import ConfigurationError
 
 
 @pytest.fixture(scope="function", autouse=True)
@@ -17,7 +18,7 @@ def mocked_context(monkeypatch, ctx_store) -> _Context:
 
 
 def test_ctx_init():
-    with pytest.raises(AttributeError):
+    with pytest.raises(ConfigurationError):
         _Context(test=True)
 
 

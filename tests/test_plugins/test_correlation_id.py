@@ -7,6 +7,7 @@ from starlette.responses import Response
 from starlette.testclient import TestClient
 
 from starlette_context import plugins
+from starlette_context.errors import ConfigurationError
 from starlette_context.header_keys import HeaderKeys
 from starlette_context.middleware import ContextMiddleware
 from tests.conftest import dummy_correlation_id
@@ -73,7 +74,7 @@ def test_force_new_uuid():
 
 
 def test_unsupported_uuid():
-    with pytest.raises(TypeError):
+    with pytest.raises(ConfigurationError):
         plugins.CorrelationIdPlugin(
             force_new_uuid=True, validate=False, version=1
         )

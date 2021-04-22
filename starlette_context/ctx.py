@@ -3,7 +3,10 @@ from contextvars import copy_context
 from typing import Any
 
 from starlette_context import _request_scope_context_storage
-from starlette_context.errors import ContextDoesNotExistError
+from starlette_context.errors import (
+    ContextDoesNotExistError,
+    ConfigurationError,
+)
 
 
 class _Context(UserDict):
@@ -17,7 +20,7 @@ class _Context(UserDict):
     def __init__(self, *args: Any, **kwargs: Any):  # noqa
         # not calling super on purpose
         if args or kwargs:
-            raise AttributeError("Can't instantiate with attributes")
+            raise ConfigurationError("Can't instantiate with attributes")
 
     @property
     def data(self) -> dict:  # type: ignore
