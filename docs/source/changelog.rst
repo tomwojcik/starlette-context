@@ -10,7 +10,7 @@ Latest release
 --------
 `0.3.2`_
 --------
-*Release date: ??, 2021*
+*Release date: April 22, 2021*
 
 * ``ContextDoesNotExistError`` is raised when context object can't be accessed. Previously it was ``RuntimeError``.
 For backwards compatibility, it inherits from ``RuntimeError`` so it shouldn't result in any regressions.
