@@ -10,6 +10,10 @@ from starlette.responses import Response
 
 from starlette_context import _request_scope_context_storage
 from starlette_context.plugins import Plugin
+from starlette_context.errors import (
+    ConfigurationError,
+    MiddleWareValidationError,
+)
 
 
 class ContextMiddleware(BaseHTTPMiddleware):
@@ -31,7 +35,9 @@ class ContextMiddleware(BaseHTTPMiddleware):
         super().__init__(*args, **kwargs)
         for plugin in plugins or ():
             if not isinstance(plugin, Plugin):
-                raise TypeError(f"Plugin {plugin} is not a valid instance")
+                raise ConfigurationError(
+                    f"Plugin {plugin} is not a valid instance"
+                )
         self.plugins = plugins or ()
         self.error_response = defaut_error_response
 
@@ -53,9 +59,9 @@ class ContextMiddleware(BaseHTTPMiddleware):
         try:
             context = await self.set_context(request)
             token: Token = _request_scope_context_storage.set(context)
-        except ValueError as e:
-            if isinstance(e.args[0], Response):
-                error_response = e.args[0]
+        except MiddleWareValidationError as e:
+            if e.error_response:
+                error_response = e.error_response
             else:
                 error_response = self.error_response
             return error_response
