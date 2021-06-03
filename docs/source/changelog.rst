@@ -8,13 +8,20 @@ This project adheres to `Semantic Versioning <http://semver.org/>`_.
 Latest release
 
 --------
+`0.3.3`_
+--------
+*Release date: June ??, 2021*
+
+* add support for custom error responses if error occurred in plugin / middleware -> fix for 500 (Thanks @hhamana)
+
+--------
 `0.3.2`_
 --------
 *Release date: April 22, 2021*
 
 * ``ContextDoesNotExistError`` is raised when context object can't be accessed. Previously it was ``RuntimeError``.
 For backwards compatibility, it inherits from ``RuntimeError`` so it shouldn't result in any regressions.
-* Added ``py.typed`` file so your mypy should never complain
+* Added ``py.typed`` file so your mypy should never complain (Thanks @ginomempin)
 
 --------
 `0.3.1`_
@@ -48,7 +55,7 @@ For backwards compatibility, it inherits from ``RuntimeError`` so it shouldn't r
 
  * for correlation id and request id plugins, add support for enforcing the generation of a new value
  * for ^ plugins add support for validating uuid. It's a default behavior so will break things for people who don't use uuid4 there. If you don't want this validation, you need to pass validate=False to the plugin
- * thanks to @VukW you can now check if context is available
+ * you can now check if context is available (Thanks @VukW)
 
 --------
 `0.2.1`_
