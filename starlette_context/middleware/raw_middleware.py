@@ -18,7 +18,7 @@ class RawContextMiddleware:
         self,
         app: ASGIApp,
         plugins: Optional[Sequence[Plugin]] = None,
-        defaut_error_response: Response = Response(status_code=400),
+        default_error_response: Response = Response(status_code=400),
     ) -> None:
         self.app = app
         for plugin in plugins or ():
@@ -28,7 +28,7 @@ class RawContextMiddleware:
                 )
 
         self.plugins = plugins or ()
-        self.error_response = defaut_error_response
+        self.error_response = default_error_response
 
     async def set_context(
         self, request: Union[Request, HTTPConnection]
