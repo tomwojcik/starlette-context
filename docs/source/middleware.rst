@@ -2,6 +2,47 @@
 Middleware
 ==========
 
+********
+What for
+********
+
+The middleware effectively creates the context for the request, so you must configure your app to use it.
+More usage detail along with code examples can be found in :doc:`/plugins`.
+
+
+***********************************
+Errors and Middlewares in Starlette
+***********************************
+
+There may be a validation error occuring while processing the request in the plugins, which requires sending an error response.
+Starlette however does not let middleware use the regular error handler (`more details <https://www.starlette.io/exceptions/#errors-and-handled-exceptions>`_), 
+so middlewares facing a validation error have to send a response by themselves.
+
+By default, the response sent will be a 400 with no body or extra header, as a Starlette ``Response(status_code=400)``.
+This response can be customized at both middleware and plugin level.
+
+The middlewares accepts a ``Response`` object (or anything that inherits it, such as a ``JSONResponse``) through ``default_error_response`` keyword argument at init. 
+This response will be sent on raised ``starlette_context.errors.MiddleWareValidationError`` exceptions, if it doesn't include a response itself.
+
+.. code-block:: python
+
+    custom_default_response = JSONResponse(
+        status_code=status.HTTP_422_UNPROCESSABLE_ENTITY
+        content={"Error": "Invalid request"}, 
+    )
+
+    middleware = [
+        Middleware(
+            ContextMiddleware,
+            default_error_response=JSONResponse(
+                status_code=status.HTTP_422_UNPROCESSABLE_ENTITY
+                content={"Error": "Invalid request"}, 
+            ),
+            # plugins = ...
+        )
+    ]
+
+
 ****************************************************
 Why are there two middlewares that do the same thing
 ****************************************************
@@ -20,36 +61,10 @@ It is entirely possible that ``ContextMiddleware`` will be removed in the future
 It is also possible that authors will make some changes to the ``BaseHTTPMiddleware`` to fix this issue.
 I'd advise to only use ``RawContextMiddleware``.
 
-.. warning::
-
-    The ``enrich_response`` method won't run for unhandled exceptions.
-    Even if you use your own 500 handler, the context won't be available in it as that's
-    how Starlette handles 500 (it's the last middleware to be run).
-    Therefore, at the current state of Starlette and this library, no response headers will be set for 500 responses.
-
 *****************
 ContextMiddleware
 *****************
 
-Excerpt
-
-.. code-block:: python
-
-    async def dispatch(
-        self, request: Request, call_next: RequestResponseEndpoint
-    ) -> Response:
-        _starlette_context_token: Token = _request_scope_context_storage.set(
-            await self.set_context(request)
-        )
-        try:
-            response = await call_next(request)
-            for plugin in self.plugins:
-                await plugin.enrich_response(response)
-
-        finally:
-            _request_scope_context_storage.reset(_starlette_context_token)
-
-        return response
 
 Firstly we create a "storage" for the context. The ``set_context`` method allows us to assign something to the context
 on creation therefore that's the best place to add everything that might come in
