@@ -14,8 +14,8 @@ Using a plugin
 You may add as many plugins as you want to your middleware. You pass them to the middleware accordingly to the Starlette standard.
 
 There may be a validation error occuring while processing the request in the plugins, which requires sending an error response.
-Starlette however does not let middleware use the regular error handler 
-(`more details on this <https://www.starlette.io/exceptions/#errors-and-handled-exceptions>`_), 
+Starlette however does not let middleware use the regular error handler
+(`more details on this <https://www.starlette.io/exceptions/#errors-and-handled-exceptions>`_),
 so middlewares facing a validation error have to send a response by themselves.
 
 By default, the response sent will be a 400 with no body or extra header, as a Starlette `Response(status_code=400)`.
@@ -52,7 +52,7 @@ Built-in plugins
 ================
 
 starlette_context includes the following plugins you can import and use as shown above.
-They are all accessible from  the `plugins` module. 
+They are all accessible from  the `plugins` module.
 
 Do note headers are case-insentive.
 You can access the header value through the `<plugin class>.key` attribute,
@@ -96,7 +96,7 @@ You can implement your plugin with variying degree of ease and flexibility.
 Easy mode
 *********
 
-You want a Plugin to extract a header that is not already available in the built-in ones. 
+You want a Plugin to extract a header that is not already available in the built-in ones.
 There are indeed many, and your app may even want to use a custom header.
 
 You just need to define the header key that you're looking for.
@@ -110,7 +110,7 @@ You just need to define the header key that you're looking for.
 
 
 That's it!
-Just load it in your Middleware's plugins, and the value of the ``Accept-Language`` header will be put in the context, 
+Just load it in your Middleware's plugins, and the value of the ``Accept-Language`` header will be put in the context,
 which you can later get with ``context.get(AcceptPlugin.key)`` or ``context.get("Accept-Language")``
 Hopefully you can use it to try and serve locally appropriate content.
 
@@ -141,7 +141,7 @@ On the way out, it retrieves the value it put in the context, and sets a new coo
 
 
 .. code-block:: python
-        
+
     import base64
     import logging
     from typing import Any, Optional, Union
