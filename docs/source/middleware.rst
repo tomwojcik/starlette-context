@@ -15,28 +15,23 @@ Errors and Middlewares in Starlette
 ***********************************
 
 There may be a validation error occuring while processing the request in the plugins, which requires sending an error response.
-Starlette however does not let middleware use the regular error handler (`more details <https://www.starlette.io/exceptions/#errors-and-handled-exceptions>`_), 
+Starlette however does not let middleware use the regular error handler (`more details <https://www.starlette.io/exceptions/#errors-and-handled-exceptions>`_),
 so middlewares facing a validation error have to send a response by themselves.
 
 By default, the response sent will be a 400 with no body or extra header, as a Starlette ``Response(status_code=400)``.
 This response can be customized at both middleware and plugin level.
 
-The middlewares accepts a ``Response`` object (or anything that inherits it, such as a ``JSONResponse``) through ``default_error_response`` keyword argument at init. 
+The middlewares accepts a ``Response`` object (or anything that inherits it, such as a ``JSONResponse``) through ``default_error_response`` keyword argument at init.
 This response will be sent on raised ``starlette_context.errors.MiddleWareValidationError`` exceptions, if it doesn't include a response itself.
 
 .. code-block:: python
-
-    custom_default_response = JSONResponse(
-        status_code=status.HTTP_422_UNPROCESSABLE_ENTITY
-        content={"Error": "Invalid request"}, 
-    )
 
     middleware = [
         Middleware(
             ContextMiddleware,
             default_error_response=JSONResponse(
                 status_code=status.HTTP_422_UNPROCESSABLE_ENTITY
-                content={"Error": "Invalid request"}, 
+                content={"Error": "Invalid request"},
             ),
             # plugins = ...
         )
