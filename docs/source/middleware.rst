@@ -15,7 +15,7 @@ Errors and Middlewares in Starlette
 ***********************************
 
 There may be a validation error occuring while processing the request in the plugins, which requires sending an error response.
-Starlette however does not let middleware use the regular error handler (`more details <https://www.starlette.io/exceptions/#errors-and-handled-exceptions>`_),
+Starlette however does not let middleware use the regular error handler (`more details <https://www.starlette.io/exceptions.html#errors-and-handled-exceptions>`_),
 so middlewares facing a validation error have to send a response by themselves.
 
 By default, the response sent will be a 400 with no body or extra header, as a Starlette ``Response(status_code=400)``.
@@ -55,6 +55,13 @@ The ``RawContextMiddleware`` does more or less the same thing.
 It is entirely possible that ``ContextMiddleware`` will be removed in the future release.
 It is also possible that authors will make some changes to the ``BaseHTTPMiddleware`` to fix this issue.
 I'd advise to only use ``RawContextMiddleware``.
+
+.. warning::
+    Due to how Starlette handles application exceptions, the ``enrich_response`` method won't run,
+    and the default error response will not be used after an unhandled exception.
+
+    Therefore, this middleware is not capable of setting response headers for 500 responses.
+    You can try to use your own 500 handler, but beware that the context will not be available.
 
 *****************
 ContextMiddleware
