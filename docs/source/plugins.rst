@@ -15,7 +15,7 @@ You may add as many plugins as you want to your middleware. You pass them to the
 
 There may be a validation error occuring while processing the request in the plugins, which requires sending an error response.
 Starlette however does not let middleware use the regular error handler
-(`more details on this <https://www.starlette.io/exceptions/#errors-and-handled-exceptions>`_),
+(`more details on this <https://www.starlette.io/exceptions.html#errors-and-handled-exceptions>`_),
 so middlewares facing a validation error have to send a response by themselves.
 
 By default, the response sent will be a 400 with no body or extra header, as a Starlette `Response(status_code=400)`.
@@ -105,13 +105,13 @@ You just need to define the header key that you're looking for.
 
     from starlette_context.plugins import Plugin
 
-    class AcceptPlugin(Plugin):
+    class AcceptLanguagePlugin(Plugin):
         key = "Accept-Language"
 
 
 That's it!
 Just load it in your Middleware's plugins, and the value of the ``Accept-Language`` header will be put in the context,
-which you can later get with ``context.get(AcceptPlugin.key)`` or ``context.get("Accept-Language")``
+which you can later get with ``context.get(AcceptLanguagePlugin.key)`` or ``context.get("Accept-Language")``
 Hopefully you can use it to try and serve locally appropriate content.
 
 You can notice the ``key`` attributes is both used to define the header you want to extract data from, and the key with which it is inserted in the context.
@@ -131,6 +131,7 @@ Any Exception raised from a middleware in Starlette would normally become a hard
 However you probably might find cases where you want to send a validation error instead.
 For those cases, ``starlette_context`` provides a ``MiddleWareValidationError`` exception you can raise, and include a Starlette ``Response`` object.
 The middleware class will take care of sending it.
+You can also raise a MiddleWareValidationError without attaching a response, the middleware's default response will then be used.
 
 You can also do more than extracting from requests, plugins also have a hook to modify the response before it's sent: ``enrich_response``.
 It can access the Response object, and of course, the context, fully populated by that point.
@@ -165,7 +166,7 @@ On the way out, it retrieves the value it put in the context, and sets a new coo
             # access any part of the request
             raw_cookie = request.cookies.get("Session")
             if not raw_cookie:
-                # it will be inserted a None in the context.
+                # it will be inserted as None in the context.
                 return None
 
             try:
@@ -181,12 +182,12 @@ On the way out, it retrieves the value it put in the context, and sets a new coo
             return decoded_cookie
 
         async def enrich_response(self, response: Union[Response, Message]) -> None:
-            # can access the pupulated context here.
+            # can access the populated context here.
             previous_cookie = context.get("session_cookie")
             response.set_cookie("PreviousSession", previous_cookie)
             response.set_cookie("Session", "SGVsbG8gV29ybGQ=")
             # mutate the response in-place, return nothing.
 
 Do note, the type of request and response argument received depends on the middlewares class used.
-The example shown here is valid for use with the ``ContextMiddleware``, receiveing built Starlette ``Request`` and ``Response`` objects.
+The example shown here is valid for use with the ``ContextMiddleware``, receiving built Starlette ``Request`` and ``Response`` objects.
 In a ``RawContextMiddleware``, the hooks will receive ``HTTPConnection`` and ``Message`` objects passed as argument.
