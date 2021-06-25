@@ -15,7 +15,7 @@ Errors and Middlewares in Starlette
 ***********************************
 
 There may be a validation error occuring while processing the request in the plugins, which requires sending an error response.
-Starlette however does not let middleware use the regular error handler (`more details <https://www.starlette.io/exceptions.html#errors-and-handled-exceptions>`_),
+Starlette however does not let middleware use the regular error handler (`more details <https://www.starlette.io/exceptions/#errors-and-handled-exceptions>`_),
 so middlewares facing a validation error have to send a response by themselves.
 
 By default, the response sent will be a 400 with no body or extra header, as a Starlette ``Response(status_code=400)``.
