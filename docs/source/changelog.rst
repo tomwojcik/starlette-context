@@ -10,9 +10,10 @@ Latest release
 --------
 `0.3.3`_
 --------
-*Release date: June ??, 2021*
+*Release date: June 28, 2021*
 
 * add support for custom error responses if error occurred in plugin / middleware -> fix for 500 (Thanks @hhamana)
+* better (custom) exceptions with a base `StarletteContextError` (Thanks @hhamana)
 
 --------
 `0.3.2`_
@@ -116,3 +117,4 @@ For backwards compatibility, it inherits from ``RuntimeError`` so it shouldn't r
 .. _0.3.0: https://github.com/tomwojcik/starlette-context/compare/v0.2.3...v0.3.0
 .. _0.3.1: https://github.com/tomwojcik/starlette-context/compare/v0.3.0...v0.3.1
 .. _0.3.2: https://github.com/tomwojcik/starlette-context/compare/v0.3.1...v0.3.2
+.. _0.3.3: https://github.com/tomwojcik/starlette-context/compare/v0.3.2...v0.3.3
