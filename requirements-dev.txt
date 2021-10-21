@@ -14,7 +14,7 @@ appdirs==1.4.4
     #   virtualenv
 attrs==20.3.0
     # via pytest
-babel==2.9.0
+babel==2.9.1
     # via sphinx
 black==20.8b1
     # via -r requirements-dev.in
@@ -52,14 +52,6 @@ idna==2.8
     # via requests
 imagesize==1.2.0
     # via sphinx
-importlib-metadata==3.10.0
-    # via
-    #   flake8
-    #   pep517
-    #   pluggy
-    #   pre-commit
-    #   pytest
-    #   virtualenv
 jinja2==2.11.3
     # via sphinx
 markupsafe==1.1.1
@@ -68,12 +60,12 @@ mccabe==0.6.1
     # via flake8
 more-itertools==8.7.0
     # via pytest
+mypy==0.812
+    # via -r requirements-dev.in
 mypy-extensions==0.4.3
     # via
     #   black
     #   mypy
-mypy==0.812
-    # via -r requirements-dev.in
 nodeenv==1.5.0
     # via pre-commit
 packaging==20.9
@@ -89,9 +81,9 @@ pip-tools==6.0.1
     # via -r requirements-dev.in
 pluggy==0.13.1
     # via pytest
-pre-commit-hooks==3.2.0
-    # via -r requirements-dev.in
 pre-commit==2.7.1
+    # via -r requirements-dev.in
+pre-commit-hooks==3.2.0
     # via -r requirements-dev.in
 py==1.10.0
     # via
@@ -105,6 +97,14 @@ pygments==2.8.1
     # via sphinx
 pyparsing==2.4.7
     # via packaging
+pytest==5.3.2
+    # via
+    #   -r requirements-dev.in
+    #   pytest-asyncio
+    #   pytest-cov
+    #   pytest-forked
+    #   pytest-sugar
+    #   pytest-xdist
 pytest-asyncio==0.10.0
     # via -r requirements-dev.in
 pytest-cov==2.8.1
@@ -115,14 +115,6 @@ pytest-sugar==0.9.2
     # via -r requirements-dev.in
 pytest-xdist==1.31.0
     # via -r requirements-dev.in
-pytest==5.3.2
-    # via
-    #   -r requirements-dev.in
-    #   pytest-asyncio
-    #   pytest-cov
-    #   pytest-forked
-    #   pytest-sugar
-    #   pytest-xdist
 pytz==2021.1
     # via babel
 pyyaml==5.4.1
@@ -134,22 +126,22 @@ requests==2.22.0
     #   -r requirements-dev.in
     #   codecov
     #   sphinx
-ruamel.yaml.clib==0.2.2
-    # via ruamel.yaml
 ruamel.yaml==0.17.2
     # via pre-commit-hooks
+ruamel.yaml.clib==0.2.2
+    # via ruamel.yaml
 six==1.15.0
     # via
     #   pytest-xdist
     #   virtualenv
 snowballstemmer==2.1.0
     # via sphinx
-sphinx-rtd-theme==0.5.0
-    # via -r requirements-dev.in
 sphinx==3.2.1
     # via
     #   -r requirements-dev.in
     #   sphinx-rtd-theme
+sphinx-rtd-theme==0.5.0
+    # via -r requirements-dev.in
 sphinxcontrib-applehelp==1.0.2
     # via sphinx
 sphinxcontrib-devhelp==1.0.2
@@ -179,7 +171,6 @@ typed-ast==1.4.2
 typing-extensions==3.7.4.3
     # via
     #   black
-    #   importlib-metadata
     #   mypy
 urllib3==1.25.11
     # via requests
@@ -187,10 +178,6 @@ virtualenv==20.4.3
     # via pre-commit
 wcwidth==0.2.5
     # via pytest
-zipp==3.4.1
-    # via
-    #   importlib-metadata
-    #   pep517
 
 # The following packages are considered to be unsafe in a requirements file:
 # pip
