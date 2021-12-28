@@ -3,7 +3,6 @@ from typing import Type
 from starlette import status
 from starlette.applications import Starlette
 from starlette.middleware import Middleware
-from starlette.responses import JSONResponse, Response
 from starlette.testclient import TestClient
 
 from starlette_context import plugins
@@ -14,13 +13,11 @@ from starlette_context.middleware import (
 )
 
 
-def gen_middleware_config(
-    middleware_class: Type, response: Response
-) -> TestClient:
+def gen_middleware_config(middleware_class: Type) -> TestClient:
     middleware = [
         Middleware(
             middleware_class,
-            plugins=(plugins.RequestIdPlugin(error_response=response),),
+            plugins=(plugins.RequestIdPlugin(),),
         )
     ]
     app = Starlette(middleware=middleware)
@@ -29,35 +26,17 @@ def gen_middleware_config(
 
 
 def test_invalid_request_id_returns_specified_response_raw_middleware():
-    content = {"Error": "Invalid X-Request-ID"}
-    response = JSONResponse(
-        content=content, status_code=status.HTTP_422_UNPROCESSABLE_ENTITY
-    )
-    client = gen_middleware_config(RawContextMiddleware, response)
+    client = gen_middleware_config(RawContextMiddleware)
 
     response = client.get("/", headers={HeaderKeys.request_id: "invalid_uuid"})
     assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
     assert HeaderKeys.request_id not in response.headers
-    body = response.json()
-    assert body == content
+    assert response.content == b"Invalid UUID in request header X-Request-ID"
 
 
 def test_invalid_request_id_returns_specified_response_context_middleware():
-    content = {"Error": "Invalid X-Request-ID"}
-    response = JSONResponse(
-        content=content, status_code=status.HTTP_422_UNPROCESSABLE_ENTITY
-    )
-    client = gen_middleware_config(ContextMiddleware, response)
+    client = gen_middleware_config(ContextMiddleware)
     response = client.get("/", headers={HeaderKeys.request_id: "invalid_uuid"})
     assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
     assert HeaderKeys.request_id not in response.headers
-    body = response.json()
-    assert body == content
-
-
-def test_invalid_request_id_unspecified_response_raw_middleware():
-    client = gen_middleware_config(RawContextMiddleware, None)
-    response = client.get("/", headers={HeaderKeys.request_id: "invalid_uuid"})
-    assert response.status_code == status.HTTP_400_BAD_REQUEST
-    assert HeaderKeys.request_id not in response.headers
-    assert response.content == b""
+    assert response.content == b"Invalid UUID in request header X-Request-ID"

@@ -2,14 +2,14 @@ from contextvars import Token
 from typing import Optional, Sequence, Union
 
 from starlette.requests import HTTPConnection, Request
-from starlette.responses import Response
+from starlette.responses import PlainTextResponse
 from starlette.types import ASGIApp, Message, Receive, Scope, Send
 
 from starlette_context import _request_scope_context_storage
 from starlette_context.plugins import Plugin
 from starlette_context.errors import (
     ConfigurationError,
-    MiddleWareValidationError,
+    StarletteContextClientException,
 )
 
 
@@ -18,7 +18,6 @@ class RawContextMiddleware:
         self,
         app: ASGIApp,
         plugins: Optional[Sequence[Plugin]] = None,
-        default_error_response: Response = Response(status_code=400),
     ) -> None:
         self.app = app
         for plugin in plugins or ():
@@ -28,7 +27,6 @@ class RawContextMiddleware:
                 )
 
         self.plugins = plugins or ()
-        self.error_response = default_error_response
 
     async def set_context(
         self, request: Union[Request, HTTPConnection]
@@ -70,22 +68,26 @@ class RawContextMiddleware:
 
         try:
             context = await self.set_context(request)
-        except MiddleWareValidationError as e:
-            if e.error_response is not None:
-                error_response = e.error_response
-            else:
-                error_response = self.error_response
+        except StarletteContextClientException as e:
+            # mimics ExceptionMiddleware.http_exception
+            resp = PlainTextResponse(e.detail, status_code=e.status_code)
 
-            message_head = {
+            headers = [
+                (k.encode(), v.encode()) for k, v in resp.headers.items()
+            ]
+
+            message_head: Message = {
                 "type": "http.response.start",
-                "status": error_response.status_code,
-                "headers": error_response.raw_headers,
+                "status": resp.status_code,
+                "headers": headers,
             }
+
             await send(message_head)
 
-            message_body = {
+            message_body: Message = {
                 "type": "http.response.body",
-                "body": error_response.body,
+                "body": resp.body,
+                "headers": headers,
             }
             await send(message_body)
             return

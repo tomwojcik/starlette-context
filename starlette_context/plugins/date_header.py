@@ -2,7 +2,6 @@ import datetime
 from typing import Optional, Union
 
 from starlette.requests import HTTPConnection, Request
-from starlette.responses import Response
 
 from starlette_context.header_keys import HeaderKeys
 from starlette_context.plugins.base import Plugin
@@ -11,14 +10,6 @@ from starlette_context.errors import DateFormatError
 
 class DateHeaderPlugin(Plugin):
     key = HeaderKeys.date
-
-    def __init__(
-        self,
-        *args,
-        error_response: Optional[Response] = Response(status_code=400),
-    ):
-        super().__init__(*args)
-        self.error_response = error_response
 
     @staticmethod
     def rfc1123_to_dt(s: str) -> datetime.datetime:
@@ -42,15 +33,10 @@ class DateHeaderPlugin(Plugin):
             dt_str, dt_data = rfc1123[:25], rfc1123[25:]
 
             if dt_data.strip() not in ("", "GMT"):  # empty str assumes ok
-                raise DateFormatError(
-                    "Date header in wrong format, has to match rfc1123.",
-                    error_response=self.error_response,
-                )
+                raise DateFormatError
 
             try:
                 value = self.rfc1123_to_dt(dt_str.strip())
             except ValueError as e:
-                raise DateFormatError(
-                    str(e), error_response=self.error_response
-                )
+                raise DateFormatError(detail=str(e))
         return value
