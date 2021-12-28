@@ -72,14 +72,12 @@ class RawContextMiddleware:
             # mimics ExceptionMiddleware.http_exception
             resp = PlainTextResponse(e.detail, status_code=e.status_code)
 
-            headers = [
-                (k.encode(), v.encode()) for k, v in resp.headers.items()
-            ]
-
             message_head: Message = {
                 "type": "http.response.start",
                 "status": resp.status_code,
-                "headers": headers,
+                "headers": [
+                    (k.encode(), v.encode()) for k, v in resp.headers.items()
+                ],
             }
 
             await send(message_head)
@@ -87,7 +85,6 @@ class RawContextMiddleware:
             message_body: Message = {
                 "type": "http.response.body",
                 "body": resp.body,
-                "headers": headers,
             }
             await send(message_body)
             return

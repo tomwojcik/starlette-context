@@ -26,7 +26,7 @@ class StarletteContextClientException(HTTPException):
 
 
 class ContextDoesNotExistError(StarletteContextServerException):
-    def __repr__(self):
+    def __str__(self):  # pragma: no cover
         return (
             "You didn't use the required middleware or "
             "you're trying to access `context` object "
@@ -35,19 +35,15 @@ class ContextDoesNotExistError(StarletteContextServerException):
 
 
 class ConfigurationError(StarletteContextServerException):
-    def __repr__(self):
+    def __str__(self):  # pragma: no cover
         return "Invalid starlette-context configuration"
 
 
-class MiddleWareValidationError(StarletteContextClientException):
-    status_code = status.HTTP_400_BAD_REQUEST
-
-
-class WrongUUIDError(MiddleWareValidationError):
+class WrongUUIDError(StarletteContextClientException):
     status_code = status.HTTP_422_UNPROCESSABLE_ENTITY
     detail = "Invalid UUID in request header"
 
 
-class DateFormatError(MiddleWareValidationError):
+class DateFormatError(StarletteContextClientException):
     status_code = status.HTTP_422_UNPROCESSABLE_ENTITY
     detail = "Date header in wrong format, has to match rfc1123."
