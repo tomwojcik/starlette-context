@@ -2,23 +2,25 @@ from contextvars import Token
 from typing import Optional, Sequence, Union
 
 from starlette.requests import HTTPConnection, Request
-from starlette.responses import PlainTextResponse
 from starlette.types import ASGIApp, Message, Receive, Scope, Send
 
 from starlette_context import _request_scope_context_storage
+from starlette_context.middleware.mixin import StarletteContextMiddlewareMixin
 from starlette_context.plugins import Plugin
 from starlette_context.errors import (
     ConfigurationError,
-    StarletteContextClientException,
+    StarletteContextException,
 )
 
 
-class RawContextMiddleware:
+class RawContextMiddleware(StarletteContextMiddlewareMixin):
     def __init__(
         self,
         app: ASGIApp,
         plugins: Optional[Sequence[Plugin]] = None,
+        **kwargs,
     ) -> None:
+        super().__init__(**kwargs)
         self.app = app
         for plugin in plugins or ():
             if not isinstance(plugin, Plugin):
@@ -68,15 +70,22 @@ class RawContextMiddleware:
 
         try:
             context = await self.set_context(request)
-        except StarletteContextClientException as e:
-            # mimics ExceptionMiddleware.http_exception
-            resp = PlainTextResponse(e.detail, status_code=e.status_code)
+            token: Token = _request_scope_context_storage.set(context)
+
+            try:
+                await self.app(scope, receive, send_wrapper)
+            finally:
+                _request_scope_context_storage.reset(token)
+
+        except StarletteContextException as e:
+            response = self.create_response_from_exception(e)
 
             message_head: Message = {
                 "type": "http.response.start",
-                "status": resp.status_code,
+                "status": response.status_code,
                 "headers": [
-                    (k.encode(), v.encode()) for k, v in resp.headers.items()
+                    (k.encode(), v.encode())
+                    for k, v in response.headers.items()
                 ],
             }
 
@@ -84,14 +93,7 @@ class RawContextMiddleware:
 
             message_body: Message = {
                 "type": "http.response.body",
-                "body": resp.body,
+                "body": response.body,
             }
             await send(message_body)
             return
-
-        token: Token = _request_scope_context_storage.set(context)
-
-        try:
-            await self.app(scope, receive, send_wrapper)
-        finally:
-            _request_scope_context_storage.reset(token)

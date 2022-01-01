@@ -53,13 +53,13 @@ def test_rfc1123_parsing_method():
 
 def test_invalid_date_header_raises_exception():
     response1 = client.get("/", headers={HeaderKeys.date: "invalid_date"})
-    assert response1.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
+    assert response1.status_code == status.HTTP_500_INTERNAL_SERVER_ERROR
     assert HeaderKeys.date not in response1.headers
 
     response2 = client.get(
         "/", headers={HeaderKeys.date: "Wed, 01 Jan 2020 04:27:12 invalid"}
     )
-    assert response2.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
+    assert response2.status_code == status.HTTP_500_INTERNAL_SERVER_ERROR
     assert HeaderKeys.date not in response2.headers
 
 

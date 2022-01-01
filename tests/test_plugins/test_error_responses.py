@@ -29,7 +29,7 @@ def test_invalid_request_id_returns_specified_response_raw_middleware():
     client = gen_middleware_config(RawContextMiddleware)
 
     response = client.get("/", headers={HeaderKeys.request_id: "invalid_uuid"})
-    assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
+    assert response.status_code == status.HTTP_500_INTERNAL_SERVER_ERROR
     assert HeaderKeys.request_id not in response.headers
     assert response.content == b"Invalid UUID in request header X-Request-ID"
 
@@ -37,6 +37,6 @@ def test_invalid_request_id_returns_specified_response_raw_middleware():
 def test_invalid_request_id_returns_specified_response_context_middleware():
     client = gen_middleware_config(ContextMiddleware)
     response = client.get("/", headers={HeaderKeys.request_id: "invalid_uuid"})
-    assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
+    assert response.status_code == status.HTTP_500_INTERNAL_SERVER_ERROR
     assert HeaderKeys.request_id not in response.headers
     assert response.content == b"Invalid UUID in request header X-Request-ID"

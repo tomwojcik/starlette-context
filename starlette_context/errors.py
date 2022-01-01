@@ -3,16 +3,9 @@ from typing import Optional
 from starlette import status
 
 
-class StarletteContextServerException(BaseException):
-    """Results in 500 error."""
-
-    ...
-
-
-class StarletteContextClientException(HTTPException):
-    """Results in 4xx errors."""
-
-    status_code = status.HTTP_400_BAD_REQUEST
+class StarletteContextException(HTTPException):
+    status_code = status.HTTP_500_INTERNAL_SERVER_ERROR
+    detail = "Internal Server Error"
 
     def __init__(
         self,
@@ -25,25 +18,23 @@ class StarletteContextClientException(HTTPException):
         )
 
 
-class ContextDoesNotExistError(StarletteContextServerException):
+class ContextDoesNotExistError(StarletteContextException):
     def __str__(self):  # pragma: no cover
         return (
             "You didn't use the required middleware or "
             "you're trying to access `context` object "
-            "outside of the request-response cycle."
+            "outside of the request-response cycle"
         )
 
 
-class ConfigurationError(StarletteContextServerException):
+class ConfigurationError(StarletteContextException):
     def __str__(self):  # pragma: no cover
         return "Invalid starlette-context configuration"
 
 
-class WrongUUIDError(StarletteContextClientException):
-    status_code = status.HTTP_422_UNPROCESSABLE_ENTITY
+class WrongUUIDError(StarletteContextException):
     detail = "Invalid UUID in request header"
 
 
-class DateFormatError(StarletteContextClientException):
-    status_code = status.HTTP_422_UNPROCESSABLE_ENTITY
-    detail = "Date header in wrong format, has to match rfc1123."
+class DateFormatError(StarletteContextException):
+    detail = "Date header in wrong format, has to match rfc1123"

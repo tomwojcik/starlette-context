@@ -38,7 +38,10 @@ middlewares = [
 ]
 
 
-app = Starlette(debug=True, middleware=middlewares)
+app = Starlette(
+    debug=False,
+    middleware=middlewares,
+)
 
 
 @app.on_event("startup")

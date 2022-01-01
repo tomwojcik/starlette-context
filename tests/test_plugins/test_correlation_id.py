@@ -40,8 +40,11 @@ def test_invalid_correlation_id_returns_a_bad_request():
     response = client.get(
         "/", headers={HeaderKeys.correlation_id: "invalid_uuid"}
     )
-    assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
+    assert response.status_code == status.HTTP_500_INTERNAL_SERVER_ERROR
     assert HeaderKeys.correlation_id not in response.headers
+    assert (
+        response.content == b"Invalid UUID in request header X-Correlation-ID"
+    )
 
 
 def test_missing_header_will_assign_one():

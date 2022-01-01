@@ -1,11 +1,9 @@
-import pytest
 from starlette.applications import Starlette
 from starlette.requests import Request
 from starlette.responses import JSONResponse
 from starlette.testclient import TestClient
 
 from starlette_context import context
-from starlette_context.errors import ContextDoesNotExistError
 
 app = Starlette()
 client = TestClient(app)
@@ -17,5 +15,5 @@ async def index(request: Request):
 
 
 def test_no_middleware():
-    with pytest.raises(ContextDoesNotExistError):
-        client.get("/")
+    response = client.get("/")
+    assert response.text == "Internal Server Error"

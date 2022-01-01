@@ -6,17 +6,18 @@ from starlette.middleware.base import (
     RequestResponseEndpoint,
 )
 from starlette.requests import Request
-from starlette.responses import PlainTextResponse, Response
+from starlette.responses import Response
 
 from starlette_context import _request_scope_context_storage
+from starlette_context.middleware.mixin import StarletteContextMiddlewareMixin
 from starlette_context.plugins import Plugin
 from starlette_context.errors import (
     ConfigurationError,
-    StarletteContextClientException,
+    StarletteContextException,
 )
 
 
-class ContextMiddleware(BaseHTTPMiddleware):
+class ContextMiddleware(BaseHTTPMiddleware, StarletteContextMiddlewareMixin):
     """
     Middleware that creates empty context for request it's used on. If not
     used, you won't be able to use context object.
@@ -28,10 +29,12 @@ class ContextMiddleware(BaseHTTPMiddleware):
     def __init__(
         self,
         plugins: Optional[Sequence[Plugin]] = None,
-        *args,
         **kwargs,
     ) -> None:
-        super().__init__(*args, **kwargs)
+        BaseHTTPMiddleware.__init__(
+            self, app=kwargs["app"], dispatch=kwargs.get("dispatch")
+        )
+        StarletteContextMiddlewareMixin.__init__(self, **kwargs)
         for plugin in plugins or ():
             if not isinstance(plugin, Plugin):
                 raise ConfigurationError(
@@ -57,17 +60,15 @@ class ContextMiddleware(BaseHTTPMiddleware):
         try:
             context = await self.set_context(request)
             token: Token = _request_scope_context_storage.set(context)
-        except StarletteContextClientException as e:
-            return PlainTextResponse(
-                content=e.detail, status_code=e.status_code
-            )
 
-        try:
-            response = await call_next(request)
-            for plugin in self.plugins:
-                await plugin.enrich_response(response)
+            try:
+                response = await call_next(request)
+                for plugin in self.plugins:
+                    await plugin.enrich_response(response)
+            finally:
+                _request_scope_context_storage.reset(token)
 
-        finally:
-            _request_scope_context_storage.reset(token)
+        except StarletteContextException as e:
+            response = self.create_response_from_exception(e)
 
         return response
