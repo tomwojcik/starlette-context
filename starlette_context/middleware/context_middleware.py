@@ -1,4 +1,3 @@
-from contextvars import Token
 from typing import Optional, Sequence
 
 from starlette.middleware.base import (
@@ -8,7 +7,7 @@ from starlette.middleware.base import (
 from starlette.requests import Request
 from starlette.responses import Response
 
-from starlette_context import _request_scope_context_storage
+from starlette_context import starlette_context
 from starlette_context.plugins import Plugin
 from starlette_context.errors import (
     ConfigurationError,
@@ -58,20 +57,18 @@ class ContextMiddleware(BaseHTTPMiddleware):
     ) -> Response:
         try:
             context = await self.set_context(request)
-            token: Token = _request_scope_context_storage.set(context)
         except MiddleWareValidationError as e:
-            if e.error_response:
-                error_response = e.error_response
-            else:
-                error_response = self.error_response
+            error_response = e.error_response or self.error_response
             return error_response
 
-        try:
+        # create request-scoped context
+        with starlette_context(context):
+            # process rest of response stack
             response = await call_next(request)
+            # gets back to middleware, process response with plugins
             for plugin in self.plugins:
                 await plugin.enrich_response(response)
-
-        finally:
-            _request_scope_context_storage.reset(token)
-
-        return response
+            # retun response before resetting context
+            # allowing further middlewares to still use the context
+            return response
+        # context reset

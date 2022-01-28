@@ -1,11 +1,10 @@
-from contextvars import Token
 from typing import Optional, Sequence, Union
 
 from starlette.requests import HTTPConnection, Request
 from starlette.responses import Response
 from starlette.types import ASGIApp, Message, Receive, Scope, Send
 
-from starlette_context import _request_scope_context_storage
+from starlette_context import starlette_context
 from starlette_context.plugins import Plugin
 from starlette_context.errors import (
     ConfigurationError,
@@ -54,6 +53,22 @@ class RawContextMiddleware:
         # instantiate Request(scope, receive, send)
         return HTTPConnection(scope)
 
+    async def send_response(
+        self, error_response: Response, send: Send
+    ) -> None:
+        message_head = {
+            "type": "http.response.start",
+            "status": error_response.status_code,
+            "headers": error_response.raw_headers,
+        }
+        await send(message_head)
+
+        message_body = {
+            "type": "http.response.body",
+            "body": error_response.body,
+        }
+        await send(message_body)
+
     async def __call__(
         self, scope: Scope, receive: Receive, send: Send
     ) -> None:
@@ -71,28 +86,8 @@ class RawContextMiddleware:
         try:
             context = await self.set_context(request)
         except MiddleWareValidationError as e:
-            if e.error_response is not None:
-                error_response = e.error_response
-            else:
-                error_response = self.error_response
+            error_response = e.error_response or self.error_response
+            return await self.send_response(error_response, send)
 
-            message_head = {
-                "type": "http.response.start",
-                "status": error_response.status_code,
-                "headers": error_response.raw_headers,
-            }
-            await send(message_head)
-
-            message_body = {
-                "type": "http.response.body",
-                "body": error_response.body,
-            }
-            await send(message_body)
-            return
-
-        token: Token = _request_scope_context_storage.set(context)
-
-        try:
+        with starlette_context(context):
             await self.app(scope, receive, send_wrapper)
-        finally:
-            _request_scope_context_storage.reset(token)

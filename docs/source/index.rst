@@ -11,7 +11,9 @@ starlette-context
    middleware
    plugins
    errors
+   testing
    example
+   fastapi
    contributing
    license
    changelog
