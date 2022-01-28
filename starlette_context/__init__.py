@@ -1,5 +1,6 @@
-from contextvars import ContextVar
-from typing import Any, Dict
+from contextvars import ContextVar, Token
+from contextlib import contextmanager
+from typing import Any, Dict, Iterator, Optional
 
 __version__ = "0.3.3"
 __author__ = "Tomasz Wojcik"
@@ -8,4 +9,24 @@ _request_scope_context_storage: ContextVar[Dict[Any, Any]] = ContextVar(
     "starlette_context"
 )
 
+
+@contextmanager
+def starlette_context(initial_data: Optional[dict] = None) -> Iterator[None]:
+    """
+    Creates and resets a starlette context context.
+
+    Used in the Context and Raw middlewares, but can also be used to create a
+    context out of a proper request cycle, such as in unit tests.
+    """
+    if initial_data is None:
+        initial_data = {}
+    token: Token = _request_scope_context_storage.set(initial_data)
+    try:
+        yield
+    finally:
+        _request_scope_context_storage.reset(token)
+
+
 from starlette_context.ctx import context  # noqa: E402
+
+__all__ = ["context", "starlette_context"]
