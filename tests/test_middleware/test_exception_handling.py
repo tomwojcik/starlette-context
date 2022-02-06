@@ -48,7 +48,7 @@ def test_default_error_parse(middleware_class):
     "middleware_class", [RawContextMiddleware, ContextMiddleware]
 )
 def test_return_lib_exc_as_json(middleware_class):
-    def starlette_context_error_handler(
+    async def starlette_context_error_handler(
         request,
         exc: StarletteContextException,
     ) -> JSONResponse:
