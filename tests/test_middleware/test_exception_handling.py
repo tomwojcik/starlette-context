@@ -49,10 +49,11 @@ def test_default_error_parse(middleware_class):
 )
 def test_return_lib_exc_as_json(middleware_class):
     def starlette_context_error_handler(
-        e: StarletteContextException,
+        request,
+        exc: StarletteContextException,
     ) -> JSONResponse:
         return JSONResponse(
-            {"error_message": e.detail}, status_code=e.status_code
+            {"error_message": exc.detail}, status_code=exc.status_code
         )
 
     middleware = [

@@ -69,6 +69,6 @@ class ContextMiddleware(BaseHTTPMiddleware, StarletteContextMiddlewareMixin):
                 _request_scope_context_storage.reset(token)
 
         except StarletteContextException as e:
-            response = self.create_response_from_exception(e)
+            response = self.create_response_from_exception(request, e)
 
         return response
