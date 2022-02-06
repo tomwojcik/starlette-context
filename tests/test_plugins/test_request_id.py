@@ -34,7 +34,7 @@ def test_valid_request_returns_proper_response():
 
 def test_invalid_request_id_returns_a_bad_request():
     response = client.get("/", headers={HeaderKeys.request_id: "invalid_uuid"})
-    assert response.status_code == status.HTTP_500_INTERNAL_SERVER_ERROR
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
     assert HeaderKeys.request_id not in response.headers
 
 

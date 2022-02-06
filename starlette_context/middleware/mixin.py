@@ -2,22 +2,20 @@ import logging
 from typing import Callable, Optional
 
 from starlette_context.errors import StarletteContextException
-from starlette.responses import PlainTextResponse
+from starlette.responses import PlainTextResponse, Response
 
 
 class StarletteContextMiddlewareMixin:
-    _default_error_handler = lambda self, e: PlainTextResponse(  # noqa: E731
-        content=e.detail, status_code=e.status_code
-    )
-
     def __init__(
         self,
-        error_handler: Optional[Callable] = None,
+        error_handler: Optional[
+            Callable[[StarletteContextException], Response]
+        ] = None,
         log_errors: bool = False,
         *args,
         **kwargs,
     ):
-        self.error_handler = error_handler or self._default_error_handler
+        self.error_handler = error_handler or self.default_error_handler
         self.log_errors = log_errors
 
     def log_error(self):
@@ -26,12 +24,16 @@ class StarletteContextMiddlewareMixin:
             logger.exception("starlette-context exception")
 
     @staticmethod
+    def default_error_handler(e: StarletteContextException) -> Response:
+        return PlainTextResponse(content=e.detail, status_code=e.status_code)
+
+    @staticmethod
     def get_logger():
         return logging.getLogger("starlette_context")  # pragma: no cover
 
     def create_response_from_exception(
         self, e: StarletteContextException
-    ) -> PlainTextResponse:
+    ) -> Response:
         """
         Middleware / plugins exceptions will always result in 500 plain text
         errors.

@@ -40,7 +40,7 @@ def test_invalid_correlation_id_returns_a_bad_request():
     response = client.get(
         "/", headers={HeaderKeys.correlation_id: "invalid_uuid"}
     )
-    assert response.status_code == status.HTTP_500_INTERNAL_SERVER_ERROR
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
     assert HeaderKeys.correlation_id not in response.headers
     assert (
         response.content == b"Invalid UUID in request header X-Correlation-ID"

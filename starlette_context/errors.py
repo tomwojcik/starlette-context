@@ -4,7 +4,7 @@ from starlette import status
 
 
 class StarletteContextException(HTTPException):
-    status_code = status.HTTP_500_INTERNAL_SERVER_ERROR
+    status_code = status.HTTP_400_BAD_REQUEST
     detail = "Internal Server Error"
 
     def __init__(
@@ -19,6 +19,8 @@ class StarletteContextException(HTTPException):
 
 
 class ContextDoesNotExistError(StarletteContextException):
+    status_code = status.HTTP_500_INTERNAL_SERVER_ERROR
+
     def __str__(self):  # pragma: no cover
         return (
             "You didn't use the required middleware or "
@@ -28,6 +30,8 @@ class ContextDoesNotExistError(StarletteContextException):
 
 
 class ConfigurationError(StarletteContextException):
+    status_code = status.HTTP_500_INTERNAL_SERVER_ERROR
+
     def __str__(self):  # pragma: no cover
         return "Invalid starlette-context configuration"
 
