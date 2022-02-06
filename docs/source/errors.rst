@@ -2,6 +2,12 @@
 Errors
 ======
 
+**************
+Error handling
+**************
+
+Due to ``starlette`` structure, it's impossible to raise an exception in the middleware (what this library does) and let it be
+handled in ``starlette`` error handler. For that, you will have to use another error handler. For details, look at middlewares section.
 ************************
 ContextDoesNotExistError
 ************************
