@@ -1,5 +1,5 @@
 import logging
-from typing import Callable, Optional
+from typing import Awaitable, Callable, Optional, Union
 
 from starlette_context.errors import StarletteContextException
 from starlette.responses import PlainTextResponse, Response
@@ -10,7 +10,10 @@ class StarletteContextMiddlewareMixin:
     def __init__(
         self,
         error_handler: Optional[
-            Callable[[Request, StarletteContextException], Response]
+            Callable[
+                [Request, StarletteContextException],
+                Union[Response, Awaitable[Response]],
+            ]
         ] = None,
         log_errors: bool = False,
         *args,
