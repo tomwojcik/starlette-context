@@ -16,4 +16,4 @@ async def index(request: Request):
 
 def test_no_middleware():
     response = client.get("/")
-    assert response.text == "Internal Server Error"
+    assert response.text == "Error"
