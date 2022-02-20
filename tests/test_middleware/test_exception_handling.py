@@ -1,3 +1,4 @@
+import logging
 from unittest import mock
 
 from starlette import status
@@ -110,11 +111,7 @@ def test_dont_log_errors(get_logger, middleware_class):
 @pytest.mark.parametrize(
     "middleware_class", [RawContextMiddleware, ContextMiddleware]
 )
-@mock.patch(
-    "starlette_context.middleware.mixin."
-    "StarletteContextMiddlewareMixin.get_logger"
-)
-def test_do_log_errors(get_logger, middleware_class):
+def test_do_log_errors(middleware_class, caplog):
     middleware = [
         Middleware(
             middleware_class,
@@ -129,5 +126,8 @@ def test_do_log_errors(get_logger, middleware_class):
     async def index(request: Request) -> Response:
         return Response(status_code=status.HTTP_204_NO_CONTENT)
 
+    assert caplog.record_tuples == []
     client.get("/", headers={HeaderKeys.correlation_id: "invalid_uuid"})
-    get_logger.assert_called_once()
+    assert caplog.record_tuples == [
+        ("starlette_context", logging.ERROR, "starlette-context exception")
+    ]
