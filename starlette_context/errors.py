@@ -5,7 +5,7 @@ from starlette import status
 
 class StarletteContextException(HTTPException):
     status_code = status.HTTP_400_BAD_REQUEST
-    detail = "Internal Server Error"
+    detail = "Error"
 
     def __init__(
         self,
