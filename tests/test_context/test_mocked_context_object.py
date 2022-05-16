@@ -27,7 +27,11 @@ def test_ctx_eq(mocked_context: _Context, ctx_store: dict):
 
 
 def test_ctx_repr(mocked_context: _Context, ctx_store: dict):
-    assert str(ctx_store) == mocked_context.__repr__()
+    assert repr(mocked_context) == "<starlette_context.ctx._Context object>"
+
+
+def test_ctx_data_str(mocked_context: _Context, ctx_store: dict):
+    assert str(mocked_context.data) == str(ctx_store)
 
 
 def test_ctx_len(mocked_context: _Context, ctx_store: dict):

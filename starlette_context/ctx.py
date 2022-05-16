@@ -43,5 +43,10 @@ class _Context(UserDict):
 
         return copy.copy(self.data)
 
+    def __repr__(self) -> str:
+        # Opaque type to avoid default implementation
+        # that could try to look into data while out of request cycle
+        return f"<{__name__}.{self.__class__.__name__} object>"
+
 
 context = _Context()
