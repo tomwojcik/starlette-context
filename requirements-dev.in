@@ -12,11 +12,8 @@ sphinx
 sphinx_rtd_theme
 
 # lint
-mypy
-black
 pre-commit
 pre-commit-hooks
-flake8
 pip-tools
 
 bump2version
