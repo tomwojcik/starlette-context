@@ -1,4 +1,4 @@
-.PHONY: init run_hooks test testdocker clean docs
+.PHONY: init run-hooks test testdocker clean docs upgrade-deps
 .ONESHELL :
 
 
@@ -9,7 +9,7 @@ init:
 test:
 	sh scripts/test
 
-run_hooks:
+run-hooks:
 	pre-commit run --all-files --show-diff-on-failure
 
 testdocker:
@@ -25,3 +25,7 @@ docs:
 
 minor:
 	bump2version patch
+
+upgrade-deps:
+	pre-commit autoupdate
+	pip-compile --upgrade requirements-dev.in
