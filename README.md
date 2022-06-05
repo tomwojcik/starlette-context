@@ -73,6 +73,9 @@ In this example the response contains a json with
 
 Context can be updated and accessed at anytime if it's created in the middleware.
 
+### Sponsorship
+
+A huge thank you to [Adverity](https://www.adverity.com/) for sponsoring the development of this OSS library in 2022.
 
 ### Contribution
 
