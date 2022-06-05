@@ -56,7 +56,6 @@ class PluginUUIDBase(Plugin):
         force_new_uuid: bool = False,
         version: int = 4,
         validate: bool = True,
-        error_response: Optional[Response] = None,
     ):
         if version not in self.uuid_functions_mapper:
             raise ConfigurationError(
@@ -65,15 +64,12 @@ class PluginUUIDBase(Plugin):
         self.force_new_uuid = force_new_uuid
         self.version = version
         self.validate = validate
-        self.error_response = error_response
 
     def validate_uuid(self, uuid_to_validate: str) -> None:
         try:
             uuid.UUID(uuid_to_validate, version=self.version)
-        except Exception as e:
-            raise WrongUUIDError(
-                "Wrong uuid", error_response=self.error_response
-            ) from e
+        except Exception:
+            raise WrongUUIDError(f"Invalid UUID in request header {self.key}")
 
     def get_new_uuid(self) -> str:
         func = self.uuid_functions_mapper[self.version]
@@ -100,7 +96,7 @@ class PluginUUIDBase(Plugin):
         # for ContextMiddleware
         if isinstance(arg, Response):
             arg.headers[self.key] = value
-        # for ContextPureMiddleware
+        # for RawContextMiddleware
         else:
             if arg["type"] == "http.response.start":
                 headers = MutableHeaders(scope=arg)

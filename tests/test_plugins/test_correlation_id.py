@@ -42,6 +42,9 @@ def test_invalid_correlation_id_returns_a_bad_request():
     )
     assert response.status_code == status.HTTP_400_BAD_REQUEST
     assert HeaderKeys.correlation_id not in response.headers
+    assert (
+        response.content == b"Invalid UUID in request header X-Correlation-ID"
+    )
 
 
 def test_missing_header_will_assign_one():

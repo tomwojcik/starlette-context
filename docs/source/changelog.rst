@@ -8,6 +8,21 @@ This project adheres to `Semantic Versioning <http://semver.org/>`_.
 Latest release
 
 --------
+`0.4.0`_
+--------
+*Release date: TBD*
+
+* BREAKING CHANGE: drop support for `default_error_response` in the middleware. Now instead of passing default response
+for error you can pass `error_handler` function that accepts the request object and `StarletteContextException`
+so it's easier to customize the exception depending on the case
+* BREAKING CHANGE: plugins don't accept `error_response` anymore. This can be handled in the middleware using
+`error_handler` mentioned above. All starlette-context errors will be passed to this handler
+* some errors didn't provide meaningful message. Now all of them should return explicit message as to what went wrong.
+Additionally, middleware now accepts `log_errors` boolean (default: `False`). If `True`, all errors
+will be additionally logged before they are handled.
+
+
+--------
 `0.3.3`_
 --------
 *Release date: June 28, 2021*

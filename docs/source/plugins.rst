@@ -13,13 +13,7 @@ Using a plugin
 
 You may add as many plugins as you want to your middleware. You pass them to the middleware accordingly to the Starlette standard.
 
-There may be a validation error occuring while processing the request in the plugins, which requires sending an error response.
-Starlette however does not let middleware use the regular error handler
-(`more details on this <https://www.starlette.io/exceptions/#errors-and-handled-exceptions>`_),
-so middlewares facing a validation error have to send a response by themselves.
-
-By default, the response sent will be a 400 with no body or extra header, as a Starlette `Response(status_code=400)`.
-This response can be customized at both middleware and plugin level.
+Plugin errors are handled in the middleware. For more information, see middlewares section.
 
 *************
 Example usage
@@ -126,12 +120,6 @@ What if you don't want to put the header's value as a plain str, or don't even w
 You need to override the ``process_request`` method.
 This gives you full access to the request, freedom to perform any processing in-between, and to return any value type.
 Whatever is returned will be put in the context, again with the plugin's defined ``key``.
-
-Any Exception raised from a middleware in Starlette would normally become a hard 500 response.
-However you probably might find cases where you want to send a validation error instead.
-For those cases, ``starlette_context`` provides a ``MiddleWareValidationError`` exception you can raise, and include a Starlette ``Response`` object.
-The middleware class will take care of sending it.
-You can also raise a MiddleWareValidationError without attaching a response, the middleware's default response will then be used.
 
 You can also do more than extracting from requests, plugins also have a hook to modify the response before it's sent: ``enrich_response``.
 It can access the Response object, and of course, the context, fully populated by that point.
