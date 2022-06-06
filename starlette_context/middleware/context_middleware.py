@@ -7,7 +7,7 @@ from starlette.middleware.base import (
 from starlette.requests import Request
 from starlette.responses import Response
 
-from starlette_context import starlette_context
+from starlette_context import request_cycle_context
 from starlette_context.plugins import Plugin
 from starlette_context.errors import (
     ConfigurationError,
@@ -62,7 +62,7 @@ class ContextMiddleware(BaseHTTPMiddleware):
             return error_response
 
         # create request-scoped context
-        with starlette_context(context):
+        with request_cycle_context(context):
             # process rest of response stack
             response = await call_next(request)
             # gets back to middleware, process response with plugins

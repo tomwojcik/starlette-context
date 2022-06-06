@@ -9,7 +9,7 @@ plugins, and alleviating the Starlette architecture making Middlewares out of
 the scope of the regular exception handler.
 """
 import pytest
-from starlette_context import starlette_context, context
+from starlette_context import request_cycle_context, context
 from starlette_context.errors import ContextDoesNotExistError
 
 
@@ -21,7 +21,7 @@ def test_context_created_within_manager():
         context.get("test")
     assert not context.exists()
 
-    with starlette_context(original_data):
+    with request_cycle_context(original_data):
         # context available here
         assert context["test"] == "success"
 
@@ -34,7 +34,7 @@ def test_context_created_within_manager():
 def test_can_add_within():
     original_data = {"test": "success"}
 
-    with starlette_context(original_data):
+    with request_cycle_context(original_data):
         # context available here
         context["extra"] = "more"
 
@@ -44,5 +44,5 @@ def test_can_add_within():
 
 
 def test_no_initial_data():
-    with starlette_context():
+    with request_cycle_context():
         assert context.exists()

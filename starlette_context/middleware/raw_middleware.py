@@ -4,7 +4,7 @@ from starlette.requests import HTTPConnection, Request
 from starlette.responses import Response
 from starlette.types import ASGIApp, Message, Receive, Scope, Send
 
-from starlette_context import starlette_context
+from starlette_context import request_cycle_context
 from starlette_context.plugins import Plugin
 from starlette_context.errors import (
     ConfigurationError,
@@ -89,5 +89,5 @@ class RawContextMiddleware:
             error_response = e.error_response or self.error_response
             return await self.send_response(error_response, send)
 
-        with starlette_context(context):
+        with request_cycle_context(context):
             await self.app(scope, receive, send_wrapper)
