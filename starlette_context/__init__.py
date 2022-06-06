@@ -11,7 +11,9 @@ _request_scope_context_storage: ContextVar[Dict[Any, Any]] = ContextVar(
 
 
 @contextmanager
-def starlette_context(initial_data: Optional[dict] = None) -> Iterator[None]:
+def request_cycle_context(
+    initial_data: Optional[dict] = None,
+) -> Iterator[None]:
     """
     Creates and resets a starlette context context.
 
@@ -29,4 +31,4 @@ def starlette_context(initial_data: Optional[dict] = None) -> Iterator[None]:
 
 from starlette_context.ctx import context  # noqa: E402
 
-__all__ = ["context", "starlette_context"]
+__all__ = ["context", "request_cycle_context"]

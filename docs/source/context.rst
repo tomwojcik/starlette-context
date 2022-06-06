@@ -24,8 +24,7 @@ Following operations work as expected
  - ``context.items()``
  - ``context["key"] = "value"``
 
-
 To make it available during the request-response cycle, it needs to be instantiated in the Starlette app with one of the middlewares,
-or the ``starlette_context`` context manager, which can be useful in FastAPI Depends or unit tests requiring an available context.
+or the ``request_cycle_context`` context manager, which can be useful in FastAPI Depends or unit tests requiring an available context.
 The middleware approach offer extended capability the form of plugins to process and extend the request, but needs to redefine the error response in case those plugins raise an Exception.
 The context manager approach is more barebone, which likely will lead you to implement the initial context population yourself.
