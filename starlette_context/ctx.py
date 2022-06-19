@@ -46,7 +46,16 @@ class _Context(UserDict):
     def __repr__(self) -> str:
         # Opaque type to avoid default implementation
         # that could try to look into data while out of request cycle
-        return f"<{__name__}.{self.__class__.__name__} object>"
+        try:
+            return f"<{__name__}.{self.__class__.__name__} {self.data}>"
+        except ContextDoesNotExistError:
+            return f"<{__name__}.{self.__class__.__name__} {dict()}>"
+
+    def __str__(self):
+        try:
+            return str(self.data)
+        except ContextDoesNotExistError:
+            return str({})
 
 
 context = _Context()

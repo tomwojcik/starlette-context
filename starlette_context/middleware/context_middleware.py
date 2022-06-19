@@ -14,6 +14,14 @@ from starlette_context.errors import (
     MiddleWareValidationError,
 )
 
+CONTEXT_MIDDLEWARE_WARNING_MSG = (
+    "ContextMiddleware middleware is deprecated "
+    "and will be removed in version 1.0.0. "
+    "Use RawContextMiddleware instead. "
+    "For more information, see "
+    "https://github.com/tomwojcik/starlette-context/issues/47"
+)
+
 
 class ContextMiddleware(BaseHTTPMiddleware):
     """
@@ -31,6 +39,12 @@ class ContextMiddleware(BaseHTTPMiddleware):
         *args,
         **kwargs,
     ) -> None:
+        import warnings
+
+        warnings.warn(
+            CONTEXT_MIDDLEWARE_WARNING_MSG, DeprecationWarning, stacklevel=2
+        )
+
         super().__init__(*args, **kwargs)
         for plugin in plugins or ():
             if not isinstance(plugin, Plugin):
