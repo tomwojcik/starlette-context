@@ -24,6 +24,7 @@ Latest release
 * add `request_cycle_context`. It's a context manager that allows for easier testing and cleaner code (Thanks @hhamana) https://github.com/tomwojcik/starlette-context/issues/46
 * fix for accessing context during logging, outside of the request-response cycle. Technically it should raise an exception, but it makes sense to include the context by default (in logs) and if it's not available, some logs are better than no logs. Now it will show context data if context is available, with a fallback to an empty dict (instead of raising an exc) https://github.com/tomwojcik/starlette-context/issues/65
 * add ``ContextMiddleware`` deprecation warning
+* ``**context`` context unpacking seems to be working now
 
 --------
 `0.3.3`_
