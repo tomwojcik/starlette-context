@@ -15,14 +15,14 @@ def request_cycle_context(
     initial_data: Optional[dict] = None,
 ) -> Iterator[None]:
     """
-    Creates and resets a starlette context context.
+    Creates and resets a starlette-context context.
 
     Used in the Context and Raw middlewares, but can also be used to create a
     context out of a proper request cycle, such as in unit tests.
     """
     if initial_data is None:
         initial_data = {}
-    token: Token = _request_scope_context_storage.set(initial_data)
+    token: Token = _request_scope_context_storage.set(initial_data.copy())
     try:
         yield
     finally:
