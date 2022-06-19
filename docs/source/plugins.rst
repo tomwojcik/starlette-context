@@ -3,23 +3,22 @@ Plugins
 =======
 
 Context plugins allow you to extract any data you want from the request and store it in the context object.
-I wrote plugins for the most common use cases that come to my mind, like extracting Correlation ID.
-You can extend the built-in plugins and/or implement your own too.
+Plugins for the most common scenarios have been created, such as extracting Correlation ID.
 
 
-==============
+**************
 Using a plugin
-==============
+**************
 
-You may add as many plugins as you want to your middleware. You pass them to the middleware accordingly to the Starlette standard.
 
-There may be a validation error occuring while processing the request in the plugins, which requires sending an error response.
+There may be a validation error occurring while processing the request in the plugins, which requires sending an error response.
 Starlette however does not let middleware use the regular error handler
 (`more details on this <https://www.starlette.io/exceptions/#errors-and-handled-exceptions>`_),
 so middlewares facing a validation error have to send a response by themselves.
 
 By default, the response sent will be a 400 with no body or extra header, as a Starlette `Response(status_code=400)`.
 This response can be customized at both middleware and plugin level.
+
 
 *************
 Example usage
@@ -47,14 +46,17 @@ Example usage
 
 You can use the middleware without plugin, it will only create the context for the request and not populate it directly.
 
-================
+
+****************
 Built-in plugins
-================
+****************
 
-starlette_context includes the following plugins you can import and use as shown above.
-They are all accessible from  the `plugins` module.
 
-Do note headers are case-insentive.
+``starlette-context`` includes the following plugins you can import and use as shown above.
+They are all accessible from the `plugins` module.
+
+Do note headers are case-insensitive, as per `RFC9110 <https://www.rfc-editor.org/rfc/rfc9110.html#name-field-names>`_.
+
 You can access the header value through the `<plugin class>.key` attribute,
 or through the `starlette_context.header_keys.HeaderKeys` enum.
 
@@ -86,9 +88,9 @@ The error response if this validation fails can be customized with ``error_respo
 If no error response was specified, the middleware's default response will be used.
 This validation can be turned off altogether with ``validate = False``.
 
-=====================
+*********************
 Implementing your own
-=====================
+*********************
 
 You can implement your plugin with variying degree of ease and flexibility.
 
