@@ -42,6 +42,11 @@ This response will be sent on raised ``starlette_context.errors.MiddleWareValida
 Why are there two middlewares that do the same thing
 ****************************************************
 
+.. warning::
+    ``ContextMiddleware`` middleware is deprecated and will be removed in version 1.0.0.
+    Use ``RawContextMiddleware`` instead. For more information, see
+    `this ticket <https://github.com/tomwojcik/starlette-context/issues/47>`_.
+
 ``ContextMiddleware`` inherits from ``BaseHTTPMiddleware`` which is an interface prepared by ``encode``.
 That is, in theory, the "normal" way of creating a middleware. It's simple and convenient.
 However, if you are using ``StreamingResponse``, you might bump into memory issues. See
@@ -63,69 +68,18 @@ I'd advise to only use ``RawContextMiddleware``.
     Therefore, this middleware is not capable of setting response headers for 500 responses.
     You can try to use your own 500 handler, but beware that the context will not be available.
 
-*****************
-ContextMiddleware
-*****************
+****************
+How does it work
+****************
 
-
-Firstly we create a "storage" for the context. The ``set_context`` method allows us to assign something to the context
-on creation therefore that's the best place to add everything that might come in
+First, an empty "storage" is created, that's bound to the context of your async request.
+The ``set_context`` method allows you to assign something to the context on creation
+therefore that's the best place to add everything that might come in
 handy later on. You can always alter the context, so add/remove items from it, but each operation comes with some cost.
 
 All ``plugins`` are executed when ``set_context`` method is called. If you want to add something else there you might
-either write your own plugin or just overwrite the ``set_context`` method which returns a ``dict``. Just add anything you need to it before you return it.
+either write your own plugin or just overwrite the ``set_context`` method which returns a ``dict``.
 
 Then, once the response is created, we iterate over plugins so it's possible to set some response headers based on the context contents.
 
 Finally, the "storage" that async python apps can access is removed.
-
-
-
-********************
-RawContextMiddleware
-********************
-
-Excerpt
-
-.. code-block:: python
-
-    @staticmethod
-    def get_request_object(
-        scope, receive, send
-    ) -> Union[Request, HTTPConnection]:
-        # here we instantiate HTTPConnection instead of a Request object
-        # because only headers are needed so that's sufficient.
-        # If you need the payload etc for your plugin
-        # instantiate Request(scope, receive, send)
-        return HTTPConnection(scope)
-
-    async def __call__(
-        self, scope: Scope, receive: Receive, send: Send
-    ) -> None:
-        if scope["type"] not in ("http", "websocket"):  # pragma: no cover
-            await self.app(scope, receive, send)
-            return
-
-        async def send_wrapper(message: Message) -> None:
-            for plugin in self.plugins:
-                await plugin.enrich_response(message)
-            await send(message)
-
-        request = self.get_request_object(scope, receive, send)
-
-        _starlette_context_token: Token = _request_scope_context_storage.set(
-            await self.set_context(request)  # noqa
-        )
-
-        try:
-            await self.app(scope, receive, send_wrapper)
-        finally:
-            _request_scope_context_storage.reset(_starlette_context_token)
-
-Tries to achieve the same thing but differently. Here you can access only the request-like object you will instantiate yourself.
-You might want to instantiate the ``Request`` object but ``HTTPConnection`` seems to be the interface that is needed as it gives
-us an access to the headers. If you need to evaluate payload in the middleware, return ``Request`` object from the
-``get_request_object`` instead.
-
-So, in theory, this middleware does the same thing. Should be faster and safer. But have in mind that some **black magic is
-involved here** and `I'm waiting for the documentation on this subject <https://github.com/encode/starlette/issues/1029>`_ to be improved.

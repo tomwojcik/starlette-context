@@ -7,6 +7,24 @@ This project adheres to `Semantic Versioning <http://semver.org/>`_.
 
 Latest release
 
+
+--------
+`1.0.0`_
+--------
+*Release date: TBA*
+
+* remove `ContextMiddleware` https://github.com/tomwojcik/starlette-context/issues/47
+* (maybe) drop `error_response` arg and replace it with a single error_handler func
+
+--------
+`0.3.4`_
+--------
+*Release date: TBA*
+
+* add `request_cycle_context`. It's a context manager that allows for easier testing and cleaner code (Thanks @hhamana) https://github.com/tomwojcik/starlette-context/issues/46
+* fix for accessing context during logging, outside of the request-response cycle. Technically it should raise an exception, but it makes sense to include the context by default (in logs) and if it's not available, some logs are better than no logs. Now it will show context data if context is available, with a fallback to an empty dict (instead of raising an exc) https://github.com/tomwojcik/starlette-context/issues/65
+* add ``ContextMiddleware`` deprecation warning
+
 --------
 `0.3.3`_
 --------
@@ -20,8 +38,7 @@ Latest release
 --------
 *Release date: April 22, 2021*
 
-* ``ContextDoesNotExistError`` is raised when context object can't be accessed. Previously it was ``RuntimeError``.
-For backwards compatibility, it inherits from ``RuntimeError`` so it shouldn't result in any regressions.
+* ``ContextDoesNotExistError`` is raised when context object can't be accessed. Previously it was ``RuntimeError``. For backwards compatibility, it inherits from ``RuntimeError`` so it shouldn't result in any regressions.
 * Added ``py.typed`` file so your mypy should never complain (Thanks @ginomempin)
 
 --------
@@ -72,7 +89,7 @@ For backwards compatibility, it inherits from ``RuntimeError`` so it shouldn't r
 --------
 *Release date: Feb 21, 2020*
 
- * changed parent of context object. More or less the API is the same but due to this change the implementation itself is way more simple and now it's possible to use .items() or keys() like in a normal dict, out of the box. Still, unpacking **kwargs is not supported and I don't think it ever will be. I tried to inherit from the builtin dict but nothing good came out of this. Now you access context as dict using context.data, not context.dict()
+ * changed parent of context object. More or less the API is the same but due to this change the implementation itself is way more simple and now it's possible to use .items() or keys() like in a normal dict, out of the box. Still, unpacking ``**kwargs`` is not supported and I don't think it ever will be. I tried to inherit from the builtin dict but nothing good came out of this. Now you access context as dict using context.data, not context.dict()
  * there was an issue related to not having awaitable plugins. Now both middleware and plugins are fully async compatible. It's a breaking change as it forces to use await, hence new minor version
 
 --------

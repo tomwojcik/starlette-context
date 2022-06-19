@@ -2,7 +2,7 @@
 Usage with FastAPI
 ==================
 
-FastAPI being built on top of Starlette, ``starlette_context`` is compatible with the FastAPI framework.
+Although FastAPI is built on top of Starlette, its popularity justifies having a section dedicated to FastAPI. As both are build on top of ASGI standard, ``starlette_context`` library is compatible with the FastAPI framework.
 
 It can be used in the same way, with the same middlewares as a regular Starlette application.
 

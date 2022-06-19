@@ -7,7 +7,8 @@ Installation
 ************
 
 The only dependency for this project is `Starlette <https://github.com/encode/starlette>`_, therefore this library
-should work with all Starlette-based frameworks, such as Responder, FastAPI or Flama.
+should work with all Starlette-based frameworks, such as `Responder <https://github.com/taoufik07/responder>`_,
+`FastAPI <https://github.com/tiangolo/fastapi>`_ or `Flama <https://github.com/perdy/flama>`_.
 
 .. code-block:: bash
 
@@ -17,7 +18,7 @@ should work with all Starlette-based frameworks, such as Responder, FastAPI or F
 How to use
 **********
 
-You can access the magic ``context`` if and only if all those conditions are met:
+You can access the magic ``context`` object if and only if these two conditions are met:
  * you access it within a request-response cycle
  * you used a ``ContextMiddleware`` or ``RawContextMiddleware`` in your ASGI app
 

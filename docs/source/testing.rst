@@ -24,3 +24,26 @@ you can use the ``request_cycle_context`` context manager.
         assumed_context = {"x-client-id": "unit testing!"}
         with request_cycle_context(assumed_context):
             assert original_function() == "unit testing!"
+
+
+Or using pytest fixture
+
+.. code-block:: python
+
+    from starlette_context import context, request_cycle_context
+    from starlette_context.ctx import _Context
+    from starlette_context.errors import ConfigurationError
+
+
+    @pytest.fixture
+    def ctx_store():
+        return {"a": 0, "b": 1, "c": 2}
+
+
+    @pytest.fixture
+    def mocked_context(ctx_store) -> None:
+        with request_cycle_context(ctx_store):
+            yield context
+
+    def test_my_function(mocked_context, ctx_store):
+        assert mocked_context == ctx_store
