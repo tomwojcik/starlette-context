@@ -44,5 +44,7 @@ def test_can_add_within():
 
 
 def test_no_initial_data():
+    assert not context.exists()
     with request_cycle_context():
         assert context.exists()
+    assert not context.exists()

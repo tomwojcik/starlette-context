@@ -1,20 +1,19 @@
 import pytest
 
+from starlette_context import context, request_cycle_context
 from starlette_context.ctx import _Context
 from starlette_context.errors import ConfigurationError
 
 
-@pytest.fixture(scope="function", autouse=True)
+@pytest.fixture(scope="function")
 def ctx_store():
     return {"a": 0, "b": 1, "c": 2}
 
 
-@pytest.fixture(scope="function", autouse=True)
-def mocked_context(monkeypatch, ctx_store) -> _Context:
-    monkeypatch.setattr(
-        "starlette_context.ctx._Context.data", ctx_store.copy()
-    )
-    return _Context()
+@pytest.fixture
+def mocked_context(ctx_store) -> None:
+    with request_cycle_context(ctx_store):
+        yield context
 
 
 def test_ctx_init():
@@ -26,12 +25,23 @@ def test_ctx_eq(mocked_context: _Context, ctx_store: dict):
     assert ctx_store == mocked_context
 
 
-def test_ctx_repr(mocked_context: _Context, ctx_store: dict):
-    assert repr(mocked_context) == "<starlette_context.ctx._Context object>"
+def test_ctx_repr_within_cycle(mocked_context: _Context, ctx_store: dict):
+    assert (
+        repr(mocked_context)
+        == f"<starlette_context.ctx._Context {str(ctx_store)}>"
+    )
 
 
-def test_ctx_data_str(mocked_context: _Context, ctx_store: dict):
+def test_ctx_repr_out_of_cycle():
+    assert repr(context) == "<starlette_context.ctx._Context {}>"
+
+
+def test_ctx_data_str_within_cycle(mocked_context: _Context, ctx_store: dict):
     assert str(mocked_context.data) == str(ctx_store)
+
+
+def test_ctx_data_str_out_of_cycle():
+    assert str(context) == "{}"
 
 
 def test_ctx_len(mocked_context: _Context, ctx_store: dict):
