@@ -89,3 +89,10 @@ def test_copy(mocked_context: _Context, ctx_store: dict):
 
     assert id(initial_data) == id(mocked_context.data)
     assert id(mocked_context.copy()) != id(mocked_context.copy())
+
+
+def test_dict_unpacking(mocked_context):
+    def func(**kwargs):
+        return sum(kwargs.values())
+
+    assert func(**context) == 3
