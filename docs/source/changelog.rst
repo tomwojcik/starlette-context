@@ -135,3 +135,4 @@ Latest release
 .. _0.3.1: https://github.com/tomwojcik/starlette-context/compare/v0.3.0...v0.3.1
 .. _0.3.2: https://github.com/tomwojcik/starlette-context/compare/v0.3.1...v0.3.2
 .. _0.3.3: https://github.com/tomwojcik/starlette-context/compare/v0.3.2...v0.3.3
+.. _0.3.4: https://github.com/tomwojcik/starlette-context/compare/v0.3.3...v0.3.4
