@@ -2,7 +2,7 @@ from contextvars import ContextVar, Token
 from contextlib import contextmanager
 from typing import Any, Dict, Iterator, Optional
 
-__version__ = "0.3.3"
+__version__ = "0.3.4"
 __author__ = "Tomasz Wojcik"
 
 _request_scope_context_storage: ContextVar[Dict[Any, Any]] = ContextVar(
