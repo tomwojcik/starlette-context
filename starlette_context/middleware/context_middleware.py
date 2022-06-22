@@ -16,7 +16,7 @@ from starlette_context.errors import (
 
 CONTEXT_MIDDLEWARE_WARNING_MSG = (
     "ContextMiddleware middleware is deprecated "
-    "and will be removed in version 1.0.0. "
+    "and will be removed in version 0.4.0. "
     "Use RawContextMiddleware instead. "
     "For more information, see "
     "https://github.com/tomwojcik/starlette-context/issues/47"
