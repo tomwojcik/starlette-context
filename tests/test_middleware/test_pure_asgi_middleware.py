@@ -44,12 +44,3 @@ def test_valid_request():
 
     assert HeaderKeys.correlation_id in resp.headers
     assert HeaderKeys.request_id in resp.headers
-
-
-def test_failed_request():
-    original_data = {"test": "success"}
-
-    with request_cycle_context(original_data):
-        from starlette_context import context
-        d1 = context.data
-    d2 = context.data
