@@ -32,3 +32,6 @@ minor:
 upgrade-deps:
 	pre-commit autoupdate
 	pip-compile --upgrade requirements-dev.in
+
+deps:
+	pip-compile requirements-dev.in
