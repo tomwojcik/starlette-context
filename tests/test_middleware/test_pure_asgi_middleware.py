@@ -9,6 +9,7 @@ from starlette_context import context, plugins
 from starlette_context.header_keys import HeaderKeys
 from starlette_context.middleware import RawContextMiddleware
 
+
 plugins_to_use = (
     plugins.CorrelationIdPlugin(),
     plugins.RequestIdPlugin(),

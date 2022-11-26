@@ -16,6 +16,14 @@ Latest release
 * remove `ContextMiddleware` https://github.com/tomwojcik/starlette-context/issues/47
 
 --------
+`0.3.5`_
+--------
+*Release date: November 26, 2022*
+
+* fix for accessing the context in error handlers (Thanks @hhamana) https://github.com/tomwojcik/starlette-context/issues/74
+
+
+--------
 `0.3.4`_
 --------
 *Release date: June 22, 2022*
@@ -136,3 +144,4 @@ Latest release
 .. _0.3.2: https://github.com/tomwojcik/starlette-context/compare/v0.3.1...v0.3.2
 .. _0.3.3: https://github.com/tomwojcik/starlette-context/compare/v0.3.2...v0.3.3
 .. _0.3.4: https://github.com/tomwojcik/starlette-context/compare/v0.3.3...v0.3.4
+.. _0.3.5: https://github.com/tomwojcik/starlette-context/compare/v0.3.4...v0.3.5
