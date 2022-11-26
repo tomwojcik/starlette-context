@@ -23,10 +23,8 @@ def request_cycle_context(
     if initial_data is None:
         initial_data = {}
     token: Token = _request_scope_context_storage.set(initial_data.copy())
-    try:
-        yield
-    finally:
-        _request_scope_context_storage.reset(token)
+    yield
+    _request_scope_context_storage.reset(token)
 
 
 from starlette_context.ctx import context  # noqa: E402
