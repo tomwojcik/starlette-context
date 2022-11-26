@@ -24,11 +24,16 @@ def should_raise(number: int) -> bool:
     return number % 2 == 0
 
 
-async def dummy_sleep():
-    for i in range(random.randint(0, 100000)):
-        if i % 2 == 0 and i % 3 == 0:
-            pass
-    return 0
+async def sleep_alternative():
+    """
+    Doesn't seem to work with asyncio.sleep.
+
+    see https://github.com/spulec/freezegun/issues/437
+
+    Even with this hack, the order of numbers is still ordered.
+    """
+    loop = asyncio.get_running_loop()
+    await asyncio.sleep(random.randint(0, 3), loop=loop)
 
 
 @pytest_asyncio.fixture
@@ -46,13 +51,7 @@ async def app():
 
     async def index(request: Request) -> JSONResponse:
         number = request.path_params["number"]
-
-        # for some reason it's not possible to
-        # await asyncio.sleep(1)
-        loop = asyncio.get_running_loop()
-        f1 = loop.create_task(dummy_sleep())
-        await asyncio.wait([f1])
-
+        await sleep_alternative()
         if should_raise(number):
             raise CloudProviderException
         return JSONResponse(
@@ -88,7 +87,7 @@ async def test_concurrency_correct_headers(app):
     async with httpx.AsyncClient(
         app=app, transport=transport, base_url="http://test"
     ) as client:
-        for number in range(1, 501):
+        for number in range(1, 10):
             rid = uuid.uuid4().hex
             resp = await client.get(
                 f"/{number}", headers={HeaderKeys.request_id: rid}
