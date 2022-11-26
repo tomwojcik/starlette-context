@@ -17,9 +17,18 @@ from starlette.routing import Route
 from asgi_lifespan import LifespanManager
 from starlette.exceptions import HTTPException
 
+import asyncio
+
 
 def should_raise(number: int) -> bool:
     return number % 2 == 0
+
+
+async def dummy_sleep():
+    for i in range(random.randint(0, 100000)):
+        if i % 2 and i % 3:
+            pass
+    return 0
 
 
 @pytest_asyncio.fixture
@@ -37,9 +46,13 @@ async def app():
 
     async def index(request: Request) -> JSONResponse:
         number = request.path_params["number"]
-        r1 = random.randint(1, 10000)
-        r2 = random.randint(1, 10000)
-        _ = r1**r2
+
+        # for some reason it's not possible to
+        # await asyncio.sleep(1)
+        loop = asyncio.get_running_loop()
+        f1 = loop.create_task(dummy_sleep())
+        await asyncio.wait([f1])
+
         if should_raise(number):
             raise CloudProviderException
         return JSONResponse(
@@ -79,6 +92,7 @@ async def test_concurrency_correct_headers(app):
             resp = await client.get(
                 f"/{number}", headers={HeaderKeys.request_id: rid}
             )
+            # print(number)
             if should_raise(number):
                 assert resp.status_code == 400
                 assert resp.headers[HeaderKeys.request_id] == rid
