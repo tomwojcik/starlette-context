@@ -8,17 +8,24 @@ from starlette.testclient import TestClient
 from starlette_context import middleware, plugins, context
 from starlette_context.header_keys import HeaderKeys
 
-app = Starlette(
-    middleware=[
-        Middleware(
-            middleware.ContextMiddleware, plugins=(plugins.RequestIdPlugin(),)
-        )
-    ]
-)
-
 
 class CustomExc(Exception):
     pass
+
+
+def custom_exc_handler(request: Request, exc):
+    return Response(status_code=400, headers=context.data)
+
+
+app = Starlette(
+    middleware=[
+        Middleware(
+            middleware.RawContextMiddleware,
+            plugins=(plugins.RequestIdPlugin(),),
+        )
+    ],
+    exception_handlers={CustomExc: custom_exc_handler},
+)
 
 
 @app.route("/exc")
@@ -29,11 +36,6 @@ async def exc(request: Request):
 @app.route("/handled")
 async def handled(request: Request):
     raise CustomExc
-
-
-@app.exception_handler(CustomExc)
-def f(request: Request):
-    return Response(status_code=400, headers=context.data)
 
 
 @app.route("/")
