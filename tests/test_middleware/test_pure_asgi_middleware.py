@@ -5,9 +5,10 @@ from starlette.requests import Request
 from starlette.responses import JSONResponse
 from starlette.testclient import TestClient
 
-from starlette_context import context, plugins
+from starlette_context import context, plugins, request_cycle_context
 from starlette_context.header_keys import HeaderKeys
 from starlette_context.middleware import RawContextMiddleware
+import pytest
 
 plugins_to_use = (
     plugins.CorrelationIdPlugin(),
@@ -43,3 +44,12 @@ def test_valid_request():
 
     assert HeaderKeys.correlation_id in resp.headers
     assert HeaderKeys.request_id in resp.headers
+
+
+def test_failed_request():
+    original_data = {"test": "success"}
+
+    with request_cycle_context(original_data):
+        from starlette_context import context
+        d1 = context.data
+    d2 = context.data
