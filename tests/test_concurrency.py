@@ -26,7 +26,7 @@ def should_raise(number: int) -> bool:
 
 async def dummy_sleep():
     for i in range(random.randint(0, 100000)):
-        if i % 2 and i % 3:
+        if i % 2 == 0 and i % 3 == 0:
             pass
     return 0
 
@@ -84,6 +84,7 @@ async def app():
 @pytest.mark.asyncio
 async def test_concurrency_correct_headers(app):
     transport = httpx.ASGITransport(app=app, raise_app_exceptions=False)
+    unordered_numbers = []
     async with httpx.AsyncClient(
         app=app, transport=transport, base_url="http://test"
     ) as client:
@@ -92,10 +93,12 @@ async def test_concurrency_correct_headers(app):
             resp = await client.get(
                 f"/{number}", headers={HeaderKeys.request_id: rid}
             )
-            # print(number)
+            unordered_numbers.append(number)
             if should_raise(number):
                 assert resp.status_code == 400
                 assert resp.headers[HeaderKeys.request_id] == rid
             else:
                 assert resp.status_code == 200
                 assert resp.headers[HeaderKeys.request_id] == rid
+
+    assert unordered_numbers != sorted(unordered_numbers)
