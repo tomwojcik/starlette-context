@@ -1,3 +1,4 @@
+import random
 import uuid
 
 import httpx
@@ -23,20 +24,22 @@ def should_raise(number: int) -> bool:
 
 @pytest_asyncio.fixture
 async def app():
-    class CloudProviderException(HTTPException):
-        pass
-
     async def cloud_provider_exception_handler(
         request: Request, exc: HTTPException
     ):
         return JSONResponse(
-            {"detail": exc.detail},
-            status_code=exc.status_code,
-            headers={HeaderKeys.request_id: context[HeaderKeys.request_id]},
+            {"detail": "asd"},
+            status_code=400,
         )
+
+    class CloudProviderException(Exception):
+        pass
 
     async def index(request: Request) -> JSONResponse:
         number = request.path_params["number"]
+        r1 = random.randint(1, 10000)
+        r2 = random.randint(1, 10000)
+        _ = r1**r2
         if should_raise(number):
             raise CloudProviderException
         return JSONResponse(
@@ -71,18 +74,14 @@ async def test_concurrency_correct_headers(app):
     async with httpx.AsyncClient(
         app=app, transport=transport, base_url="http://test"
     ) as client:
-        for number in range(1, 101):
+        for number in range(1, 501):
             rid = uuid.uuid4().hex
             resp = await client.get(
                 f"/{number}", headers={HeaderKeys.request_id: rid}
             )
-
             if should_raise(number):
-                assert resp.status_code == 500
+                assert resp.status_code == 400
                 assert resp.headers[HeaderKeys.request_id] == rid
             else:
                 assert resp.status_code == 200
-                d = resp.json()
-                assert d["from"] == "view"
-                assert d["trace_id"] == rid
                 assert resp.headers[HeaderKeys.request_id] == rid
