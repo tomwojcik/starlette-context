@@ -1,5 +1,6 @@
 starlette
-requests
+asgi-lifespan
+httpx
 pytest
 pytest-cov
 pytest-sugar
