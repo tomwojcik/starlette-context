@@ -23,8 +23,11 @@ clean:
 docs:
 	cd docs && make html
 
-minor:
+patch:
 	bump2version patch
+
+minor:
+	bump2version minor
 
 upgrade-deps:
 	pre-commit autoupdate
