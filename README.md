@@ -4,7 +4,7 @@
 [![codecov](https://codecov.io/gh/tomwojcik/starlette-context/branch/master/graph/badge.svg)](https://codecov.io/gh/tomwojcik/starlette-context)
 [![Docs](https://readthedocs.org/projects/pip/badge/?version=latest)](https://starlette-context.readthedocs.io/)
 ![Downloads](https://img.shields.io/pypi/dm/starlette-context)
-[![Language grade: Python](https://img.shields.io/lgtm/grade/python/g/tomwojcik/starlette-context.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/tomwojcik/starlette-context/context:python)
+
 
 # starlette context
 Middleware for Starlette that allows you to store and access the context data of a request. Can be used with logging so logs automatically use request headers such as x-request-id or x-correlation-id.
