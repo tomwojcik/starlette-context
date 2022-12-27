@@ -3,7 +3,7 @@ fail_fast: false
 
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.2.0
+    rev: v4.4.0
     hooks:
       - id: debug-statements
       - id: check-added-large-files
@@ -13,7 +13,7 @@ repos:
       - id: trailing-whitespace
 
   - repo: https://github.com/ambv/black
-    rev: 22.3.0
+    rev: 22.12.0
     hooks:
       - id: black
         language_version: python3
@@ -22,7 +22,7 @@ repos:
         types: [ python ]
 
   - repo: https://github.com/myint/docformatter
-    rev: v1.4
+    rev: v1.5.1
     hooks:
       - id: docformatter
         args: ['--in-place', '--wrap-summaries=78', '--wrap-descriptions=78', '--pre-summary-newline']
@@ -35,17 +35,17 @@ repos:
         exclude: '__init__.py'
 
   - repo: https://github.com/pre-commit/mirrors-mypy
-    rev: v0.960
+    rev: v0.991
     hooks:
       - id: mypy
         files: ^starlette_context/
 
   - repo: https://github.com/pycqa/flake8
-    rev: 4.0.1
+    rev: 5.0.0
     hooks:
       - id: flake8
 
   - repo: https://github.com/asottile/pyupgrade
-    rev: v2.32.1
+    rev: v3.3.1
     hooks:
       - id: pyupgrade

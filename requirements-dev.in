@@ -17,3 +17,4 @@ pre-commit-hooks
 pip-tools
 
 bump2version
+httpx
