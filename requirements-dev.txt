@@ -7,7 +7,9 @@
 alabaster==0.7.12
     # via sphinx
 anyio==3.6.2
-    # via starlette
+    # via
+    #   httpcore
+    #   starlette
 attrs==22.2.0
     # via pytest
 babel==2.11.0
@@ -17,7 +19,10 @@ build==0.9.0
 bump2version==1.0.1
     # via -r requirements-dev.in
 certifi==2022.12.7
-    # via requests
+    # via
+    #   httpcore
+    #   httpx
+    #   requests
 cfgv==3.3.1
     # via pre-commit
 charset-normalizer==2.1.1
@@ -42,12 +47,19 @@ execnet==1.9.0
     # via pytest-xdist
 filelock==3.8.2
     # via virtualenv
+h11==0.14.0
+    # via httpcore
+httpcore==0.16.3
+    # via httpx
+httpx==0.23.1
+    # via -r requirements-dev.in
 identify==2.5.11
     # via pre-commit
 idna==3.4
     # via
     #   anyio
     #   requests
+    #   rfc3986
 imagesize==1.4.1
     # via sphinx
 importlib-metadata==5.2.0
@@ -104,12 +116,17 @@ requests==2.28.1
     #   -r requirements-dev.in
     #   codecov
     #   sphinx
+rfc3986[idna2008]==1.5.0
+    # via httpx
 ruamel-yaml==0.17.21
     # via pre-commit-hooks
 ruamel-yaml-clib==0.2.7
     # via ruamel-yaml
 sniffio==1.3.0
-    # via anyio
+    # via
+    #   anyio
+    #   httpcore
+    #   httpx
 snowballstemmer==2.2.0
     # via sphinx
 sphinx==5.3.0
