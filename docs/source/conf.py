@@ -3,6 +3,7 @@
 # This file only contains a selection of the most common options. For a full
 # list see the documentation:
 # https://www.sphinx-doc.org/en/master/usage/configuration.html
+import datetime
 
 # -- Path setup --------------------------------------------------------------
 
@@ -10,21 +11,22 @@
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
-import os
+import pathlib
 import sys
 
-sys.path.insert(0, os.path.abspath("../../starlette_context"))
+import toml
 
+ROOT_DIR = pathlib.Path(__file__).parents[2].resolve()
+sys.path.append(ROOT_DIR.as_posix())
 
-# -- Project information -----------------------------------------------------
+pyproject = toml.load((ROOT_DIR / "pyproject.toml").as_posix())
+poetry = pyproject["tool"]["poetry"]
 
-project = "Starlette Context"
-copyright = "2021, Tomasz Wojcik"
-author = "Tomasz Wojcik"
+project = poetry["name"]
+copyright = f"{datetime.datetime.now().year}, Tom Wojcik"
+author = poetry["authors"][0]
+release = poetry["version"]
 
-# The full version, including alpha/beta/rc tags
-VERSION = "0.3.5"
-release = VERSION
 
 # -- General configuration ---------------------------------------------------
 

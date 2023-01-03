@@ -1,31 +1,64 @@
----
-name: Test Suite
-
-on:
-  push:
-    branches:
-      - master
-  pull_request:
+name: Tests
+on: [ push ]
 
 jobs:
-  tests:
-    name: "Python ${{ matrix.python-version }}"
-    runs-on: "ubuntu-latest"
-
+  test:
     strategy:
+      fail-fast: false
       matrix:
-        python-version:
-          - "3.7"
-          - "3.8"
-          - "3.9"
-
+        python-version: [ 3.7, 3.8, 3.9, '3.10', 3.11]
+        poetry-version: [ 1.2.0 ]
+        os: [ ubuntu-latest ]
+    runs-on: ${{ matrix.os }}
     steps:
-      - uses: "actions/checkout@v3"
-      - name: "Set up Python ${{ matrix.python-version }}"
-        uses: "actions/setup-python@v4"
+      - uses: actions/checkout@v3.2.0
+      - uses: actions/setup-python@v4.3.0
         with:
-          python-version: "${{ matrix.python-version }}"
-      - name: "Install dependencies"
-        run: "scripts/install"
-      - name: "Run tests"
-        run: "scripts/test"
+          python-version: ${{ matrix.python-version }}
+      - name: Run image
+        uses: abatilo/actions-poetry@v2.0.0
+        with:
+          poetry-version: ${{ matrix.poetry-version }}
+      - name: Upgrade django version
+        run: |
+          poetry run pip install "Django~=${{ matrix.django-version }}"
+      - name: Install dependencies
+        run: poetry install --only dev
+      - name: Run tests
+        run: scripts/test
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v3
+        with:
+          files: ./coverage.xml
+          fail_ci_if_error: true
+          verbose: true
+
+  code-quality:
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: [ 3.8 ]
+        poetry-version: [ 1.2.0 ]
+        os: [ ubuntu-latest ]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v3.2.0
+      - uses: actions/setup-python@v4.3.0
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Run image
+        uses: abatilo/actions-poetry@v2.0.0
+        with:
+          poetry-version: ${{ matrix.poetry-version }}
+      - name: Install dependencies
+        run: poetry install
+      - name: Run black
+        run: poetry run black . --check
+      - name: Run isort
+        run: poetry run isort . --check-only
+      - name: Run flake8
+        run: poetry run flake8 .
+      - name: Run bandit
+        run: poetry run bandit .
+      - name: Run saftey
+        run: poetry run safety check

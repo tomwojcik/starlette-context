@@ -1,3 +1,61 @@
+[tool.poetry]
+name = "starlette-context"
+version = "v0.3.5"
+description = "Middleware for Starlette that allows you to store and access the context data of a request. Can be used with logging so logs automatically use request headers such as x-request-id or x-correlation-id."
+authors = ["Tom Wojcik <starlette-context-pkg@tomwojcik.com>"]
+license = "MIT"
+readme = "README.md"
+classifiers = [
+    'Development Status :: 3 - Alpha',
+    'Programming Language :: Python :: 3.8',
+    'Programming Language :: Python :: 3.9',
+    'Programming Language :: Python :: 3.10',
+    'Programming Language :: Python :: 3.11',
+    'Intended Audience :: Developers',
+    'Intended Audience :: Information Technology',
+    'Intended Audience :: System Administrators',
+    'License :: OSI Approved :: MIT License',
+    'Topic :: Internet',
+]
+homepage = "https://github.com/tomwojcik/starlette-context"
+repository = "https://github.com/tomwojcik/starlette-context"
+keywords = ["middleware", "starlette", "fastapi"]
+documentation = "https://starlette-context.readthedocs.io/"
+packages = [
+    { include = "starlette_context" },
+]
+
+[tool.poetry.dependencies]
+python = "^3.8"
+starlette = "*"
+
+
+[tool.poetry.group.dev.dependencies]
+black = "^22.12.0"
+isort = "^5.11.4"
+flake8 = "4"
+bandit = "^1.7.4"
+safety = "^2.3.5"
+coverage = "^7.0.2"
+pre-commit = "^2.21.0"
+pre-commit-hooks = "^4.4.0"
+pytest = "^7.2.0"
+pytest-cov = "^4.0.0"
+pytest-sugar = "^0.9.6"
+pytest-xdist = "^3.1.0"
+pytest-asyncio = "^0.20.3"
+codecov = "^2.1.12"
+httpx = "^0.23.2"
+
+
+[tool.poetry.group.docs.dependencies]
+sphinx = ">=5,<5.1"
+sphinx-rtd-theme = "^1.1.1"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
 [tool.black]
 line-length = 79
 target-version = ['py37', 'py38']
@@ -20,3 +78,18 @@ exclude = '''
   | profiling
 )/
 '''
+preview = true
+
+[tool.isort]
+multi_line_output = 3
+include_trailing_comma = true
+line_length = 79
+force_grid_wrap = 0
+use_parentheses = true
+profile = "black"
+force_single_line = true
+
+[tool.mypy]
+python_version = "3.8"
+warn_return_any = true
+warn_unused_configs = true
