@@ -93,7 +93,7 @@ docs <https://starlette-context.readthedocs.io/en/latest/contributing.html#contr
 
 .. |Test Suite| image:: https://github.com/tomwojcik/starlette-context/actions/workflows/test-suite.yml/badge.svg
    :target: https://github.com/tomwojcik/starlette-context/actions/workflows/test-suite.yml
-.. |Python| image:: https://img.shields.io/badge/python-3.7+-blue.svg
+.. |Python| image:: https://img.shields.io/badge/python-3.8+-blue.svg
    :target: https://www.python.org/downloads/release/python-370/
 .. |PyPI version| image:: https://badge.fury.io/py/starlette-context.svg
    :target: https://badge.fury.io/py/starlette-context
