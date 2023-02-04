@@ -82,7 +82,6 @@ class PluginUUIDBase(Plugin):
     async def extract_value_from_header_by_key(
         self, request: Union[Request, HTTPConnection]
     ) -> Optional[str]:
-
         value = await super().extract_value_from_header_by_key(request)
 
         # if force_new_uuid or correlation id was not found, create one

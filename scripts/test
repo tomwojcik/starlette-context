@@ -7,10 +7,8 @@ fi
 
 set -x
 
-${PREFIX}pytest --ignore=example --doctest-modules --cov=starlette_context --cov-report=term-missing
-
-${PREFIX}pre-commit run --all-files --show-diff-on-failure
+${PREFIX}poetry run pytest --ignore=example --cov=starlette_context --cov-report=term-missing
 
 if [ -n "$GITHUB_ACTIONS" ]; then
-  ${PREFIX}codecov
+  ${PREFIX}poetry run codecov
 fi

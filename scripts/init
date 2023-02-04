@@ -1,16 +1,11 @@
 #!/bin/sh -e
 
-PYTHON_VERSION_TARGET=3.7.0
-
 set -x
 
-
+if [ -d venv ]; then rm -r venv; fi
 if which pyenv > /dev/null
 then
   echo "Pyenv found"
-  pyenv versions | grep -q $PYTHON_VERSION_TARGET || pyenv install $PYTHON_VERSION_TARGET
-  pyenv local $PYTHON_VERSION_TARGET
+  pyenv local
 fi
-
-if [ -d venv ]; then rm -r venv; fi
-python3 -m venv venv
+python -m venv venv

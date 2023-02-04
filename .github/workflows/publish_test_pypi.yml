@@ -26,7 +26,6 @@ jobs:
           poetry-version: ${{ matrix.poetry-version }}
       - name: Build and publish
         run: |
-          poetry version $(git describe --tags --abbrev=0)
-          poetry build
+          make build
           poetry config repositories.test-pypi https://test.pypi.org/legacy/
           poetry publish -r test-pypi --username ${{ secrets.PYPI_USERNAME }} --password ${{ secrets.PYPI_PASSWORD }}

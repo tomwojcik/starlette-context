@@ -1,4 +1,4 @@
-.PHONY: init run-hooks test testdocker clean docs upgrade-deps
+.PHONY: init test run-hooks clean docs update-deps build
 .ONESHELL :
 
 
@@ -7,28 +7,23 @@ init:
 	sh scripts/install
 
 test:
+	poetry install --with dev
 	sh scripts/test
 
 run-hooks:
+	poetry install --with code-quality
 	pre-commit run --all-files --show-diff-on-failure
-
-testdocker:
-	docker-compose build
-	docker-compose run --rm tests sh scripts/test
-	docker-compose down
 
 clean:
 	sh scripts/clean
 
 docs:
+	poetry install --with docs
 	cd docs && make html
 
-patch:
-	bump2version patch
+update-deps:
+	poetry update
 
-minor:
-	bump2version minor
-
-upgrade-deps:
-	pre-commit autoupdate
-	pip-compile --upgrade requirements-dev.in
+build:
+	poetry version v$(git describe --tags --abbrev=0)
+	poetry build

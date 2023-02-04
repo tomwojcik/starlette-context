@@ -19,11 +19,8 @@ jobs:
         uses: abatilo/actions-poetry@v2.0.0
         with:
           poetry-version: ${{ matrix.poetry-version }}
-      - name: Upgrade django version
-        run: |
-          poetry run pip install "Django~=${{ matrix.django-version }}"
       - name: Install dependencies
-        run: poetry install --only dev
+        run: poetry install --with dev
       - name: Run tests
         run: scripts/test
       - name: Upload coverage to Codecov
@@ -51,14 +48,16 @@ jobs:
         with:
           poetry-version: ${{ matrix.poetry-version }}
       - name: Install dependencies
-        run: poetry install
+        run: poetry install --with code-quality
       - name: Run black
-        run: poetry run black . --check
-      - name: Run isort
-        run: poetry run isort . --check-only
-      - name: Run flake8
-        run: poetry run flake8 .
+        run: poetry run black starlette_context --check
+      - name: Run ruff
+        run: poetry run ruff starlette_context check --diff
       - name: Run bandit
-        run: poetry run bandit .
-      - name: Run saftey
-        run: poetry run safety check
+        run: poetry run bandit starlette_context
+      - name: Run mypy
+        run: poetry run mypy starlette_context
+      - name: Run docformatter
+        run: poetry run docformatter starlette_context
+      - name: Run pyupgrade
+        run: poetry run pyupgrade

@@ -50,6 +50,7 @@ Why are there two middlewares that do the same thing
 ``ContextMiddleware`` inherits from ``BaseHTTPMiddleware`` which is an interface prepared by ``encode``.
 That is, in theory, the "normal" way of creating a middleware. It's simple and convenient.
 However, if you are using ``StreamingResponse``, you might bump into memory issues. See
+
  * https://github.com/encode/starlette/issues/919
  * https://github.com/encode/starlette/issues/1012
 

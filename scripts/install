@@ -15,5 +15,5 @@ if [ "$ver" -lt "37" ]; then
 fi
 
 "$PIP" install --upgrade pip
-"$PIP" install wheel
-"$PIP" install -r requirements-dev.txt
+"$PIP" install poetry
+poetry install
