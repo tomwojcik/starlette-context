@@ -4,7 +4,7 @@ version = "v0.3.6a0"
 description = "Middleware for Starlette that allows you to store and access the context data of a request. Can be used with logging so logs automatically use request headers such as x-request-id or x-correlation-id."
 authors = ["Tom Wojcik <starlette-context-pkg@tomwojcik.com>"]
 license = "MIT"
-readme = "README.md"
+readme = "README.rst"
 classifiers = [
     'Development Status :: 3 - Alpha',
     'Programming Language :: Python :: 3.8',
