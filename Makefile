@@ -7,23 +7,23 @@ init:
 	sh scripts/install
 
 test:
-	poetry install --with dev
+	poetry install --only dev
 	sh scripts/test
 
 run-hooks:
-	poetry install --with code-quality
+	poetry install --only code-quality
 	pre-commit run --all-files --show-diff-on-failure
 
 clean:
 	sh scripts/clean
 
 docs:
-	poetry install --with docs
+	poetry install --only docs
 	cd docs && make html
 
 update-deps:
 	poetry update
 
+# https://python-poetry.org/docs/cli/#version
 build:
-	poetry version v$(git describe --tags --abbrev=0)
 	poetry build

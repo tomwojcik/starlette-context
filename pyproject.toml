@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "starlette-context"
-version = "v0.0.0"
+version = "v0.3.6a0"
 description = "Middleware for Starlette that allows you to store and access the context data of a request. Can be used with logging so logs automatically use request headers such as x-request-id or x-correlation-id."
 authors = ["Tom Wojcik <starlette-context-pkg@tomwojcik.com>"]
 license = "MIT"
@@ -124,3 +124,11 @@ warn_unused_configs = true
 
 [tool.ruff.per-file-ignores]
 "starlette_context/plugins/__init__.py" = ["F401"]
+
+[tool.docformatter]
+recursive = true
+pre-summary-newline = true
+make-summary-multi-line = true
+wrap-summaries = 79
+wrap-descriptions = 79
+in-place = true

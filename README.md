@@ -21,7 +21,7 @@ Resources:
 
 
 ### Requirements
-Python 3.7+
+See `.python-version` file.
 
 ### Dependencies
 

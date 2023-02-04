@@ -10,11 +10,10 @@ from starlette_context.errors import (
 
 
 class _Context(UserDict):
-    """
-    A mapping with dict-like interface.
+    """A mapping with dict-like interface.
 
-    It is using request context as a data store. Can be used only if context
-    has been created in the middleware.
+    It is using request context as a data store. Can be used only if
+    context has been created in the middleware.
     """
 
     def __init__(self, *args: Any, **kwargs: Any):  # noqa
@@ -24,8 +23,7 @@ class _Context(UserDict):
 
     @property
     def data(self) -> dict:  # type: ignore
-        """
-        Dump this to json.
+        """Dump this to json.
 
         Object itself it not serializable.
         """

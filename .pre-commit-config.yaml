@@ -25,7 +25,6 @@ repos:
     rev: v1.5.1
     hooks:
       - id: docformatter
-        args: ['--in-place', '--wrap-summaries=78', '--wrap-descriptions=78', '--pre-summary-newline']
 
   - repo: https://github.com/charliermarsh/ruff-pre-commit
     rev: 'v0.0.236'
