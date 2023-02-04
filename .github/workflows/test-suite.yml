@@ -6,8 +6,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python-version: [ 3.7, 3.8, 3.9, '3.10', 3.11]
-        poetry-version: [ 1.2.0 ]
+        python-version: [ 3.8, 3.9, '3.10', 3.11]
+        poetry-version: [ 1.3.2 ]
         os: [ ubuntu-latest ]
     runs-on: ${{ matrix.os }}
     steps:
@@ -16,11 +16,11 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
       - name: Run image
-        uses: abatilo/actions-poetry@v2.0.0
+        uses: abatilo/actions-poetry@v2.2.0
         with:
           poetry-version: ${{ matrix.poetry-version }}
       - name: Install dependencies
-        run: poetry install --with dev
+        run: poetry install --only main,dev
       - name: Run tests
         run: scripts/test
       - name: Upload coverage to Codecov
@@ -35,7 +35,7 @@ jobs:
       fail-fast: false
       matrix:
         python-version: [ 3.8 ]
-        poetry-version: [ 1.2.0 ]
+        poetry-version: [ 1.3.2 ]
         os: [ ubuntu-latest ]
     runs-on: ${{ matrix.os }}
     steps:
@@ -48,16 +48,6 @@ jobs:
         with:
           poetry-version: ${{ matrix.poetry-version }}
       - name: Install dependencies
-        run: poetry install --with code-quality
-      - name: Run black
-        run: poetry run black starlette_context --check
-      - name: Run ruff
-        run: poetry run ruff starlette_context check --diff
-      - name: Run bandit
-        run: poetry run bandit starlette_context
-      - name: Run mypy
-        run: poetry run mypy starlette_context
-      - name: Run docformatter
-        run: poetry run docformatter starlette_context
-      - name: Run pyupgrade
-        run: poetry run pyupgrade
+        run: poetry install --only main,code-quality
+      - name: Run pre-commit
+        run: poetry run pre-commit run --all-files --show-diff-on-failure
