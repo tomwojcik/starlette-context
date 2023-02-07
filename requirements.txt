@@ -4,5 +4,5 @@
 #
 #    pip-compile setup.py
 #
-starlette==0.14.2
+starlette==0.24.0
     # via starlette-context (setup.py)
