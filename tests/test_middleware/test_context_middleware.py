@@ -11,7 +11,6 @@ async def test_set_context_method(
     mocked_request: Request,
     mocked_middleware: ContextMiddleware,
 ):
-
     mocked_middleware.plugins = [plugins.DateHeaderPlugin()]
     rfc1123_date = mocked_request.headers[HeaderKeys.date][:25]
     dt_date = plugins.DateHeaderPlugin.rfc1123_to_dt(rfc1123_date)

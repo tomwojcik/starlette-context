@@ -27,12 +27,11 @@ class DateHeaderPlugin(Plugin):
     async def process_request(
         self, request: Union[Request, HTTPConnection]
     ) -> Optional[datetime.datetime]:
-        """
-        Has to be as stated in rfc2616 which uses rfc1123. Has to be in GMT.
+        """Has to be as stated in rfc2616 which uses rfc1123. Has to be in GMT.
         Returns UTC datetime.
 
-        Examples allowed:     Wed, 01 Jan 2020 04:27:12 GMT     Wed, 01 Jan
-        2020 04:27:12
+        Examples allowed:     Wed, 01 Jan 2020 04:27:12 GMT     Wed, 01
+        Jan 2020 04:27:12
         """
 
         rfc1123 = await self.extract_value_from_header_by_key(request)

@@ -32,11 +32,10 @@ class RawContextMiddleware:
     async def set_context(
         self, request: Union[Request, HTTPConnection]
     ) -> dict:
-        """
-        You might want to override this method.
+        """You might want to override this method.
 
-        The dict it returns will be saved in the scope of a context. You can
-        always do that later.
+        The dict it returns will be saved in the scope of a context. You
+        can always do that later.
         """
         return {
             plugin.key: await plugin.process_request(request)
