@@ -1,3 +1,4 @@
+import functools
 import uuid
 from unittest.mock import MagicMock
 
@@ -5,6 +6,7 @@ import pytest
 from starlette.datastructures import MutableHeaders
 from starlette.requests import Request
 from starlette.responses import Response
+from starlette.testclient import TestClient
 
 from starlette_context.header_keys import HeaderKeys
 from starlette_context.middleware import ContextMiddleware
@@ -50,3 +52,16 @@ def mocked_response() -> Response:
     mock = MagicMock(spec=Response)
     mock.headers = MutableHeaders()
     return mock
+
+
+@pytest.fixture
+def test_client_factory():
+    """See https://github.com/encode/starlette/blob/master/tests/conftest.py.
+    Otherwise testing middlewares init is a pain.
+
+    Needed after https://github.com/encode/starlette/pull/2017
+    """
+    return functools.partial(
+        TestClient,
+        backend="asyncio",
+    )
