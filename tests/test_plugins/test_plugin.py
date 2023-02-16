@@ -1,8 +1,11 @@
+from unittest import mock
+
 import pytest
 from starlette.requests import Request
 from starlette.responses import Response
 
 from starlette_context import plugins
+from starlette_context.errors import StarletteContextError
 
 
 @pytest.fixture(scope="function", autouse=True)
@@ -41,3 +44,22 @@ async def test_getter_for_headers(
     assert value == await plugin.extract_value_from_header_by_key(
         mocked_request
     )
+
+
+@pytest.mark.asyncio
+async def test_plugin_exceptions_handled_generically(
+    mocked_request: Request, plugin: plugins.Plugin
+):
+    """Verifies that exceptions raised by plugins are caught normally."""
+    try:
+        with mock.patch.object(
+            plugin,
+            "extract_value_from_header_by_key",
+            side_effect=StarletteContextError,
+        ):
+            with pytest.raises(Exception):
+                await plugin.extract_value_from_header_by_key(mocked_request)
+    except BaseException:
+        pytest.fail(
+            "General exceptions should subclass Exception (not BaseException)"
+        )
