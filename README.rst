@@ -17,15 +17,18 @@ Resources:
 Installation
 ~~~~~~~~~~~~
 
+Python ~3.7.0
+
 .. code-block:: console
 
-   $ pip install starlette-context
+   $ pip install starlette-context==0.3.5
 
-Requirements
-~~~~~~~~~~~~
+Python ^3.8
 
-Python ~3.7.0 `starlette-context==0.3.5`
-Python ^3.8 `starlette-context>=0.3.6`
+.. code-block:: console
+
+   $ pip install starlette-context>=0.3.6
+
 
 Dependencies
 ~~~~~~~~~~~~
