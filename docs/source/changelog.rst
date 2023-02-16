@@ -16,6 +16,14 @@ Latest release
 * remove `ContextMiddleware` https://github.com/tomwojcik/starlette-context/issues/47
 
 --------
+`0.3.6`_
+--------
+*Release date: February 16, 2023*
+
+* fix for being unable to catch some exceptions with a try/except due to base exc inheriting from the `BaseException` (Thanks @soundstripe) https://github.com/tomwojcik/starlette-context/issues/90
+
+
+--------
 `0.3.5`_
 --------
 *Release date: November 26, 2022*
@@ -145,3 +153,4 @@ Latest release
 .. _0.3.3: https://github.com/tomwojcik/starlette-context/compare/v0.3.2...v0.3.3
 .. _0.3.4: https://github.com/tomwojcik/starlette-context/compare/v0.3.3...v0.3.4
 .. _0.3.5: https://github.com/tomwojcik/starlette-context/compare/v0.3.4...v0.3.5
+.. _0.3.6: https://github.com/tomwojcik/starlette-context/compare/v0.3.5...v0.3.6

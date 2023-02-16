@@ -4,7 +4,7 @@ SHELL := /bin/bash
 
 init:
 	if [ -d "venv" ]; then rm -r venv; fi
-	python3 -m venv venv
+	python -m venv venv
 	source ./venv/bin/activate; \
 	python -m pip install -U pip; \
 	python -m pip install -r requirements.txt -e ..

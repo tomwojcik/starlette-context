@@ -1,4 +1,0 @@
-starlette
-uvicorn
-structlog
-mypy
