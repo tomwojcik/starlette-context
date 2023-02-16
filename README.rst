@@ -24,8 +24,8 @@ Installation
 Requirements
 ~~~~~~~~~~~~
 
-Should be working fine on 3.7+.
-Official support starts at 3.8.
+Python ~3.7.0 `starlette-context==0.3.5`
+Python ^3.8 `starlette-context>=0.3.6`
 
 Dependencies
 ~~~~~~~~~~~~
