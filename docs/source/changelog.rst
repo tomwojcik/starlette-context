@@ -21,6 +21,7 @@ Latest release
 *Release date: February 16, 2023*
 
 * fix for being unable to catch some exceptions with a try/except due to base exc inheriting from the `BaseException` (Thanks @soundstripe) https://github.com/tomwojcik/starlette-context/issues/90
+* minimal Python version required is now 3.8
 
 
 --------
