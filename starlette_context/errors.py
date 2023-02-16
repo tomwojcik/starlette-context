@@ -2,7 +2,7 @@ from typing import Optional
 from starlette.responses import Response
 
 
-class StarletteContextError(BaseException):
+class StarletteContextError(Exception):
     pass
 
 
