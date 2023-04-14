@@ -11,7 +11,7 @@ jobs:
         os: [ ubuntu-latest ]
     runs-on: ${{ matrix.os }}
     steps:
-      - uses: actions/checkout@v3.5.0
+      - uses: actions/checkout@v3.5.2
       - uses: actions/setup-python@v4.5.0
         with:
           python-version: ${{ matrix.python-version }}
@@ -39,7 +39,7 @@ jobs:
         os: [ ubuntu-latest ]
     runs-on: ${{ matrix.os }}
     steps:
-      - uses: actions/checkout@v3.5.0
+      - uses: actions/checkout@v3.5.2
       - uses: actions/setup-python@v4.5.0
         with:
           python-version: ${{ matrix.python-version }}
