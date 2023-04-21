@@ -37,7 +37,7 @@ pytest-cov = "^4.0.0"
 pytest-sugar = "^0.9.6"
 pytest-xdist = "^3.1.0"
 pytest-asyncio = "^0.20.3"
-codecov = "^2.1.12"
+codecov = "^2.1.13"  # https://about.codecov.io/blog/message-regarding-the-pypi-package/
 httpx = "^0.23.2"
 
 
