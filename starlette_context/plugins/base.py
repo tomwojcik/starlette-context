@@ -84,7 +84,7 @@ class PluginUUIDBase(Plugin):
     ) -> Optional[str]:
         value = await super().extract_value_from_header_by_key(request)
 
-        # if force_new_uuid or correlation id was not found, create one
+        # if force_new_uuid or value was not found, create one
         if self.force_new_uuid or not value:
             value = self.get_new_uuid()
 
