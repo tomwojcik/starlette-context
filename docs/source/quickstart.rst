@@ -52,3 +52,11 @@ Minimal working example
    @app.route("/")
    async def index(request: Request):
        return JSONResponse(context.data)
+
+****
+Why?
+****
+
+You'd think that ``contextvars`` or thread local storage would be sufficient for storing logging (or other) data.
+However, since Starlette uses `both sync and async <https://github.com/fastapi/fastapi/discussions/8632>`_ execution
+contexts both of these methods do not work. There's `additional discussion here <https://gist.github.com/nymous/f138c7f06062b7c43c060bf03759c29e>`_ on this issue.
