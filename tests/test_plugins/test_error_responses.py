@@ -1,5 +1,3 @@
-from typing import Type
-
 from starlette import status
 from starlette.applications import Starlette
 from starlette.middleware import Middleware
@@ -15,7 +13,7 @@ from starlette_context.middleware import (
 
 
 def gen_middleware_config(
-    middleware_class: Type, response: Response
+    middleware_class: type, response: Response
 ) -> TestClient:
     middleware = [
         Middleware(

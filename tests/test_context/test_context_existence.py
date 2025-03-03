@@ -3,17 +3,22 @@ import json
 from starlette.applications import Starlette
 from starlette.requests import Request
 from starlette.responses import JSONResponse, Response
+from starlette.routing import Route
 from starlette.testclient import TestClient
 
 from starlette_context import context, middleware
 
-app = Starlette()
-app.add_middleware(middleware.ContextMiddleware)
 
-
-@app.route("/")
 async def index(request: Request) -> Response:
     return JSONResponse({"exists": context.exists()})
+
+
+app = Starlette(
+    routes=[
+        Route("/", index),
+    ]
+)
+app.add_middleware(middleware.ContextMiddleware)
 
 
 client = TestClient(app)

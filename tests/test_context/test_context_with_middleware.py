@@ -1,3 +1,4 @@
+import pytest
 from starlette.applications import Starlette
 from starlette.middleware.base import (
     BaseHTTPMiddleware,
@@ -5,6 +6,7 @@ from starlette.middleware.base import (
 )
 from starlette.requests import Request
 from starlette.responses import JSONResponse
+from starlette.routing import Route
 from starlette.testclient import TestClient
 
 from starlette_context.middleware import ContextMiddleware
@@ -27,19 +29,12 @@ class MiddlewareUsingContextObject(BaseHTTPMiddleware):
         return await call_next(request)
 
 
-app = Starlette()
-app.add_middleware(MiddlewareUsingContextObject)
-app.add_middleware(MiddlewareUsingSetContextMethod)
-
-
-@app.route("/context_only_from_middleware")
 async def no_context_in_resource(request: Request):
     from starlette_context import context
 
     return JSONResponse(context.data)
 
 
-@app.route("/add_context_in_view")
 async def add_context_in_resource(request: Request):
     from starlette_context import context
 
@@ -47,10 +42,23 @@ async def add_context_in_resource(request: Request):
     return JSONResponse(context.data)
 
 
-client = TestClient(app)
+app = Starlette(
+    routes=[
+        Route("/context_only_from_middleware", no_context_in_resource),
+        Route("/add_context_in_view", add_context_in_resource),
+    ]
+)
+app.add_middleware(MiddlewareUsingContextObject)
+app.add_middleware(MiddlewareUsingSetContextMethod)
 
 
-def test_set_context_in_middlewares():
+@pytest.fixture
+def client():
+    with TestClient(app) as client:
+        yield client
+
+
+def test_set_context_in_middlewares(client):
     response = client.get("/context_only_from_middleware")
     assert response.status_code == 200
     assert {
@@ -59,7 +67,7 @@ def test_set_context_in_middlewares():
     } == response.json()
 
 
-def test_set_context_in_view():
+def test_set_context_in_view(client):
     response = client.get("/add_context_in_view")
     assert response.status_code == 200
     assert {

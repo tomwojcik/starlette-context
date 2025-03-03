@@ -1,10 +1,13 @@
-"""Temp set of tests until 1.0.0 is released."""
+"""
+Temp set of tests until 1.0.0 is released.
+"""
+
 import warnings
 from unittest.mock import MagicMock
 
 from starlette_context.middleware.context_middleware import (
-    ContextMiddleware,
     CONTEXT_MIDDLEWARE_WARNING_MSG,
+    ContextMiddleware,
 )
 from starlette_context.middleware.raw_middleware import RawContextMiddleware
 

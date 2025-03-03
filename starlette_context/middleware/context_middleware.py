@@ -1,4 +1,5 @@
-from typing import Optional, Sequence
+from collections.abc import Sequence
+from typing import Optional
 
 from starlette.middleware.base import (
     BaseHTTPMiddleware,
@@ -8,11 +9,11 @@ from starlette.requests import Request
 from starlette.responses import Response
 
 from starlette_context import request_cycle_context
-from starlette_context.plugins import Plugin
 from starlette_context.errors import (
     ConfigurationError,
     MiddleWareValidationError,
 )
+from starlette_context.plugins import Plugin
 
 CONTEXT_MIDDLEWARE_WARNING_MSG = (
     "ContextMiddleware middleware is deprecated "
@@ -24,7 +25,8 @@ CONTEXT_MIDDLEWARE_WARNING_MSG = (
 
 
 class ContextMiddleware(BaseHTTPMiddleware):
-    """Middleware that creates empty context for request it's used on. If not
+    """
+    Middleware that creates empty context for request it's used on. If not
     used, you won't be able to use context object.
 
     Not to be used with StreamingResponse or FileResponse.
@@ -54,10 +56,11 @@ class ContextMiddleware(BaseHTTPMiddleware):
         self.error_response = default_error_response
 
     async def set_context(self, request: Request) -> dict:
-        """You might want to override this method.
+        """
+        You might want to override this method.
 
-        The dict it returns will be saved in the scope of a context. You
-        can always do that later.
+        The dict it returns will be saved in the scope of a context. You can
+        always do that later.
         """
         return {
             plugin.key: await plugin.process_request(request)
