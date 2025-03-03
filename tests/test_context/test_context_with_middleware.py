@@ -61,17 +61,17 @@ def client():
 def test_set_context_in_middlewares(client):
     response = client.get("/context_only_from_middleware")
     assert response.status_code == 200
-    assert {
+    assert response.json() == {
         "set_context_in_middleware_using_context_method": True,
         "set_context_in_middleware_using_context_object": True,
-    } == response.json()
+    }
 
 
 def test_set_context_in_view(client):
     response = client.get("/add_context_in_view")
     assert response.status_code == 200
-    assert {
+    assert response.json() == {
         "set_context_in_middleware_using_context_method": True,
         "set_context_in_middleware_using_context_object": True,
         "set_context_in_view": True,
-    } == response.json()
+    }

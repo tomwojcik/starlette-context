@@ -15,21 +15,12 @@ from starlette_context.errors import (
 )
 from starlette_context.plugins import Plugin
 
-CONTEXT_MIDDLEWARE_WARNING_MSG = (
-    "ContextMiddleware middleware is deprecated "
-    "and will be removed in version 0.4.0. "
-    "Use RawContextMiddleware instead. "
-    "For more information, see "
-    "https://github.com/tomwojcik/starlette-context/issues/47"
-)
-
 
 class ContextMiddleware(BaseHTTPMiddleware):
     """
     Middleware that creates empty context for request it's used on. If not
     used, you won't be able to use context object.
 
-    Not to be used with StreamingResponse or FileResponse.
     """
 
     def __init__(
@@ -41,10 +32,6 @@ class ContextMiddleware(BaseHTTPMiddleware):
         **kwargs,
     ) -> None:
         import warnings
-
-        warnings.warn(
-            CONTEXT_MIDDLEWARE_WARNING_MSG, DeprecationWarning, stacklevel=2
-        )
 
         super().__init__(app, *args, **kwargs)
         for plugin in plugins or ():
