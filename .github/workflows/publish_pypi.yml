@@ -13,6 +13,7 @@ jobs:
         python-version: [ '3.11' ]
         poetry-version: [ 1.7.1 ]
         os: [ ubuntu-latest ]
+    name: Publish to PyPI (Python ${{ matrix.python-version }})
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4

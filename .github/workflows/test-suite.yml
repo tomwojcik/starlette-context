@@ -12,7 +12,24 @@ jobs:
       matrix:
         python-version: [ 3.9, '3.10', '3.11', '3.12' ]
         poetry-version: [ 1.7.1 ]
+        starlette-version: [ '0.27.0', '0.33.0', '0.37.0', '0.42.0', '0.46.0' ]
         os: [ ubuntu-latest ]
+        exclude:
+          # Only test oldest Starlette with oldest Python and newest Starlette with newest Python
+          - python-version: 3.9
+            starlette-version: '0.46.0'
+          - python-version: '3.12'
+            starlette-version: '0.27.0'
+          # Reduce testing combinations for middle versions
+          - python-version: '3.10'
+            starlette-version: '0.27.0'
+          - python-version: '3.10'
+            starlette-version: '0.33.0'
+          - python-version: '3.11'
+            starlette-version: '0.37.0'
+          - python-version: '3.11'
+            starlette-version: '0.42.0'
+    name: Test Python ${{ matrix.python-version }} / Starlette ${{ matrix.starlette-version }}
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
@@ -26,7 +43,9 @@ jobs:
           virtualenvs-create: true
           virtualenvs-in-project: true
       - name: Install dependencies
-        run: poetry install --only main,dev
+        run: |
+          poetry install --only main,dev
+          poetry run pip install "starlette==${{ matrix.starlette-version }}"
       - name: Run tests
         run: scripts/test
       - name: Upload coverage to Codecov
@@ -45,6 +64,7 @@ jobs:
         python-version: [ '3.11' ]
         poetry-version: [ 1.7.1 ]
         os: [ ubuntu-latest ]
+    name: Code Quality (Python ${{ matrix.python-version }})
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
