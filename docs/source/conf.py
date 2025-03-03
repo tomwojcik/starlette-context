@@ -36,8 +36,23 @@ extensions = [
     "sphinx.ext.autodoc",
     "sphinx.ext.viewcode",
     "sphinx.ext.autosectionlabel",
+    "myst_parser",
 ]
 pygments_style = "sphinx"
+
+# Configure MyST-Parser
+myst_enable_extensions = [
+    "tasklist",
+    "colon_fence",
+    "deflist",
+    "attrs_inline",
+]
+
+# Add support for Markdown files
+source_suffix = {
+    '.rst': 'restructuredtext',
+    '.md': 'markdown',
+}
 
 
 # Add any paths that contain templates here, relative to this directory.
