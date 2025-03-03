@@ -110,11 +110,11 @@ async def process_request(self, request):
     auth_header = request.headers.get("Authorization")
     if not auth_header:
         error_response = JSONResponse(
-            {"error": "Missing authorization header"}, 
+            {"error": "Missing authorization header"},
             status_code=401
         )
         raise MiddleWareValidationError(
-            "Missing auth header", 
+            "Missing auth header",
             error_response=error_response
         )
     return auth_header

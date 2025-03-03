@@ -73,7 +73,7 @@ plugin = RequestIdPlugin(
     force_new_uuid=False,  # Use existing header if present
     validate=True,         # Validate it's a proper UUID
     error_response=JSONResponse(
-        status_code=400, 
+        status_code=400,
         content={"error": "Invalid request ID format"}
     )
 )
@@ -108,7 +108,7 @@ from starlette_context.plugins import Plugin
 
 class JsonBodyPlugin(Plugin):
     key = "request_body"
-    
+
     async def process_request(
         self, request: Union[Request, HTTPConnection]
     ) -> Optional[Any]:
@@ -169,7 +169,7 @@ class SessionPlugin(Plugin):
     async def enrich_response(self, arg: Union[Response, Message]) -> None:
         # Can access the populated context here
         previous_cookie = context.get(self.key)
-        
+
         # For ContextMiddleware (Response object)
         if isinstance(arg, Response):
             if previous_cookie:

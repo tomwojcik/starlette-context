@@ -34,9 +34,9 @@ app = Starlette(
 def test_context_in_endpoint():
     client = TestClient(app)
     response = client.get("/test")
-    
+
     assert response.status_code == 200
-    
+
     # Context data is available in the response
     data = response.json()
     assert "X-Request-ID" in data
@@ -60,7 +60,7 @@ def test_function_using_context():
     with request_cycle_context({"key": "test_value"}):
         result = function_using_context()
         assert result == "test_value"
-        
+
         # We can also modify the context
         context["another_key"] = "another_value"
         assert context["another_key"] == "another_value"
@@ -81,13 +81,13 @@ def test_with_mocked_context():
     mock_context = mock.MagicMock()
     mock_context.data = {"mocked_key": "mocked_value"}
     mock_context.get.return_value = "mocked_value"
-    
+
     # Replace the context with our mock
     with mock.patch("your_module.context", mock_context):
         # Test your function that uses context
         from your_module import your_function
         result = your_function()
-        
+
         # Verify context was used as expected
         mock_context.get.assert_called_with("some_key")
 ```
@@ -110,7 +110,7 @@ def test_context_does_not_exist():
     # Outside request-response cycle, no context exists
     result = function_with_context_check()
     assert result == "no context"
-    
+
     # Accessing context directly should raise an error
     with pytest.raises(ContextDoesNotExistError):
         context["key"] = "value"
@@ -150,13 +150,13 @@ def test_app():
 
 def test_custom_plugin(test_app):
     client = TestClient(test_app)
-    
+
     # Set custom header that your plugin processes
     response = client.get("/test", headers={"X-Custom-Header": "test-value"})
-    
+
     assert response.status_code == 200
     data = response.json()
-    
+
     # Verify your plugin processed the header correctly
     assert "custom_key" in data
     assert data["custom_key"] == "processed-test-value"
@@ -181,13 +181,13 @@ def test_full_request_flow(client):
     # Make a series of requests that use context
     response1 = client.get("/first-endpoint")
     request_id = response1.json()["X-Request-ID"]
-    
+
     # Use the request ID in the next request
     response2 = client.get(
-        "/second-endpoint", 
+        "/second-endpoint",
         headers={"X-Request-ID": request_id}
     )
-    
+
     # Verify context is maintained
     assert response2.json()["X-Request-ID"] == request_id
 ```
@@ -205,7 +205,7 @@ from starlette_context import request_cycle_context, context
 async def test_async_function_with_context():
     async def async_function():
         return context.get("key")
-    
+
     with request_cycle_context({"key": "async_value"}):
         result = await async_function()
         assert result == "async_value"

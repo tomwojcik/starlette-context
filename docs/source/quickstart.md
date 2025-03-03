@@ -43,7 +43,7 @@ from .app import app
 async def index(request: Request):
     # Access context data
     context["user_id"] = "12345"
-    
+
     # Return context data in response
     return JSONResponse(context.data)
 ```

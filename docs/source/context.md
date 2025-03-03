@@ -88,7 +88,7 @@ async def test_with_context():
         context["test_key"] = "test_value"
         assert context["initial_data"] == "value"
         assert context["test_key"] == "test_value"
-    
+
     # Outside the context manager, context is no longer available
     # Using context here would raise ContextDoesNotExistError
 ```
