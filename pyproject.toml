@@ -49,7 +49,7 @@ myst-parser = "^2.0.0"
 
 
 [tool.poetry.group.code-quality.dependencies]
-black = "^24.2.0"
+black = ">=24.2,<26.0"
 ruff = "^0.3.0"
 bandit = "^1.7.6"
 mypy = "^1.8.0"
