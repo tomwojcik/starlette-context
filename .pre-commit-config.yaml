@@ -3,7 +3,7 @@ fail_fast: false
 
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.5.0
+    rev: v4.4.0
     hooks:
       - id: debug-statements
       - id: check-added-large-files
@@ -46,4 +46,4 @@ repos:
     rev: v3.15.0
     hooks:
       - id: pyupgrade
-        args: [ --py38-plus ]
+        args: [ --py39-plus ]
