@@ -1,7 +1,7 @@
 from collections.abc import Iterator
 from contextlib import contextmanager
 from contextvars import ContextVar, Token
-from typing import Any, Dict, Optional
+from typing import Any, Optional
 
 _request_scope_context_storage: ContextVar[dict[Any, Any]] = ContextVar(
     "starlette_context"

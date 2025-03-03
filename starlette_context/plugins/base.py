@@ -93,7 +93,7 @@ class PluginUUIDBase(Plugin):
 
         return value
 
-    async def enrich_response(self, arg) -> None:
+    async def enrich_response(self, arg: Any) -> None:
         value = str(context.get(self.key))
 
         # for ContextMiddleware

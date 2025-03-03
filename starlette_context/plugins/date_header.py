@@ -1,5 +1,5 @@
 import datetime
-from typing import Optional, Union
+from typing import Any, Optional, Union
 
 from starlette.requests import HTTPConnection, Request
 from starlette.responses import Response
@@ -14,9 +14,9 @@ class DateHeaderPlugin(Plugin):
 
     def __init__(
         self,
-        *args,
+        *args: Any,
         error_response: Optional[Response] = Response(status_code=400),
-    ):
+    ) -> None:
         super().__init__(*args)
         self.error_response = error_response
 
