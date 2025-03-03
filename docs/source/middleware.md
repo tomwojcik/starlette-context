@@ -60,12 +60,12 @@ app = Starlette(middleware=middleware)
 
 Both middlewares provide the same core functionality, but have different implementations:
 
-- **ContextMiddleware**: 
+- **ContextMiddleware**:
   - Simpler to understand and use
   - Built on Starlette's `BaseHTTPMiddleware`
   - Works well for most use cases
 
-- **RawContextMiddleware**: 
+- **RawContextMiddleware**:
   - Works at a lower ASGI level
   - Better performance with streaming responses
   - Doesn't have the same memory issues with large responses
@@ -111,7 +111,7 @@ Therefore, these middlewares can't set response headers for 500 responses. You c
 ## Middleware Mechanics
 
 1. The middleware creates an empty "storage" bound to the context of your async request
-2. The `set_context` method populates this storage with data from plugins 
+2. The `set_context` method populates this storage with data from plugins
 3. When the response is created, plugins can add headers based on context values
 4. Finally, the request context is cleaned up
 
@@ -124,10 +124,10 @@ class CustomContextMiddleware(ContextMiddleware):
     async def set_context(self, request: Request) -> dict:
         # Get the standard context from plugins
         context = await super().set_context(request)
-        
+
         # Add custom data
         context["environment"] = os.environ.get("ENVIRONMENT", "development")
         context["app_version"] = "1.0.0"
-        
+
         return context
 ```

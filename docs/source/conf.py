@@ -50,8 +50,8 @@ myst_enable_extensions = [
 
 # Add support for Markdown files
 source_suffix = {
-    '.rst': 'restructuredtext',
-    '.md': 'markdown',
+    ".rst": "restructuredtext",
+    ".md": "markdown",
 }
 
 

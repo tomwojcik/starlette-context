@@ -28,7 +28,7 @@ class LoggingMiddleware(BaseHTTPMiddleware):
     """
     Example logging middleware that includes context in logs.
     """
-    
+
     async def dispatch(
         self, request: Request, call_next: RequestResponseEndpoint
     ) -> Response:
@@ -189,7 +189,7 @@ class AuthMiddleware(BaseHTTPMiddleware):
                 context["is_authenticated"] = False
         else:
             context["is_authenticated"] = False
-            
+
         # Continue with request
         response = await call_next(request)
         return response

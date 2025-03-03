@@ -92,10 +92,10 @@ def process_item(item_id: str, context_data: dict):
 async def create_item(item_id: str, background_tasks: BackgroundTasks):
     # Capture context data during request
     context_data = context.data.copy()
-    
+
     # Pass context data explicitly to the background task
     background_tasks.add_task(process_item, item_id, context_data)
-    
+
     return {"message": "Item will be processed"}
 ```
 
@@ -122,7 +122,7 @@ async def http_exception_handler(request: Request, exc: HTTPException):
             extra_data = {"request_id": context.get("X-Request-ID")}
     except ContextDoesNotExistError:
         pass
-        
+
     return JSONResponse(
         status_code=exc.status_code,
         content={
@@ -160,7 +160,7 @@ class Item(BaseModel):
 async def create_item(item: Item):
     # Store the validated item data in context
     context["item"] = item.dict()
-    
+
     # Create response that includes context data
     return {
         "item": item,
