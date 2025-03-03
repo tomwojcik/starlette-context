@@ -32,6 +32,7 @@ class ContextMiddleware(BaseHTTPMiddleware):
 
     def __init__(
         self,
+        app,
         plugins: Optional[Sequence[Plugin]] = None,
         default_error_response: Response = Response(status_code=400),
         *args,
@@ -43,7 +44,7 @@ class ContextMiddleware(BaseHTTPMiddleware):
             CONTEXT_MIDDLEWARE_WARNING_MSG, DeprecationWarning, stacklevel=2
         )
 
-        super().__init__(*args, **kwargs)
+        super().__init__(app, *args, **kwargs)
         for plugin in plugins or ():
             if not isinstance(plugin, Plugin):
                 raise ConfigurationError(
