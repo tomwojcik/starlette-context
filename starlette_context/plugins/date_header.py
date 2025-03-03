@@ -1,12 +1,12 @@
 import datetime
-from typing import Optional, Union
+from typing import Any, Optional, Union
 
 from starlette.requests import HTTPConnection, Request
 from starlette.responses import Response
 
+from starlette_context.errors import DateFormatError
 from starlette_context.header_keys import HeaderKeys
 from starlette_context.plugins.base import Plugin
-from starlette_context.errors import DateFormatError
 
 
 class DateHeaderPlugin(Plugin):
@@ -14,9 +14,9 @@ class DateHeaderPlugin(Plugin):
 
     def __init__(
         self,
-        *args,
+        *args: Any,
         error_response: Optional[Response] = Response(status_code=400),
-    ):
+    ) -> None:
         super().__init__(*args)
         self.error_response = error_response
 
@@ -27,7 +27,8 @@ class DateHeaderPlugin(Plugin):
     async def process_request(
         self, request: Union[Request, HTTPConnection]
     ) -> Optional[datetime.datetime]:
-        """Has to be as stated in rfc2616 which uses rfc1123. Has to be in GMT.
+        """
+        Has to be as stated in rfc2616 which uses rfc1123. Has to be in GMT.
         Returns UTC datetime.
 
         Examples allowed:     Wed, 01 Jan 2020 04:27:12 GMT     Wed, 01

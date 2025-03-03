@@ -10,20 +10,23 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        python-version: [ 3.8 ]
-        poetry-version: [ 1.3.2 ]
+        python-version: [ '3.11' ]
+        poetry-version: [ 1.7.1 ]
         os: [ ubuntu-latest ]
+    name: Publish to PyPI (Python ${{ matrix.python-version }})
     runs-on: ${{ matrix.os }}
     steps:
-      - uses: actions/checkout@v4.0.0
+      - uses: actions/checkout@v4
       - name: Set up Python
-        uses: actions/setup-python@v4.7.0
+        uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
-      - name: Run image
-        uses: abatilo/actions-poetry@v4
+      - name: Install Poetry
+        uses: snok/install-poetry@v1
         with:
-          poetry-version: ${{ matrix.poetry-version }}
+          version: ${{ matrix.poetry-version }}
+          virtualenvs-create: true
+          virtualenvs-in-project: true
       - name: Build and publish
         run: |
           poetry config pypi-token.pypi ${{ secrets.PYPI_RELEASE_STARLETTE_CONTEXT }}

@@ -3,6 +3,7 @@ from uuid import uuid4
 from starlette.applications import Starlette
 from starlette.requests import Request
 from starlette.responses import JSONResponse
+from starlette.routing import Route
 from starlette.testclient import TestClient
 
 from starlette_context.middleware import ContextMiddleware
@@ -15,16 +16,19 @@ class UuidMiddleware(ContextMiddleware):
         return {"from_middleware": uuid4().hex}
 
 
-app = Starlette()
-app.add_middleware(UuidMiddleware)
-
-
-@app.route("/")
 async def index(request: Request):
     from starlette_context import context
 
     context["from_view"] = uuid4().hex
     return JSONResponse(context.data)
+
+
+app = Starlette(
+    routes=[
+        Route("/", index),
+    ]
+)
+app.add_middleware(UuidMiddleware)
 
 
 client = TestClient(app)

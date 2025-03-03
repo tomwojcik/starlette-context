@@ -1,7 +1,7 @@
-from starlette_context.errors import ConfigurationError
 import pytest
 from starlette.applications import Starlette
 
+from starlette_context.errors import ConfigurationError
 from starlette_context.middleware import (
     ContextMiddleware,
     RawContextMiddleware,

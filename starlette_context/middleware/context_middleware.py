@@ -1,6 +1,8 @@
-from typing import Optional, Sequence
+from collections.abc import Sequence
+from typing import Any, Optional
 
 from starlette.middleware.base import (
+    ASGIApp,
     BaseHTTPMiddleware,
     RequestResponseEndpoint,
 )
@@ -8,42 +10,30 @@ from starlette.requests import Request
 from starlette.responses import Response
 
 from starlette_context import request_cycle_context
-from starlette_context.plugins import Plugin
 from starlette_context.errors import (
     ConfigurationError,
     MiddleWareValidationError,
 )
-
-CONTEXT_MIDDLEWARE_WARNING_MSG = (
-    "ContextMiddleware middleware is deprecated "
-    "and will be removed in version 0.4.0. "
-    "Use RawContextMiddleware instead. "
-    "For more information, see "
-    "https://github.com/tomwojcik/starlette-context/issues/47"
-)
+from starlette_context.plugins import Plugin
 
 
 class ContextMiddleware(BaseHTTPMiddleware):
-    """Middleware that creates empty context for request it's used on. If not
-    used, you won't be able to use context object.
+    """
+    Middleware that creates empty context for request it's used on.
 
-    Not to be used with StreamingResponse or FileResponse.
+    If not used, you won't be able to use context object.
     """
 
     def __init__(
         self,
+        app: ASGIApp,
         plugins: Optional[Sequence[Plugin]] = None,
         default_error_response: Response = Response(status_code=400),
-        *args,
-        **kwargs,
+        *args: Any,
+        **kwargs: Any,
     ) -> None:
-        import warnings
 
-        warnings.warn(
-            CONTEXT_MIDDLEWARE_WARNING_MSG, DeprecationWarning, stacklevel=2
-        )
-
-        super().__init__(*args, **kwargs)
+        super().__init__(app, *args, **kwargs)
         for plugin in plugins or ():
             if not isinstance(plugin, Plugin):
                 raise ConfigurationError(
@@ -53,10 +43,11 @@ class ContextMiddleware(BaseHTTPMiddleware):
         self.error_response = default_error_response
 
     async def set_context(self, request: Request) -> dict:
-        """You might want to override this method.
+        """
+        You might want to override this method.
 
-        The dict it returns will be saved in the scope of a context. You
-        can always do that later.
+        The dict it returns will be saved in the scope of a context. You can
+        always do that later.
         """
         return {
             plugin.key: await plugin.process_request(request)

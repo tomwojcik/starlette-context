@@ -5,6 +5,7 @@ from starlette.middleware.base import (
 )
 from starlette.requests import Request
 from starlette.responses import JSONResponse
+from starlette.routing import Route
 from starlette.testclient import TestClient
 
 from starlette_context import context, middleware
@@ -20,16 +21,19 @@ class MiddlewareUsingContextObject(BaseHTTPMiddleware):
         return await call_next(request)
 
 
-app = Starlette()
-app.add_middleware(MiddlewareUsingContextObject)
-app.add_middleware(middleware.ContextMiddleware)
-
-
-@app.route("/")
 async def index(request: Request):
     context.update(c=2, d=3, e=4)
     context["f"] = 5
     return JSONResponse(context.data)
+
+
+app = Starlette(
+    routes=[
+        Route("/", index),
+    ]
+)
+app.add_middleware(MiddlewareUsingContextObject)
+app.add_middleware(middleware.ContextMiddleware)
 
 
 client = TestClient(app)

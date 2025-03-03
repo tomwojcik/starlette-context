@@ -10,47 +10,73 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python-version: [ 3.8, 3.9, '3.10', 3.11]
-        poetry-version: [ 1.3.2 ]
+        python-version: [ 3.9, '3.10', '3.11', '3.12' , '3.13' ]
+        poetry-version: [ 1.7.1 ]
+        starlette-version: [ '0.27.0', '0.33.0', '0.37.0', '0.42.0', '0.46.0' ]
         os: [ ubuntu-latest ]
+        exclude:
+          # Only test oldest Starlette with oldest Python and newest Starlette with newest Python
+          - python-version: 3.9
+            starlette-version: '0.46.0'
+          - python-version: '3.12'
+            starlette-version: '0.27.0'
+          # Reduce testing combinations for middle versions
+          - python-version: '3.10'
+            starlette-version: '0.27.0'
+          - python-version: '3.10'
+            starlette-version: '0.33.0'
+          - python-version: '3.11'
+            starlette-version: '0.37.0'
+          - python-version: '3.11'
+            starlette-version: '0.42.0'
+    name: Test Python ${{ matrix.python-version }} / Starlette ${{ matrix.starlette-version }}
     runs-on: ${{ matrix.os }}
     steps:
-      - uses: actions/checkout@v4.0.0
-      - uses: actions/setup-python@v4.7.0
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
-      - name: Run image
-        uses: abatilo/actions-poetry@v4
+      - name: Install Poetry
+        uses: snok/install-poetry@v1
         with:
-          poetry-version: ${{ matrix.poetry-version }}
+          version: ${{ matrix.poetry-version }}
+          virtualenvs-create: true
+          virtualenvs-in-project: true
       - name: Install dependencies
-        run: poetry install --only main,dev
+        run: |
+          poetry install --only main,dev
+          poetry run pip install "starlette==${{ matrix.starlette-version }}"
       - name: Run tests
         run: scripts/test
       - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v3
+        uses: codecov/codecov-action@v5
+        continue-on-error: true
         with:
           files: ./coverage.xml
           fail_ci_if_error: true
           verbose: true
+          token: ${{ secrets.CODECOV_TOKEN }}
 
   code-quality:
     strategy:
       fail-fast: false
       matrix:
-        python-version: [ 3.8 ]
-        poetry-version: [ 1.3.2 ]
+        python-version: [ '3.11' ]
+        poetry-version: [ 1.7.1 ]
         os: [ ubuntu-latest ]
+    name: Code Quality (Python ${{ matrix.python-version }})
     runs-on: ${{ matrix.os }}
     steps:
-      - uses: actions/checkout@v4.0.0
-      - uses: actions/setup-python@v4.7.0
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
-      - name: Run image
-        uses: abatilo/actions-poetry@v4
+      - name: Install Poetry
+        uses: snok/install-poetry@v1
         with:
-          poetry-version: ${{ matrix.poetry-version }}
+          version: ${{ matrix.poetry-version }}
+          virtualenvs-create: true
+          virtualenvs-in-project: true
       - name: Install dependencies
         run: poetry install --only main,code-quality
       - name: Run pre-commit

@@ -4,16 +4,17 @@ from typing import Any
 
 from starlette_context import _request_scope_context_storage
 from starlette_context.errors import (
-    ContextDoesNotExistError,
     ConfigurationError,
+    ContextDoesNotExistError,
 )
 
 
 class _Context(UserDict):
-    """A mapping with dict-like interface.
+    """
+    A mapping with dict-like interface.
 
-    It is using request context as a data store. Can be used only if
-    context has been created in the middleware.
+    It is using request context as a data store. Can be used only if context
+    has been created in the middleware.
     """
 
     def __init__(self, *args: Any, **kwargs: Any):  # noqa
@@ -23,7 +24,8 @@ class _Context(UserDict):
 
     @property
     def data(self) -> dict:  # type: ignore
-        """Dump this to json.
+        """
+        Dump this to json.
 
         Object itself it not serializable.
         """
@@ -36,7 +38,9 @@ class _Context(UserDict):
         return _request_scope_context_storage in copy_context()
 
     def copy(self) -> dict:  # type: ignore
-        """Read only context data."""
+        """
+        Read only context data.
+        """
         import copy
 
         return copy.copy(self.data)
@@ -47,9 +51,9 @@ class _Context(UserDict):
         try:
             return f"<{__name__}.{self.__class__.__name__} {self.data}>"
         except ContextDoesNotExistError:
-            return f"<{__name__}.{self.__class__.__name__} {dict()}>"
+            return f"<{__name__}.{self.__class__.__name__} {{}}>"
 
-    def __str__(self):
+    def __str__(self) -> str:
         try:
             return str(self.data)
         except ContextDoesNotExistError:

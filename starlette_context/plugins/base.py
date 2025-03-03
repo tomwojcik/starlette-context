@@ -8,13 +8,14 @@ from starlette.responses import Response
 from starlette.types import Message
 
 from starlette_context import context
-from starlette_context.errors import WrongUUIDError, ConfigurationError
+from starlette_context.errors import ConfigurationError, WrongUUIDError
 
 __all__ = ["Plugin", "PluginUUIDBase"]
 
 
 class Plugin(metaclass=abc.ABCMeta):
-    """Base class for building those plugins to extract things from request.
+    """
+    Base class for building those plugins to extract things from request.
 
     One plugin should be responsible for extracting one thing.
     key: the key that allows to access value in headers
@@ -30,7 +31,8 @@ class Plugin(metaclass=abc.ABCMeta):
     async def process_request(
         self, request: Union[Request, HTTPConnection]
     ) -> Optional[Any]:
-        """Runs always on request.
+        """
+        Runs always on request.
 
         Extracts value from header by default.
         """
@@ -38,7 +40,8 @@ class Plugin(metaclass=abc.ABCMeta):
         return await self.extract_value_from_header_by_key(request)
 
     async def enrich_response(self, arg: Union[Response, Message]) -> None:
-        """Runs always on response.
+        """
+        Runs always on response.
 
         Does nothing by default.
         """
@@ -90,7 +93,7 @@ class PluginUUIDBase(Plugin):
 
         return value
 
-    async def enrich_response(self, arg) -> None:
+    async def enrich_response(self, arg: Any) -> None:
         value = str(context.get(self.key))
 
         # for ContextMiddleware
