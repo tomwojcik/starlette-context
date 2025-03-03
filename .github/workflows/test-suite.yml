@@ -10,7 +10,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python-version: [ 3.9, '3.10', '3.11', '3.12' ]
+        python-version: [ 3.9, '3.10', '3.11', '3.12' , '3.13' ]
         poetry-version: [ 1.7.1 ]
         starlette-version: [ '0.27.0', '0.33.0', '0.37.0', '0.42.0', '0.46.0' ]
         os: [ ubuntu-latest ]
