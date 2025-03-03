@@ -8,12 +8,34 @@ updates:
   - package-ecosystem: "pip"
     directory: "/"
     schedule:
-      interval: "daily"
-    allow:
-      - dependency-name: "starlette"
-        dependency-type: "direct"
+      interval: "weekly"
+    assignees:
+      - "tomwojcik"
+    open-pull-requests-limit: 15
+    groups:
+      test-dependencies:
+        patterns:
+          - "pytest*"
+        update-types:
+          - "minor"
+          - "patch"
+      linters:
+        patterns:
+          - "black"
+          - "ruff"
+          - "mypy"
+          - "bandit"
+          - "docformatter"
+          - "pyupgrade"
+          - "pre-commit*"
+        update-types:
+          - "minor"
+          - "patch"
 
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
-      interval: "daily"
+      interval: "weekly"
+    assignees:
+      - "tomwojcik"
+    open-pull-requests-limit: 10
