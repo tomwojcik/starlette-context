@@ -12,7 +12,7 @@ test:
 
 run-hooks:
 	poetry install --only code-quality
-	pre-commit run --all-files --show-diff-on-failure
+	poetry run pre-commit run --all-files --show-diff-on-failure
 
 clean:
 	sh scripts/clean

@@ -6,6 +6,7 @@ from starlette.applications import Starlette
 from starlette.middleware import Middleware
 from starlette.requests import Request
 from starlette.responses import JSONResponse, Response
+from starlette.routing import Route
 from starlette.testclient import TestClient
 
 from starlette_context import plugins
@@ -13,19 +14,23 @@ from starlette_context.header_keys import HeaderKeys
 from starlette_context.middleware import ContextMiddleware
 from starlette_context.plugins import DateHeaderPlugin
 
-middleware = [
-    Middleware(
-        ContextMiddleware,
-        plugins=(plugins.DateHeaderPlugin(),),
-    )
-]
-app = Starlette(middleware=middleware)
-client = TestClient(app)
 
-
-@app.route("/")
 async def index(request: Request) -> Response:
     return JSONResponse({"headers": str(request.headers.get(HeaderKeys.date))})
+
+
+app = Starlette(
+    routes=[
+        Route("/", index),
+    ],
+    middleware=[
+        Middleware(
+            ContextMiddleware,
+            plugins=(plugins.DateHeaderPlugin(),),
+        )
+    ],
+)
+client = TestClient(app)
 
 
 @pytest.mark.parametrize(

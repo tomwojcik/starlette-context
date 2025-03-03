@@ -45,7 +45,7 @@ def test_ctx_data_str_out_of_cycle():
 
 
 def test_ctx_len(mocked_context: _Context, ctx_store: dict):
-    assert 3 == len(mocked_context)
+    assert len(mocked_context) == 3
 
 
 def test_ctx_dict(mocked_context: _Context, ctx_store: dict):

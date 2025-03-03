@@ -1,14 +1,17 @@
-"""Tests the context manager without using the middlewares. This feature makes
-it much easier for users to also test the usage of context in a unit test
+"""
+Tests the context manager without using the middlewares. This feature makes it
+much easier for users to also test the usage of context in a unit test
 environnment, allowing to create the assumed/mocked environnment directly in a
 similar way to having a middleware upstream processing a request.
 
-On FastAPI apps, this also allows usage as part of a Depends system, out
-of plugins, and alleviating the Starlette architecture making
-Middlewares out of the scope of the regular exception handler.
+On FastAPI apps, this also allows usage as part of a Depends system, out of
+plugins, and alleviating the Starlette architecture making Middlewares out of
+the scope of the regular exception handler.
 """
+
 import pytest
-from starlette_context import request_cycle_context, context
+
+from starlette_context import context, request_cycle_context
 from starlette_context.errors import ContextDoesNotExistError
 
 

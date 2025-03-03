@@ -1,15 +1,16 @@
-from typing import Optional, Sequence, Union
+from collections.abc import Sequence
+from typing import Optional, Union
 
 from starlette.requests import HTTPConnection, Request
 from starlette.responses import Response
 from starlette.types import ASGIApp, Message, Receive, Scope, Send
 
 from starlette_context import request_cycle_context
-from starlette_context.plugins import Plugin
 from starlette_context.errors import (
     ConfigurationError,
     MiddleWareValidationError,
 )
+from starlette_context.plugins import Plugin
 
 
 class RawContextMiddleware:
@@ -32,10 +33,11 @@ class RawContextMiddleware:
     async def set_context(
         self, request: Union[Request, HTTPConnection]
     ) -> dict:
-        """You might want to override this method.
+        """
+        You might want to override this method.
 
-        The dict it returns will be saved in the scope of a context. You
-        can always do that later.
+        The dict it returns will be saved in the scope of a context. You can
+        always do that later.
         """
         return {
             plugin.key: await plugin.process_request(request)
@@ -44,7 +46,7 @@ class RawContextMiddleware:
 
     @staticmethod
     def get_request_object(
-        scope, receive, send
+        scope: Scope, receive: Receive, send: Send
     ) -> Union[Request, HTTPConnection]:
         # here we instantiate HTTPConnection instead of a Request object
         # because only headers are needed so that's sufficient.
