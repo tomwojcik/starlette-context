@@ -35,10 +35,22 @@ from starlette.applications import Starlette
 from starlette.middleware import Middleware
 from starlette.requests import Request
 from starlette.responses import JSONResponse
+from starlette.routing import Route
 
 from starlette_context import context, plugins
 from starlette_context.middleware import ContextMiddleware
 
+async def index(request: Request):
+    # Access and store data in context
+    context["custom_value"] = "example"
+    return JSONResponse(context.data)
+
+# Define routes
+routes = [
+    Route("/", endpoint=index)
+]
+
+# Configure middleware
 middleware = [
     Middleware(
         ContextMiddleware,
@@ -49,13 +61,11 @@ middleware = [
     )
 ]
 
-app = Starlette(middleware=middleware)
-
-
-@app.route("/")
-async def index(request: Request):
-    return JSONResponse(context.data)
-
+# Create application with routes and middleware
+app = Starlette(
+    routes=routes,
+    middleware=middleware
+)
 
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0")
@@ -66,7 +76,8 @@ In this example the response contains a JSON with:
 ```json
 {
   "X-Correlation-ID": "5ca2f0b43115461bad07ccae5976a990",
-  "X-Request-ID": "21f8d52208ec44948d152dc49a713fdd"
+  "X-Request-ID": "21f8d52208ec44948d152dc49a713fdd",
+  "custom_value": "example"
 }
 ```
 
