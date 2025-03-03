@@ -89,6 +89,8 @@ preview = true
 [tool.ruff]
 target-version = "py39"
 line-length = 79
+
+[tool.ruff.lint]
 select = [
     "E",    # pycodestyle errors
     "F",    # pyflakes
@@ -99,15 +101,15 @@ select = [
     "TID",  # flake8-tidy-imports
     "UP",   # pyupgrade
 ]
-ignore = []
+ignore = ["TID252"]
 
-[tool.ruff.isort]
+[tool.ruff.lint.isort]
 known-first-party = ["starlette_context"]
 
-[tool.ruff.flake8-tidy-imports]
+[tool.ruff.lint.flake8-tidy-imports]
 ban-relative-imports = "all"
 
-[tool.ruff.per-file-ignores]
+[tool.ruff.lint.per-file-ignores]
 "starlette_context/plugins/__init__.py" = ["F401"]
 
 [tool.mypy]

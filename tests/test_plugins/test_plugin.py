@@ -54,13 +54,15 @@ async def test_plugin_exceptions_handled_generically(
     Verifies that exceptions raised by plugins are caught normally.
     """
     try:
-        with mock.patch.object(
-            plugin,
-            "extract_value_from_header_by_key",
-            side_effect=StarletteContextError,
+        with (
+            mock.patch.object(
+                plugin,
+                "extract_value_from_header_by_key",
+                side_effect=StarletteContextError,
+            ),
+            pytest.raises(Exception),
         ):
-            with pytest.raises(Exception):
-                await plugin.extract_value_from_header_by_key(mocked_request)
+            await plugin.extract_value_from_header_by_key(mocked_request)
     except BaseException:
         pytest.fail(
             "General exceptions should subclass Exception (not BaseException)"

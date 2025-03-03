@@ -46,7 +46,7 @@ class RawContextMiddleware:
 
     @staticmethod
     def get_request_object(
-        scope, receive, send
+        scope: Scope, receive: Receive, send: Send
     ) -> Union[Request, HTTPConnection]:
         # here we instantiate HTTPConnection instead of a Request object
         # because only headers are needed so that's sufficient.

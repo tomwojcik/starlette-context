@@ -51,9 +51,9 @@ class _Context(UserDict):
         try:
             return f"<{__name__}.{self.__class__.__name__} {self.data}>"
         except ContextDoesNotExistError:
-            return f"<{__name__}.{self.__class__.__name__} {dict()}>"
+            return f"<{__name__}.{self.__class__.__name__} {{}}>"
 
-    def __str__(self):
+    def __str__(self) -> str:
         try:
             return str(self.data)
         except ContextDoesNotExistError:

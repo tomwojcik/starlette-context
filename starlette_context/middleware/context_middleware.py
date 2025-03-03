@@ -1,7 +1,8 @@
 from collections.abc import Sequence
-from typing import Optional
+from typing import Any, Optional
 
 from starlette.middleware.base import (
+    ASGIApp,
     BaseHTTPMiddleware,
     RequestResponseEndpoint,
 )
@@ -18,20 +19,19 @@ from starlette_context.plugins import Plugin
 
 class ContextMiddleware(BaseHTTPMiddleware):
     """
-    Middleware that creates empty context for request it's used on. If not
-    used, you won't be able to use context object.
+    Middleware that creates empty context for request it's used on.
 
+    If not used, you won't be able to use context object.
     """
 
     def __init__(
         self,
-        app,
+        app: ASGIApp,
         plugins: Optional[Sequence[Plugin]] = None,
         default_error_response: Response = Response(status_code=400),
-        *args,
-        **kwargs,
+        *args: Any,
+        **kwargs: Any,
     ) -> None:
-        import warnings
 
         super().__init__(app, *args, **kwargs)
         for plugin in plugins or ():

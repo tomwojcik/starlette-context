@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Any, Optional
 
 from starlette.responses import Response
 
@@ -8,7 +8,7 @@ class StarletteContextError(Exception):
 
 
 class ContextDoesNotExistError(RuntimeError, StarletteContextError):
-    def __init__(self):
+    def __init__(self) -> None:
         self.message = (
             "You didn't use the required middleware or "
             "you're trying to access `context` object "
@@ -23,7 +23,7 @@ class ConfigurationError(StarletteContextError):
 
 class MiddleWareValidationError(StarletteContextError):
     def __init__(
-        self, *args, error_response: Optional[Response] = None
+        self, *args: Any, error_response: Optional[Response] = None
     ) -> None:
         super().__init__(*args)
         self.error_response = error_response

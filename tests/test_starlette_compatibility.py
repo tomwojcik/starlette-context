@@ -30,7 +30,7 @@ def test_starlette_version(starlette_version):
     """
     Verify the test is running with the expected Starlette version.
     """
-    # This test will fail if Starlette is updated, reminding us to check compatibility
+    # This reminds us to check compatibility when Starlette is updated
     print(f"Testing with Starlette version: {starlette_version}")
     assert starlette_version.split(".")[0] >= "0"
 
