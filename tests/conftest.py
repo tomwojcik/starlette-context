@@ -1,4 +1,3 @@
-import functools
 import uuid
 from unittest.mock import MagicMock
 
@@ -19,7 +18,7 @@ dummy_date = "Wed, 01 Jan 2020 04:27:12 GMT"
 dummy_forwarded_for = "203.0.113.19"
 
 
-@pytest.fixture(scope="function", autouse=True)
+@pytest.fixture
 def headers():
     h = MutableHeaders()
     h.update(
@@ -35,19 +34,19 @@ def headers():
     return h
 
 
-@pytest.fixture(scope="function", autouse=True)
+@pytest.fixture
 def mocked_middleware() -> ContextMiddleware:
     return ContextMiddleware(app=MagicMock())
 
 
-@pytest.fixture(scope="function", autouse=True)
+@pytest.fixture
 def mocked_request(headers) -> Request:
     mocked = MagicMock(spec=Request)
     mocked.headers = headers
     return mocked
 
 
-@pytest.fixture(scope="function", autouse=True)
+@pytest.fixture
 def mocked_response() -> Response:
     mock = MagicMock(spec=Response)
     mock.headers = MutableHeaders()
@@ -56,12 +55,11 @@ def mocked_response() -> Response:
 
 @pytest.fixture
 def test_client_factory():
-    """See https://github.com/encode/starlette/blob/master/tests/conftest.py.
-    Otherwise testing middlewares init is a pain.
-
-    Needed after https://github.com/encode/starlette/pull/2017
     """
-    return functools.partial(
-        TestClient,
-        backend="asyncio",
-    )
+    Factory for creating TestClient instances.
+    """
+
+    def _test_client_factory(app, **kwargs):
+        return TestClient(app, **kwargs)
+
+    return _test_client_factory

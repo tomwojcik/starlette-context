@@ -1,11 +1,13 @@
+import pytest
 from starlette import status
 from starlette.applications import Starlette
 from starlette.middleware import Middleware
 from starlette.requests import Request
 from starlette.responses import Response
+from starlette.routing import Route
 from starlette.testclient import TestClient
 
-from starlette_context import middleware, plugins, context
+from starlette_context import context, middleware, plugins
 from starlette_context.header_keys import HeaderKeys
 
 
@@ -17,7 +19,24 @@ def custom_exc_handler(request: Request, exc):
     return Response(status_code=400, headers=context.data)
 
 
+async def exc_endpoint(request: Request):
+    raise Exception
+
+
+async def handled_endpoint(request: Request):
+    raise CustomExc
+
+
+async def index_endpoint(request: Request):
+    return Response(status_code=status.HTTP_200_OK)
+
+
 app = Starlette(
+    routes=[
+        Route("/exc", exc_endpoint),
+        Route("/handled", handled_endpoint),
+        Route("/", index_endpoint),
+    ],
     middleware=[
         Middleware(
             middleware.RawContextMiddleware,
@@ -28,25 +47,13 @@ app = Starlette(
 )
 
 
-@app.route("/exc")
-async def exc(request: Request):
-    raise Exception
+@pytest.fixture
+def client():
+    with TestClient(app, raise_server_exceptions=False) as client:
+        yield client
 
 
-@app.route("/handled")
-async def handled(request: Request):
-    raise CustomExc
-
-
-@app.route("/")
-async def index(request: Request):
-    return Response(status_code=status.HTTP_200_OK)
-
-
-client = TestClient(app, raise_server_exceptions=False)
-
-
-def test_context_persistence():
+def test_context_persistence(client):
     resp = client.get("/")
     assert resp.status_code == 200
     assert HeaderKeys.request_id.lower() in resp.headers

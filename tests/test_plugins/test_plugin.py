@@ -50,7 +50,9 @@ async def test_getter_for_headers(
 async def test_plugin_exceptions_handled_generically(
     mocked_request: Request, plugin: plugins.Plugin
 ):
-    """Verifies that exceptions raised by plugins are caught normally."""
+    """
+    Verifies that exceptions raised by plugins are caught normally.
+    """
     try:
         with mock.patch.object(
             plugin,

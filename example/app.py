@@ -7,6 +7,7 @@ from starlette.middleware.base import (
 )
 from starlette.requests import Request
 from starlette.responses import JSONResponse, Response
+from starlette.routing import Route
 
 from starlette_context import context, plugins
 from starlette_context.middleware import RawContextMiddleware
@@ -15,7 +16,9 @@ logger = structlog.get_logger("starlette_context_example")
 
 
 class LoggingMiddleware(BaseHTTPMiddleware):
-    """Example logging middleware."""
+    """
+    Example logging middleware.
+    """
 
     async def dispatch(
         self, request: Request, call_next: RequestResponseEndpoint
@@ -26,30 +29,32 @@ class LoggingMiddleware(BaseHTTPMiddleware):
         return response
 
 
-middlewares = [
-    Middleware(
-        RawContextMiddleware,
-        plugins=(
-            plugins.CorrelationIdPlugin(),
-            plugins.RequestIdPlugin(),
-        ),
-    ),
-    Middleware(LoggingMiddleware),
-]
+async def index(request: Request):
+    context["something else"] = "This will be visible even in the response log"
+    await logger.info("log from view")
+    return JSONResponse(context.data)
 
 
-app = Starlette(debug=True, middleware=middlewares)
-
-
-@app.on_event("startup")
 async def startup_event() -> None:
     from setup_logging import setup_logging
 
     setup_logging()
 
 
-@app.route("/")
-async def index(request: Request):
-    context["something else"] = "This will be visible even in the response log"
-    await logger.info("log from view")
-    return JSONResponse(context.data)
+app = Starlette(
+    debug=True,
+    routes=[
+        Route("/", index),
+    ],
+    middleware=[
+        Middleware(
+            RawContextMiddleware,
+            plugins=(
+                plugins.CorrelationIdPlugin(),
+                plugins.RequestIdPlugin(),
+            ),
+        ),
+        Middleware(LoggingMiddleware),
+    ],
+    on_startup=[startup_event],
+)
