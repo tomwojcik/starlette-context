@@ -50,7 +50,7 @@ myst-parser = ">=2,<4"
 
 [tool.poetry.group.code-quality.dependencies]
 black = ">=24.2,<26.0"
-ruff = "^0.3.0"
+ruff = ">=0.3,<0.10"
 bandit = "^1.7.6"
 mypy = "^1.8.0"
 docformatter = "^1.7.5"
