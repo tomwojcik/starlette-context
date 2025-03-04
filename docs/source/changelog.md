@@ -10,7 +10,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 * Drop support for Python 3.8. Now only 3.9+ is supported ( https://github.com/tomwojcik/starlette-context/pull/152/files#diff-50c86b7ed8ac2cf95bd48334961bf0530cdc77b5a56f852c5c61b89d735fd711R29 )
 * Drop support for Starlette versions below 0.27.0 ( released May 16, 2023) ( https://github.com/tomwojcik/starlette-context/pull/152/files#diff-50c86b7ed8ac2cf95bd48334961bf0530cdc77b5a56f852c5c61b89d735fd711R30 )
 * Drop `ContextMiddleware` deprecation warning as Starlette no longer plans to deprecate it ( https://github.com/encode/starlette/discussions/2160#discussioncomment-6053386 )
-* Fix `starlette-context` potentially breaking using `ContextMiddleware` with `starlette>=0.41.3` ( https://github.com/tomwojcik/starlette-context/issues/151 )
+* Fix `starlette-context` potentially breaking if `ContextMiddleware` is used along with `starlette>=0.41.3` ( https://github.com/tomwojcik/starlette-context/issues/151 )
 
 ## [0.3.6] - 2023-02-16
 
@@ -93,7 +93,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 **MVP until 0.1.4**
 * experiments and tests with ContextVar
 
-[0.3.7]: https://github.com/tomwojcik/starlette-context/compare/v0.3.6...v0.3.7
+[0.4.0]: https://github.com/tomwojcik/starlette-context/compare/v0.3.6...v0.4.0
 [0.3.6]: https://github.com/tomwojcik/starlette-context/compare/v0.3.5...v0.3.6
 [0.3.5]: https://github.com/tomwojcik/starlette-context/compare/v0.3.4...v0.3.5
 [0.3.4]: https://github.com/tomwojcik/starlette-context/compare/v0.3.3...v0.3.4
