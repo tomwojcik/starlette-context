@@ -43,7 +43,7 @@ httpx = "^0.27.0"
 
 [tool.poetry.group.docs.dependencies]
 sphinx = ">=7.2.6"
-sphinx-rtd-theme = "^2.0.0"
+sphinx-rtd-theme = ">=2,<4"
 toml = "^0.10.2"
 myst-parser = "^2.0.0"
 
