@@ -1,7 +1,15 @@
-from enum import Enum
+import sys
+
+if sys.version_info >= (3, 11):
+    from enum import StrEnum
+else:
+    from enum import Enum
+
+    class StrEnum(str, Enum):
+        pass
 
 
-class HeaderKeys(str, Enum):
+class HeaderKeys(StrEnum):
     api_key = "X-API-Key"
     correlation_id = "X-Correlation-ID"
     request_id = "X-Request-ID"
