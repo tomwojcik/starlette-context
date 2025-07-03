@@ -33,7 +33,6 @@ repos:
     hooks:
       - id: ruff
         name: ruff
-        stages: [ pre-commit ]
         types: [ file, python ]
         args: ["--fix"]
 
