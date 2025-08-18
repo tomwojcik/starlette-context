@@ -32,7 +32,7 @@ jobs:
     name: Test Python ${{ matrix.python-version }} / Starlette ${{ matrix.starlette-version }}
     runs-on: ${{ matrix.os }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
@@ -67,7 +67,7 @@ jobs:
     name: Code Quality (Python ${{ matrix.python-version }})
     runs-on: ${{ matrix.os }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
