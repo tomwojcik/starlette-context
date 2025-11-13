@@ -69,9 +69,10 @@ async def handler(request):
 ```
 
 This applies to:
-- Background tasks running after the response
 - Logging outside of request handlers
 - Testing code that checks context after a request completes
+
+**Note on Background Tasks**: Due to Python's `ContextVar` inheritance (PEP 567), context may appear to be available in background tasks when they are created as asyncio tasks. However, this is an implementation detail and should not be relied upon. Always explicitly copy context data and pass it to background tasks. See the [FastAPI Integration](fastapi.md#using-with-background-tasks) section for the recommended pattern.
 
 ### Safe Access
 
