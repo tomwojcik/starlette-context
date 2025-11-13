@@ -73,7 +73,20 @@ async def read_items(request: Request):
 
 ## Using with Background Tasks
 
-When using FastAPI's background tasks, be aware that the context is only available during the request-response cycle. Background tasks usually run after the response has been sent, so the context will no longer be available.
+**Important**: While context may appear to be available in background tasks due to Python's `ContextVar` inheritance mechanism (PEP 567), **you should not rely on this behavior**. Always explicitly copy and pass context data to background tasks.
+
+### Why Context Appears Available (But You Shouldn't Use It)
+
+When a background task is created, Python's `asyncio` automatically creates a copy of the current context for the task. This means you might observe that context data is accessible within background tasks. However:
+
+1. **This is an implementation detail**, not a guaranteed API feature
+2. **Timing-sensitive**: Context availability depends on when the asyncio task is created
+3. **Not officially supported**: Future versions of Python or Starlette could change this behavior
+4. **Not documented as reliable**: This library does not guarantee context persistence in background tasks
+
+### Recommended Pattern: Explicit Context Copying
+
+Always use the explicit pattern shown below:
 
 ```python
 from fastapi import FastAPI, BackgroundTasks
@@ -84,9 +97,10 @@ app = FastAPI()
 app.add_middleware(ContextMiddleware)
 
 def process_item(item_id: str, context_data: dict):
-    # Context isn't available here directly
-    # Use the context_data parameter instead
+    # ✅ RECOMMENDED: Use explicitly passed context data
+    # This is reliable and guaranteed to work
     print(f"Processing item {item_id} with context: {context_data}")
+    request_id = context_data.get("X-Request-ID")
 
 @app.post("/items/{item_id}")
 async def create_item(item_id: str, background_tasks: BackgroundTasks):
@@ -96,6 +110,23 @@ async def create_item(item_id: str, background_tasks: BackgroundTasks):
     # Pass context data explicitly to the background task
     background_tasks.add_task(process_item, item_id, context_data)
 
+    return {"message": "Item will be processed"}
+```
+
+### What NOT to Do
+
+```python
+# ❌ NOT RECOMMENDED: Accessing context directly in background task
+def risky_background_task(item_id: str):
+    # This might work now due to ContextVar inheritance,
+    # but it's not guaranteed and could break in the future
+    request_id = context.get("X-Request-ID")  # Risky!
+    print(f"Processing {item_id} with {request_id}")
+
+@app.post("/items/{item_id}")
+async def create_item_risky(item_id: str, background_tasks: BackgroundTasks):
+    # Don't rely on context being available in the background task
+    background_tasks.add_task(risky_background_task, item_id)
     return {"message": "Item will be processed"}
 ```
 
