@@ -77,20 +77,17 @@ async def read_items(request: Request):
 
 ### Why Context Appears Available (But You Shouldn't Use It)
 
-When a background task is created, Python's `asyncio` automatically creates a copy of the current context for the task. This means you might observe that context data is accessible within background tasks. However:
+With `RawContextMiddleware` (pure ASGI), background tasks run inside the middleware's `with request_cycle_context()` block, so context is reliably available, or at least should be.
 
-1. **This is an implementation detail**, not a guaranteed API feature
-2. **Timing-sensitive**: Context availability depends on when the asyncio task is created
-3. **Not officially supported**: Future versions of Python or Starlette could change this behavior
-4. **Not documented as reliable**: This library does not guarantee context persistence in background tasks
+With `ContextMiddleware` (which uses Starlette's `BaseHTTPMiddleware`), the inner app runs in a separate task. Background tasks execute after the middleware's context manager has already exited and reset the context. Context may still appear available due to Python's `ContextVar` inheritance (PEP 567) — spawned tasks receive a copy of the parent context — but this is an implementation detail that could change.
 
-### Recommended Pattern: Explicit Context Copying
+### Recommended Pattern: Explicit Context Passing
 
-Always use the explicit pattern shown below:
+Always copy context data during the request and pass it explicitly to background tasks:
 
 ```python
 from fastapi import FastAPI, BackgroundTasks
-from starlette_context import context, request_cycle_context
+from starlette_context import context
 from starlette_context.middleware import ContextMiddleware
 
 app = FastAPI()

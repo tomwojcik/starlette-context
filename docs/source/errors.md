@@ -72,7 +72,7 @@ This applies to:
 - Logging outside of request handlers
 - Testing code that checks context after a request completes
 
-**Note on Background Tasks**: Due to Python's `ContextVar` inheritance (PEP 567), context may appear to be available in background tasks when they are created as asyncio tasks. However, this is an implementation detail and should not be relied upon. Always explicitly copy context data and pass it to background tasks. See the [FastAPI Integration](fastapi.md#using-with-background-tasks) section for the recommended pattern.
+**Note on Background Tasks**: Context may be available in background tasks due to Python's `ContextVar` inheritance (PEP 567), but this is not guaranteed across all middleware types and Starlette versions. With `RawContextMiddleware`, background tasks run inside the middleware's context manager, so context is reliably available. With `ContextMiddleware` (which uses `BaseHTTPMiddleware`), background tasks may run after the context has been reset, and availability depends on ContextVar inheritance to spawned tasks. To be safe, explicitly copy context data and pass it to background tasks. See the [FastAPI Integration](fastapi.md#using-with-background-tasks) section for the recommended pattern.
 
 ### Safe Access
 
