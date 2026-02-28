@@ -46,8 +46,7 @@ uv run pytest --cov=starlette_context
 
 This project uses several tools to ensure code quality:
 
-- [Black](https://github.com/psf/black) for code formatting
-- [ruff](https://github.com/astral-sh/ruff) for linting
+- [ruff](https://github.com/astral-sh/ruff) for formatting and linting
 - [mypy](https://github.com/python/mypy) for type checking
 
 You can run all checks with:

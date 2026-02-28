@@ -12,14 +12,6 @@ repos:
       - id: end-of-file-fixer
       - id: trailing-whitespace
 
-  - repo: https://github.com/psf/black
-    rev: 26.1.0
-    hooks:
-      - id: black
-        language_version: python3
-        require_serial: true
-        types: [ python ]
-
   - repo: https://github.com/PyCQA/docformatter
     rev: v1.7.7
     hooks:
@@ -27,10 +19,12 @@ repos:
         additional_dependencies: [tomli]
         args: ["--in-place", "--config", "./pyproject.toml"]
 
-
   - repo: https://github.com/astral-sh/ruff-pre-commit
     rev: 'v0.15.4'
     hooks:
+      - id: ruff-format
+        name: ruff-format
+        types: [ python ]
       - id: ruff
         name: ruff
         stages: [ commit ]

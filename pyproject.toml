@@ -49,7 +49,6 @@ docs = [
     "myst-parser>=2,<4",
 ]
 code-quality = [
-    "black>=24.2,<26.0",
     "ruff>=0.3,<0.12",
     "bandit>=1.7.6",
     "mypy>=1.8.0",
@@ -63,30 +62,6 @@ code-quality = [
 [build-system]
 requires = ["hatchling"]
 build-backend = "hatchling.build"
-
-[tool.black]
-line-length = 79
-target-version = ['py310', 'py311', 'py312', 'py313', 'py314']
-include = '\.pyi?$'
-exclude = '''
-/(
-    \.eggs
-  | \.git
-  | \.hg
-  | \.mypy_cache
-  | \.tox
-  | \.venv
-  | _build
-  | buck-out
-  | build
-  | dist
-  # The following are specific to Black, you probably don't want those.
-  | blib2to3
-  | tests/data
-  | profiling
-)/
-'''
-preview = true
 
 [tool.ruff]
 target-version = "py310"

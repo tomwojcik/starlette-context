@@ -21,7 +21,6 @@ updates:
           - "patch"
       linters:
         patterns:
-          - "black"
           - "ruff"
           - "mypy"
           - "bandit"
