@@ -41,5 +41,5 @@ client = TestClient(app)
 
 def test_context_update():
     resp = client.get("/")
-    expected = {k: v for v, k in (enumerate("abcdef"))}
+    expected = {k: v for v, k in enumerate("abcdef")}
     assert expected == resp.json()

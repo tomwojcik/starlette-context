@@ -1,6 +1,6 @@
 import abc
 import uuid
-from typing import Any, Optional, Union
+from typing import Any
 
 from starlette.datastructures import MutableHeaders
 from starlette.requests import HTTPConnection, Request
@@ -24,13 +24,13 @@ class Plugin(metaclass=abc.ABCMeta):
     key: str
 
     async def extract_value_from_header_by_key(
-        self, request: Union[Request, HTTPConnection]
-    ) -> Optional[Any]:
+        self, request: Request | HTTPConnection
+    ) -> Any | None:
         return request.headers.get(self.key)
 
     async def process_request(
-        self, request: Union[Request, HTTPConnection]
-    ) -> Optional[Any]:
+        self, request: Request | HTTPConnection
+    ) -> Any | None:
         """
         Runs always on request.
 
@@ -42,7 +42,7 @@ class Plugin(metaclass=abc.ABCMeta):
             )
         return await self.extract_value_from_header_by_key(request)
 
-    async def enrich_response(self, arg: Union[Response, Message]) -> None:
+    async def enrich_response(self, arg: Response | Message) -> None:
         """
         Runs always on response.
 
@@ -59,7 +59,7 @@ class PluginUUIDBase(Plugin):
         force_new_uuid: bool = False,
         version: int = 4,
         validate: bool = True,
-        error_response: Optional[Response] = None,
+        error_response: Response | None = None,
     ):
         if version not in self.uuid_functions_mapper:
             raise ConfigurationError(
@@ -83,8 +83,8 @@ class PluginUUIDBase(Plugin):
         return func().hex
 
     async def extract_value_from_header_by_key(
-        self, request: Union[Request, HTTPConnection]
-    ) -> Optional[str]:
+        self, request: Request | HTTPConnection
+    ) -> str | None:
         value = await super().extract_value_from_header_by_key(request)
 
         # if force_new_uuid or value was not found, create one

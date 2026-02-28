@@ -1,4 +1,4 @@
-from typing import Any, Optional
+from typing import Any
 
 from starlette.responses import Response
 
@@ -23,7 +23,7 @@ class ConfigurationError(StarletteContextError):
 
 class MiddleWareValidationError(StarletteContextError):
     def __init__(
-        self, *args: Any, error_response: Optional[Response] = None
+        self, *args: Any, error_response: Response | None = None
     ) -> None:
         super().__init__(*args)
         self.error_response = error_response
