@@ -1,7 +1,7 @@
 # starlette-context
 
 [![Test Suite](https://github.com/tomwojcik/starlette-context/actions/workflows/test-suite.yml/badge.svg)](https://github.com/tomwojcik/starlette-context/actions/workflows/test-suite.yml)
-[![Python](https://img.shields.io/badge/python-3.9+-blue.svg)](https://www.python.org/downloads/release/python-390/)
+[![Python](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/release/python-3100/)
 [![PyPI version](https://badge.fury.io/py/starlette-context.svg)](https://badge.fury.io/py/starlette-context)
 [![codecov](https://codecov.io/gh/tomwojcik/starlette-context/branch/master/graph/badge.svg)](https://codecov.io/gh/tomwojcik/starlette-context)
 [![Docs](https://readthedocs.org/projects/pip/badge/?version=latest)](https://starlette-context.readthedocs.io/)
@@ -18,7 +18,7 @@ Middleware for Starlette that allows you to store and access the context data of
 ## Installation
 
 ```bash
-# Python 3.9+
+# Python 3.10+
 pip install starlette-context
 ```
 

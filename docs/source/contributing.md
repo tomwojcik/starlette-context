@@ -6,8 +6,8 @@ Thank you for considering contributing to starlette-context! This project is ope
 
 ### Prerequisites
 
-- Python 3.9+
-- [Poetry](https://python-poetry.org/) for dependency management
+- Python 3.10+
+- [uv](https://docs.astral.sh/uv/) for dependency management
 
 ### Setup
 
@@ -18,9 +18,9 @@ Thank you for considering contributing to starlette-context! This project is ope
    cd starlette-context
    ```
 
-3. Set up the development environment using Poetry:
+3. Set up the development environment using uv:
    ```bash
-   poetry install
+   uv sync
    ```
 
 4. Install pre-commit hooks:
@@ -34,20 +34,19 @@ Thank you for considering contributing to starlette-context! This project is ope
 
 Run the entire test suite:
 ```bash
-poetry run pytest
+uv run pytest
 ```
 
 Run tests with coverage report:
 ```bash
-poetry run pytest --cov=starlette_context
+uv run pytest --cov=starlette_context
 ```
 
 ### Code Style
 
 This project uses several tools to ensure code quality:
 
-- [Black](https://github.com/psf/black) for code formatting
-- [ruff](https://github.com/astral-sh/ruff) for linting
+- [ruff](https://github.com/astral-sh/ruff) for formatting and linting
 - [mypy](https://github.com/python/mypy) for type checking
 
 You can run all checks with:

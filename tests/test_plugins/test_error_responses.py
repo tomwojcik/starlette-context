@@ -29,12 +29,12 @@ def gen_middleware_config(
 def test_invalid_request_id_returns_specified_response_raw_middleware():
     content = {"Error": "Invalid X-Request-ID"}
     response = JSONResponse(
-        content=content, status_code=status.HTTP_422_UNPROCESSABLE_ENTITY
+        content=content, status_code=status.HTTP_422_UNPROCESSABLE_CONTENT
     )
     client = gen_middleware_config(RawContextMiddleware, response)
 
     response = client.get("/", headers={HeaderKeys.request_id: "invalid_uuid"})
-    assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
+    assert response.status_code == status.HTTP_422_UNPROCESSABLE_CONTENT
     assert HeaderKeys.request_id not in response.headers
     body = response.json()
     assert body == content
@@ -43,11 +43,11 @@ def test_invalid_request_id_returns_specified_response_raw_middleware():
 def test_invalid_request_id_returns_specified_response_context_middleware():
     content = {"Error": "Invalid X-Request-ID"}
     response = JSONResponse(
-        content=content, status_code=status.HTTP_422_UNPROCESSABLE_ENTITY
+        content=content, status_code=status.HTTP_422_UNPROCESSABLE_CONTENT
     )
     client = gen_middleware_config(ContextMiddleware, response)
     response = client.get("/", headers={HeaderKeys.request_id: "invalid_uuid"})
-    assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
+    assert response.status_code == status.HTTP_422_UNPROCESSABLE_CONTENT
     assert HeaderKeys.request_id not in response.headers
     body = response.json()
     assert body == content

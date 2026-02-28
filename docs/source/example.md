@@ -7,6 +7,8 @@ Here are comprehensive examples showing how to use starlette-context in real app
 A complete working example is available in the [example directory](https://github.com/tomwojcik/starlette-context/tree/master/example) of the repository.
 
 ```python
+from contextlib import asynccontextmanager
+
 import structlog
 from starlette.applications import Starlette
 from starlette.middleware import Middleware
@@ -32,9 +34,18 @@ class LoggingMiddleware(BaseHTTPMiddleware):
     async def dispatch(
         self, request: Request, call_next: RequestResponseEndpoint
     ) -> Response:
-        await logger.info("request log", request=request)
+        await logger.info(
+            "request started",
+            path=request.url.path,
+            method=request.method,
+        )
         response = await call_next(request)
-        await logger.info("response log", response=response)
+        await logger.info(
+            "request finished",
+            path=request.url.path,
+            method=request.method,
+            status_code=response.status_code,
+        )
         return response
 
 
@@ -44,9 +55,11 @@ async def index(request: Request):
     return JSONResponse(context.data)
 
 
-async def startup_event() -> None:
+@asynccontextmanager
+async def lifespan(app):
     # Configure structlog to include context data
     setup_logging()
+    yield
 
 
 app = Starlette(
@@ -64,7 +77,7 @@ app = Starlette(
         ),
         Middleware(LoggingMiddleware),
     ],
-    on_startup=[startup_event],
+    lifespan=lifespan,
 )
 ```
 
@@ -138,8 +151,9 @@ When you run the example application and make a request, you'll see logs like:
 
 ```json
 {
-  "event": "request log",
-  "request": "<starlette.requests.Request object>",
+  "event": "request started",
+  "path": "/",
+  "method": "GET",
   "X-Correlation-ID": "5ca2f0b43115461bad07ccae5976a990",
   "X-Request-ID": "21f8d52208ec44948d152dc49a713fdd",
   "timestamp": "2023-03-01T12:00:00.123456Z"
@@ -154,8 +168,10 @@ When you run the example application and make a request, you'll see logs like:
 }
 
 {
-  "event": "response log",
-  "response": "<starlette.responses.JSONResponse object>",
+  "event": "request finished",
+  "path": "/",
+  "method": "GET",
+  "status_code": 200,
   "X-Correlation-ID": "5ca2f0b43115461bad07ccae5976a990",
   "X-Request-ID": "21f8d52208ec44948d152dc49a713fdd",
   "custom_value": "This will be visible in logs",
@@ -207,14 +223,13 @@ To run the example from the repository:
 
 ```bash
 cd example
-pip install -r requirements.txt
-uvicorn app:app --reload
+uv run uvicorn app:app --reload --port 5000
 ```
 
-Then visit http://localhost:8000/ in your browser or use curl:
+Then visit http://localhost:5000/ in your browser or use curl:
 
 ```bash
-curl http://localhost:8000/
+curl http://localhost:5000/
 ```
 
 You should see a JSON response with the context data and logs in your console showing the same data.

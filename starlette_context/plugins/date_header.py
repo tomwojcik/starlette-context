@@ -1,5 +1,5 @@
 import datetime
-from typing import Any, Optional, Union
+from typing import Any
 
 from starlette.requests import HTTPConnection, Request
 from starlette.responses import Response
@@ -15,7 +15,7 @@ class DateHeaderPlugin(Plugin):
     def __init__(
         self,
         *args: Any,
-        error_response: Optional[Response] = Response(status_code=400),
+        error_response: Response | None = Response(status_code=400),
     ) -> None:
         super().__init__(*args)
         self.error_response = error_response
@@ -25,8 +25,8 @@ class DateHeaderPlugin(Plugin):
         return datetime.datetime.strptime(s, "%a, %d %b %Y %H:%M:%S")
 
     async def process_request(
-        self, request: Union[Request, HTTPConnection]
-    ) -> Optional[datetime.datetime]:
+        self, request: Request | HTTPConnection
+    ) -> datetime.datetime | None:
         """
         Has to be as stated in rfc2616 which uses rfc1123. Has to be in GMT.
         Returns UTC datetime.
