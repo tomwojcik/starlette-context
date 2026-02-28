@@ -1,3 +1,5 @@
+from contextlib import asynccontextmanager
+
 import structlog
 from starlette.applications import Starlette
 from starlette.middleware import Middleware
@@ -23,9 +25,18 @@ class LoggingMiddleware(BaseHTTPMiddleware):
     async def dispatch(
         self, request: Request, call_next: RequestResponseEndpoint
     ) -> Response:
-        await logger.info("request log", request=request)
+        await logger.info(
+            "request started",
+            path=request.url.path,
+            method=request.method,
+        )
         response = await call_next(request)
-        await logger.info("response log", response=response)
+        await logger.info(
+            "request finished",
+            path=request.url.path,
+            method=request.method,
+            status_code=response.status_code,
+        )
         return response
 
 
@@ -35,10 +46,12 @@ async def index(request: Request):
     return JSONResponse(context.data)
 
 
-async def startup_event() -> None:
+@asynccontextmanager
+async def lifespan(app):
     from setup_logging import setup_logging
 
     setup_logging()
+    yield
 
 
 app = Starlette(
@@ -56,5 +69,5 @@ app = Starlette(
         ),
         Middleware(LoggingMiddleware),
     ],
-    on_startup=[startup_event],
+    lifespan=lifespan,
 )

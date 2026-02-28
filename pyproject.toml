@@ -48,6 +48,10 @@ docs = [
     "toml>=0.10.2",
     "myst-parser>=2,<4",
 ]
+example = [
+    "structlog",
+    "uvicorn",
+]
 code-quality = [
     "ruff>=0.3,<0.12",
     "mypy>=1.8.0",

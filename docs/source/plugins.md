@@ -102,7 +102,7 @@ For more control, override the `process_request` method:
 
 ```python
 import json
-from typing import Any, Optional, Union
+from typing import Any
 from starlette.requests import HTTPConnection, Request
 from starlette_context.plugins import Plugin
 
@@ -110,8 +110,8 @@ class JsonBodyPlugin(Plugin):
     key = "request_body"
 
     async def process_request(
-        self, request: Union[Request, HTTPConnection]
-    ) -> Optional[Any]:
+        self, request: Request | HTTPConnection
+    ) -> Any | None:
         if request.method in ("POST", "PUT", "PATCH"):
             try:
                 body = await request.json()
@@ -132,7 +132,7 @@ For complete control, implement both `process_request` and `enrich_response`:
 ```python
 import base64
 import logging
-from typing import Any, Optional, Union
+from typing import Any
 
 from starlette.responses import Response
 from starlette.requests import HTTPConnection, Request
@@ -147,8 +147,8 @@ class SessionPlugin(Plugin):
     key = "session_cookie"
 
     async def process_request(
-        self, request: Union[Request, HTTPConnection]
-    ) -> Optional[Any]:
+        self, request: Request | HTTPConnection
+    ) -> Any | None:
         # Access any part of the request
         raw_cookie = request.cookies.get("Session")
         if not raw_cookie:
@@ -166,7 +166,7 @@ class SessionPlugin(Plugin):
             raise MiddleWareValidationError("Cookie problem", error_response=response)
         return decoded_cookie
 
-    async def enrich_response(self, arg: Union[Response, Message]) -> None:
+    async def enrich_response(self, arg: Response | Message) -> None:
         # Can access the populated context here
         previous_cookie = context.get(self.key)
 
