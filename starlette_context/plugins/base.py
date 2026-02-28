@@ -36,7 +36,10 @@ class Plugin(metaclass=abc.ABCMeta):
 
         Extracts value from header by default.
         """
-        assert isinstance(self.key, str)
+        if not isinstance(self.key, str):
+            raise ConfigurationError(
+                f"Plugin {self.__class__.__name__} is missing a valid key."
+            )
         return await self.extract_value_from_header_by_key(request)
 
     async def enrich_response(self, arg: Union[Response, Message]) -> None:
