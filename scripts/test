@@ -2,7 +2,7 @@
 
 set -x
 
-uv run pytest --ignore=example --cov=starlette_context --cov-report=term-missing --cov-report=xml --asyncio-mode=auto
+uv run pytest --ignore=example --cov=starlette_context --cov-report=term-missing --cov-report=xml
 
 if [ -n "$GITHUB_ACTIONS" ]; then
   uv run codecov
