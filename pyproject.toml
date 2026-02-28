@@ -50,7 +50,6 @@ docs = [
 ]
 code-quality = [
     "ruff>=0.3,<0.12",
-    "bandit>=1.7.6",
     "mypy>=1.8.0",
     "docformatter>=1.7.5",
     "pyupgrade>=3.15.0",

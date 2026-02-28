@@ -23,7 +23,6 @@ updates:
         patterns:
           - "ruff"
           - "mypy"
-          - "bandit"
           - "docformatter"
           - "pyupgrade"
           - "pre-commit*"
