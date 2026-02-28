@@ -1,5 +1,4 @@
 from collections.abc import Sequence
-from typing import Optional, Union
 
 from starlette.requests import HTTPConnection, Request
 from starlette.responses import Response
@@ -17,7 +16,7 @@ class RawContextMiddleware:
     def __init__(
         self,
         app: ASGIApp,
-        plugins: Optional[Sequence[Plugin]] = None,
+        plugins: Sequence[Plugin] | None = None,
         default_error_response: Response = Response(status_code=400),
     ) -> None:
         self.app = app
@@ -30,9 +29,7 @@ class RawContextMiddleware:
         self.plugins = plugins or ()
         self.error_response = default_error_response
 
-    async def set_context(
-        self, request: Union[Request, HTTPConnection]
-    ) -> dict:
+    async def set_context(self, request: Request | HTTPConnection) -> dict:
         """
         You might want to override this method.
 
@@ -47,7 +44,7 @@ class RawContextMiddleware:
     @staticmethod
     def get_request_object(
         scope: Scope, receive: Receive, send: Send
-    ) -> Union[Request, HTTPConnection]:
+    ) -> Request | HTTPConnection:
         # here we instantiate HTTPConnection instead of a Request object
         # because only headers are needed so that's sufficient.
         # If you need the payload etc for your plugin

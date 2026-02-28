@@ -35,7 +35,7 @@ repos:
         name: ruff
         stages: [ commit ]
         types: [ file, python ]
-        args: ["--fix"]
+        args: ["--fix", "--unsafe-fixes"]
 
   - repo: https://github.com/pre-commit/mirrors-mypy
     rev: v1.19.1

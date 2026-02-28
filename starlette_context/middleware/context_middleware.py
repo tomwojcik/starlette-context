@@ -1,5 +1,5 @@
 from collections.abc import Sequence
-from typing import Any, Optional
+from typing import Any
 
 from starlette.middleware.base import (
     ASGIApp,
@@ -27,7 +27,7 @@ class ContextMiddleware(BaseHTTPMiddleware):
     def __init__(
         self,
         app: ASGIApp,
-        plugins: Optional[Sequence[Plugin]] = None,
+        plugins: Sequence[Plugin] | None = None,
         default_error_response: Response = Response(status_code=400),
         *args: Any,
         **kwargs: Any,

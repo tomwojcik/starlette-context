@@ -104,6 +104,8 @@ select = [
     "UP",   # pyupgrade
 ]
 ignore = ["TID252"]
+fixable = ["ALL"]
+unfixable = []
 
 [tool.ruff.lint.isort]
 known-first-party = ["starlette_context"]
