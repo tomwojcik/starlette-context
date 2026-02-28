@@ -2,10 +2,7 @@
 
 ## Installation
 
-This library's only dependency is [Starlette](https://github.com/encode/starlette). It works with all Starlette-based frameworks, including:
-- [FastAPI](https://github.com/tiangolo/fastapi)
-- [Responder](https://github.com/taoufik07/responder)
-- [Flama](https://github.com/perdy/flama)
+This library's only dependency is [Starlette](https://github.com/encode/starlette). It works with all Starlette-based frameworks, including [FastAPI](https://github.com/tiangolo/fastapi).
 
 ```bash
 pip install starlette-context
@@ -83,25 +80,35 @@ These values are accessible via `context.data` and are also included in the resp
 One of the main benefits of starlette-context is enriching your logs with request data:
 
 ```python
-import logging
 import structlog
 from starlette_context import context
 
-# Configure structlog to include context data
+
+def add_context(
+    logger, method_name, event_dict
+):
+    """Structlog processor that merges context data into every log entry."""
+    if context.exists():
+        event_dict.update(context.data)
+    return event_dict
+
+
 structlog.configure(
     processors=[
-        # Add context data to log entries
-        lambda _, __, event_dict: {**event_dict, **context.data}
+        add_context,
+        structlog.dev.ConsoleRenderer(),
     ]
 )
 
 logger = structlog.get_logger()
 
+
 @app.route("/")
 async def index(request: Request):
-    # Log with context data automatically included
     logger.info("Processing request")
     return JSONResponse({"message": "Hello World"})
 ```
 
-Now your logs will include request IDs, correlation IDs, and any other data in the context.
+The `context.exists()` guard is important — without it, any log emitted outside a request cycle (e.g. during startup) would raise `ContextDoesNotExistError`.
+
+For a complete working example with JSON logging, see the [Examples](./example.md) page.

@@ -56,6 +56,20 @@ middleware = [
 app = Starlette(middleware=middleware)
 ```
 
+## Middleware Order
+
+The context middleware **must be listed first** in your middleware list. Starlette processes middlewares in reverse order, so the first middleware in the list wraps the outermost layer. Any middleware that needs to access `context` must appear **after** the context middleware:
+
+```python
+middleware = [
+    Middleware(ContextMiddleware),   # 1st — creates the context
+    Middleware(LoggingMiddleware),   # 2nd — can use context
+    Middleware(AuthMiddleware),      # 3rd — can use context
+]
+```
+
+If a middleware is listed before `ContextMiddleware`, accessing `context` inside it will raise `ContextDoesNotExistError`. See [Handling Errors](./errors.md) for details.
+
 ## Choosing the Right Middleware
 
 Both middlewares provide the same core functionality, but have different implementations:
