@@ -48,6 +48,7 @@ jobs:
       - name: Run tests
         run: scripts/test
       - name: Upload coverage to Codecov
+        if: matrix.python-version == '3.14' && matrix.starlette-version == '1.0.0rc1'
         uses: codecov/codecov-action@v5
         continue-on-error: true
         with:
