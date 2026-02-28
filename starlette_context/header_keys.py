@@ -1,8 +1,8 @@
 import sys
 
-if sys.version_info >= (3, 11):
+if sys.version_info >= (3, 11):  # pragma: no cover
     from enum import StrEnum
-else:
+else:  # pragma: no cover
     from enum import Enum
 
     class StrEnum(str, Enum):
