@@ -5,6 +5,10 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## Latest Release
 
+## [0.5.1] - 2026-02-28
+
+* Fix `HeaderKeys` enum `str()` behavior inconsistency across Python versions ([#192](https://github.com/tomwojcik/starlette-context/pull/192)). On Python 3.11+, `str(HeaderKeys.api_key)` returned `"HeaderKeys.api_key"` instead of `"X-API-Key"`. Now uses `StrEnum` for consistent behavior across all supported Python versions.
+
 ## [0.5.0] - 2026-02-28
 
 * Add support for Python 3.13 and 3.14
@@ -103,6 +107,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 **MVP until 0.1.4**
 * experiments and tests with ContextVar
 
+[0.5.1]: https://github.com/tomwojcik/starlette-context/compare/v0.5.0...v0.5.1
 [0.5.0]: https://github.com/tomwojcik/starlette-context/compare/v0.4.0...v0.5.0
 [0.4.0]: https://github.com/tomwojcik/starlette-context/compare/v0.3.6...v0.4.0
 [0.3.6]: https://github.com/tomwojcik/starlette-context/compare/v0.3.5...v0.3.6
