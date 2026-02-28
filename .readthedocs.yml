@@ -4,12 +4,9 @@ build:
   os: ubuntu-22.04
   tools:
     python: "3.11"
-  jobs:
-    post_create_environment:
-      - python -m pip install poetry
-    post_install:
-      - VIRTUAL_ENV=$READTHEDOCS_VIRTUALENV_PATH poetry install --with docs
-
-sphinx:
-  configuration: docs/source/conf.py
-  fail_on_warning: false
+  commands:
+    - asdf plugin add uv
+    - asdf install uv latest
+    - asdf global uv latest
+    - uv sync --group docs
+    - uv run python -m sphinx -b html docs/source $READTHEDOCS_OUTPUT/html

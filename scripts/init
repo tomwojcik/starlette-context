@@ -2,10 +2,4 @@
 
 set -x
 
-if [ -d venv ]; then rm -r venv; fi
-if which pyenv > /dev/null
-then
-  echo "Pyenv found"
-  pyenv local
-fi
-python -m venv venv
+if [ -d .venv ]; then rm -r .venv; fi

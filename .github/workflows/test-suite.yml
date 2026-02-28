@@ -11,7 +11,6 @@ jobs:
       fail-fast: false
       matrix:
         python-version: [ '3.10', '3.11', '3.12' , '3.13' ]
-        poetry-version: [ 1.7.1 ]
         starlette-version: [ '0.27.0', '0.33.0', '0.37.0', '0.42.0', '0.46.0' ]
         os: [ ubuntu-latest ]
         exclude:
@@ -31,19 +30,17 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
       - uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
-      - name: Install Poetry
-        uses: snok/install-poetry@v1
-        with:
-          version: ${{ matrix.poetry-version }}
-          virtualenvs-create: true
-          virtualenvs-in-project: true
       - name: Install dependencies
         run: |
-          poetry install --only main,dev
-          poetry run pip install "starlette==${{ matrix.starlette-version }}"
+          uv sync --group dev
+          uv pip install "starlette==${{ matrix.starlette-version }}"
       - name: Run tests
         run: scripts/test
       - name: Upload coverage to Codecov
@@ -60,22 +57,19 @@ jobs:
       fail-fast: false
       matrix:
         python-version: [ '3.11' ]
-        poetry-version: [ 1.7.1 ]
         os: [ ubuntu-latest ]
     name: Code Quality (Python ${{ matrix.python-version }})
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
       - uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
-      - name: Install Poetry
-        uses: snok/install-poetry@v1
-        with:
-          version: ${{ matrix.poetry-version }}
-          virtualenvs-create: true
-          virtualenvs-in-project: true
       - name: Install dependencies
-        run: poetry install --only main,code-quality
+        run: uv sync --group code-quality
       - name: Run pre-commit
-        run: poetry run pre-commit run --all-files --show-diff-on-failure
+        run: uv run pre-commit run --all-files --show-diff-on-failure

@@ -7,7 +7,7 @@ Thank you for considering contributing to starlette-context! This project is ope
 ### Prerequisites
 
 - Python 3.10+
-- [Poetry](https://python-poetry.org/) for dependency management
+- [uv](https://docs.astral.sh/uv/) for dependency management
 
 ### Setup
 
@@ -18,9 +18,9 @@ Thank you for considering contributing to starlette-context! This project is ope
    cd starlette-context
    ```
 
-3. Set up the development environment using Poetry:
+3. Set up the development environment using uv:
    ```bash
-   poetry install
+   uv sync
    ```
 
 4. Install pre-commit hooks:
@@ -34,12 +34,12 @@ Thank you for considering contributing to starlette-context! This project is ope
 
 Run the entire test suite:
 ```bash
-poetry run pytest
+uv run pytest
 ```
 
 Run tests with coverage report:
 ```bash
-poetry run pytest --cov=starlette_context
+uv run pytest --cov=starlette_context
 ```
 
 ### Code Style
