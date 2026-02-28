@@ -7,6 +7,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [0.5.0] - 2026-02-28
 
+* Add support for Python 3.13 and 3.14
 * Drop support for Python 3.9. Now only 3.10+ is supported
 * Migrate from Poetry to [uv](https://docs.astral.sh/uv/) as the package manager and build tool
 * Switch build backend from poetry-core to hatchling
