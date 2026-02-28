@@ -6,7 +6,7 @@ Thank you for considering contributing to starlette-context! This project is ope
 
 ### Prerequisites
 
-- Python 3.9+
+- Python 3.10+
 - [Poetry](https://python-poetry.org/) for dependency management
 
 ### Setup
