@@ -19,12 +19,12 @@ ROOT_DIR = pathlib.Path(__file__).parents[2].resolve()
 sys.path.append(ROOT_DIR.as_posix())
 
 pyproject = toml.load((ROOT_DIR / "pyproject.toml").as_posix())
-poetry = pyproject["tool"]["poetry"]
+project_meta = pyproject["project"]
 
-project = poetry["name"]
+project = project_meta["name"]
 copyright = f"{datetime.datetime.now().year}, Tom Wojcik"
-author = poetry["authors"][0]
-release = poetry["version"]
+author = project_meta["authors"][0]["name"]
+release = project_meta["version"]
 
 
 # -- General configuration ---------------------------------------------------

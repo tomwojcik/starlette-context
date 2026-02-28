@@ -84,13 +84,13 @@ You can provide a custom error response when initializing the middleware:
 
 ```python
 from starlette.responses import JSONResponse
-from starlette.status import HTTP_422_UNPROCESSABLE_ENTITY
+from starlette.status import HTTP_422_UNPROCESSABLE_CONTENT
 
 middleware = [
     Middleware(
         ContextMiddleware,
         default_error_response=JSONResponse(
-            status_code=HTTP_422_UNPROCESSABLE_ENTITY,
+            status_code=HTTP_422_UNPROCESSABLE_CONTENT,
             content={"error": "Invalid request"},
         ),
         plugins=(
