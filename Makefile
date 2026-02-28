@@ -2,8 +2,7 @@
 
 
 init:
-	sh scripts/init
-	sh scripts/install
+	uv sync
 
 test:
 	uv sync --group dev
