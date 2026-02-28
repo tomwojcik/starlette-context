@@ -1,5 +1,8 @@
 name: Publish to Test PyPi
 
+permissions:
+  contents: read
+
 on:
   release:
     types:
