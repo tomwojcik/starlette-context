@@ -70,7 +70,7 @@ class ContextMiddleware(BaseHTTPMiddleware):
             # gets back to middleware, process response with plugins
             for plugin in self.plugins:
                 await plugin.enrich_response(response)
-            # retun response before resetting context
+            # return response before resetting context
             # allowing further middlewares to still use the context
             return response
         # context reset
