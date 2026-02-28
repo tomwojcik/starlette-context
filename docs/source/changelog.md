@@ -12,6 +12,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 * Migrate from Poetry to [uv](https://docs.astral.sh/uv/) as the package manager and build tool
 * Switch build backend from poetry-core to hatchling
 * Replace `assert` with `ConfigurationError` in `Plugin.process_request` for clearer error messages
+* Replace Black with `ruff format` for code formatting
 * Replace deprecated `HTTP_422_UNPROCESSABLE_ENTITY` with `HTTP_422_UNPROCESSABLE_CONTENT`
 
 ## [0.4.0] - 2024-03-04
