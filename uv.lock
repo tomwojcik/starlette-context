@@ -1304,7 +1304,7 @@ code-quality = [
     { name = "black", specifier = ">=24.2,<26.0" },
     { name = "docformatter", specifier = ">=1.7.5" },
     { name = "mypy", specifier = ">=1.8.0" },
-    { name = "pre-commit", specifier = ">=2.21.0,<4.0.0" },
+    { name = "pre-commit", specifier = ">=3.2.0,<4.0.0" },
     { name = "pre-commit-hooks", specifier = ">=4.4,<6.0" },
     { name = "pyupgrade", specifier = ">=3.15.0" },
     { name = "ruff", specifier = ">=0.3,<0.12" },
