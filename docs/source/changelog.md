@@ -5,6 +5,16 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## Latest Release
 
+## [0.5.0] - 2026-02-28
+
+* Add support for Python 3.13 and 3.14
+* Drop support for Python 3.9. Now only 3.10+ is supported
+* Migrate from Poetry to [uv](https://docs.astral.sh/uv/) as the package manager and build tool
+* Switch build backend from poetry-core to hatchling
+* Replace `assert` with `ConfigurationError` in `Plugin.process_request` for clearer error messages
+* Replace Black with `ruff format` for code formatting
+* Replace deprecated `HTTP_422_UNPROCESSABLE_ENTITY` with `HTTP_422_UNPROCESSABLE_CONTENT`
+
 ## [0.4.0] - 2024-03-04
 
 * Drop support for Python 3.8. Now only 3.9+ is supported ( https://github.com/tomwojcik/starlette-context/pull/152/files#diff-50c86b7ed8ac2cf95bd48334961bf0530cdc77b5a56f852c5c61b89d735fd711R29 )
@@ -93,6 +103,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 **MVP until 0.1.4**
 * experiments and tests with ContextVar
 
+[0.5.0]: https://github.com/tomwojcik/starlette-context/compare/v0.4.0...v0.5.0
 [0.4.0]: https://github.com/tomwojcik/starlette-context/compare/v0.3.6...v0.4.0
 [0.3.6]: https://github.com/tomwojcik/starlette-context/compare/v0.3.5...v0.3.6
 [0.3.5]: https://github.com/tomwojcik/starlette-context/compare/v0.3.4...v0.3.5

@@ -1,7 +1,7 @@
 from collections.abc import Iterator
 from contextlib import contextmanager
 from contextvars import ContextVar, Token
-from typing import Any, Optional
+from typing import Any
 
 _request_scope_context_storage: ContextVar[dict[Any, Any]] = ContextVar(
     "starlette_context"
@@ -10,7 +10,7 @@ _request_scope_context_storage: ContextVar[dict[Any, Any]] = ContextVar(
 
 @contextmanager
 def request_cycle_context(
-    initial_data: Optional[dict] = None,
+    initial_data: dict | None = None,
 ) -> Iterator[None]:
     """
     Creates and resets a starlette-context context.

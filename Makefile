@@ -1,29 +1,26 @@
 .PHONY: init test run-hooks clean docs update-deps build
-.ONESHELL :
 
 
 init:
-	sh scripts/init
-	sh scripts/install
+	uv sync
 
 test:
-	poetry install --only dev
+	uv sync --group dev
 	sh scripts/test
 
 run-hooks:
-	poetry install --only code-quality
-	poetry run pre-commit run --all-files --show-diff-on-failure
+	uv sync --group code-quality
+	uv run pre-commit run --all-files --show-diff-on-failure
 
 clean:
 	sh scripts/clean
 
 docs:
-	poetry install --only docs
+	uv sync --group docs
 	cd docs && make html
 
 update-deps:
-	poetry update
+	uv lock --upgrade
 
-# https://python-poetry.org/docs/cli/#version
 build:
-	poetry build
+	uv build

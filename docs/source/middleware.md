@@ -56,6 +56,20 @@ middleware = [
 app = Starlette(middleware=middleware)
 ```
 
+## Middleware Order
+
+The context middleware **must be listed first** in your middleware list. Starlette processes middlewares in reverse order, so the first middleware in the list wraps the outermost layer. Any middleware that needs to access `context` must appear **after** the context middleware:
+
+```python
+middleware = [
+    Middleware(ContextMiddleware),   # 1st — creates the context
+    Middleware(LoggingMiddleware),   # 2nd — can use context
+    Middleware(AuthMiddleware),      # 3rd — can use context
+]
+```
+
+If a middleware is listed before `ContextMiddleware`, accessing `context` inside it will raise `ContextDoesNotExistError`. See [Handling Errors](./errors.md) for details.
+
 ## Choosing the Right Middleware
 
 Both middlewares provide the same core functionality, but have different implementations:
@@ -84,13 +98,13 @@ You can provide a custom error response when initializing the middleware:
 
 ```python
 from starlette.responses import JSONResponse
-from starlette.status import HTTP_422_UNPROCESSABLE_ENTITY
+from starlette.status import HTTP_422_UNPROCESSABLE_CONTENT
 
 middleware = [
     Middleware(
         ContextMiddleware,
         default_error_response=JSONResponse(
-            status_code=HTTP_422_UNPROCESSABLE_ENTITY,
+            status_code=HTTP_422_UNPROCESSABLE_CONTENT,
             content={"error": "Invalid request"},
         ),
         plugins=(

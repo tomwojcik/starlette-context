@@ -35,7 +35,7 @@ async def read_root(request: Request):
 FastAPI's dependency injection system works perfectly with starlette-context. You can create dependencies that use the context:
 
 ```python
-from typing import Optional, Dict, Any
+from typing import Any
 from fastapi import FastAPI, Depends, HTTPException, Request
 from starlette_context import context, plugins
 from starlette_context.middleware import ContextMiddleware
@@ -61,7 +61,7 @@ def get_current_user():
     return {"user_id": user_id}
 
 @app.get("/user/me")
-async def read_user_me(current_user: Dict[str, Any] = Depends(get_current_user)):
+async def read_user_me(current_user: dict[str, Any] = Depends(get_current_user)):
     return current_user
 
 @app.get("/items/")

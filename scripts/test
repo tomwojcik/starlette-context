@@ -1,14 +1,9 @@
 #!/bin/sh -e
 
-export PREFIX=""
-if [ -d 'venv' ] ; then
-    export PREFIX="venv/bin/"
-fi
-
 set -x
 
-${PREFIX}poetry run pytest --ignore=example --cov=starlette_context --cov-report=term-missing --cov-report=xml --asyncio-mode=auto
+uv run pytest --ignore=example --cov=starlette_context --cov-report=term-missing --cov-report=xml
 
 if [ -n "$GITHUB_ACTIONS" ]; then
-  ${PREFIX}poetry run codecov
+  uv run codecov
 fi
