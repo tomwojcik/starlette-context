@@ -34,7 +34,7 @@ Documentation = "https://starlette-context.readthedocs.io/"
 [dependency-groups]
 dev = [
     "coverage>=7.4.1",
-    "pytest>=7.4.4,<9.0.0",
+    "pytest>=7.4.4,<10.0.0",
     "pytest-cov>=4.1,<7.0",
     "pytest-sugar>=0.9.7,<1.1.0",
     "pytest-xdist>=3.5.0",
